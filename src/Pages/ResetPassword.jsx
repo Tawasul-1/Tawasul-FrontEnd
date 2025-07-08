@@ -13,7 +13,7 @@ function ResetPassword() {
                 Welcome <br /> to Tawasul
               </h1>
 
-              <div className="login-box shadow-sm">
+              <div className="login-box2 shadow-sm">
                 <div className="text-center mb-4">
                   <p className="text-center text">Reset Your Password</p>
                   <img

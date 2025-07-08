@@ -9,14 +9,14 @@
 
 .login-wrapper {
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   padding: 0 40px;
   background-color: #d4e2f6;
 }
 
 /* Limit max width */
 .container-fluid {
-  max-width: 1200px;
+  max-width: 100%;
   margin: auto;
 }
 
@@ -37,13 +37,12 @@
 }
 
 /* Login Box */
-.login-box {
+.login-box1 {
   background-color: #fff;
   border-radius: 20px;
   padding: 50px; 
   width: 100%;
   max-width: 550px; 
-  min-height: 500px; 
   margin: 0 auto;
 }
 

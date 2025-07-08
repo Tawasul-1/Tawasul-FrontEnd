@@ -14,7 +14,7 @@ function Login() {
                 Welcome <br /> to Tawasul
               </h1>
 
-              <div className="login-box shadow-sm">
+              <div className="login-box1 shadow-sm">
                 <div className="text-center mb-4">
                   <img
                     src="/image-2.png"
