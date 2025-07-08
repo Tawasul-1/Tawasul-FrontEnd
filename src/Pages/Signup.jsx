@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Card, InputGroup } from "react-boots
 import { signup } from "../services/authService";
 import singupImage from "../assets/signup.svg";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { Link } from 'react-router-dom';
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -237,7 +238,7 @@ function Signup() {
             <Row>
               <Col className="text-center">
                 <p>
-                  Have an account already? <a href="#login">Log In</a>
+                  Have an account already? <Link to="/login">Log In</Link>
                 </p>
               </Col>
             </Row>

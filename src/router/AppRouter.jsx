@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import Login from "../Pages/Login";
 import ResetPassword from "../Pages/ResetPassword";
+import Signup from "../Pages/Signup";
 
 function AppRouter() {
   return (
@@ -8,7 +9,7 @@ function AppRouter() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/reset" element={<ResetPassword/>} />
-
+        <Route path="/signup" element={<Signup/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,7 @@
 import "../Style-pages/Login.css";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -26,7 +27,7 @@ function Login() {
                 {/* Email Field */}
                 <div className="input-group mb-4 custom-input-group">
                   <span className="input-group-text">
-                    <FaEnvelope  style={{color:"#173067"}}/>
+                    <FaEnvelope style={{ color: "#173067" }} />
                   </span>
                   <input
                     type="email"
@@ -38,7 +39,7 @@ function Login() {
                 {/* Password Field */}
                 <div className="input-group mb-4 custom-input-group">
                   <span className="input-group-text">
-                    <FaLock  style={{color:"#173067"}}/>
+                    <FaLock style={{ color: "#173067" }} />
                   </span>
                   <input
                     type="password"
@@ -46,17 +47,20 @@ function Login() {
                     placeholder="Password"
                   />
                   <span className="input-group-text">
-                    <IoEyeSharp  style={{color:"#173067"}}/>
+                    <IoEyeSharp style={{ color: "#173067" }} />
                   </span>
                 </div>
 
+                <p className="text-center mb-0">
+                  <Link to="/reset">Forget Password? </Link>
+                </p>
                 {/* Login Button */}
                 <button className="btn btn-primary w-100 mb-3 custom-login-btn">
                   Login
                 </button>
 
                 <p className="text-center mb-0">
-                  Don’t have an account? <a href="#">Sign Up</a>
+                  Don’t have an account? <Link to="/signup">Sign Up</Link>
                 </p>
               </div>
             </div>

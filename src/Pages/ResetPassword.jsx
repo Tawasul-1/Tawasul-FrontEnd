@@ -1,6 +1,5 @@
 import "../Style-pages/ResetPassword.css";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { IoEyeSharp } from "react-icons/io5";
 function ResetPassword() {
   return (
     <div className="login-wrapper d-flex align-items-center justify-content-center background">
