@@ -1,10 +1,11 @@
-function App() {
+import AppRouter from "./router/AppRouter";
 
+function App() {
   return (
     <>
-      <h1>Welcome to TAWASUL</h1>
+      <AppRouter />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

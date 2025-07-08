@@ -1,0 +1,102 @@
+/* General Layout */
+.background {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: sans-serif;
+  background-color: #d4e2f6 !important;
+}
+
+.login-wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 0 40px;
+  background-color: #d4e2f6;
+}
+
+/* Limit max width */
+.container-fluid {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Box Wrapper */
+.login-box-wrapper {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  font-size: 1.3rem;
+}
+
+/* Welcome Text */
+.welcome-text {
+  font-size: 60px;
+  font-weight: bold;
+  color: #304871;
+  margin-left: 10px;
+}
+
+/* Login Box */
+.login-box {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 50px; 
+  width: 100%;
+  max-width: 550px; 
+  min-height: 500px; 
+  margin: 0 auto;
+}
+
+
+/* Button */
+.custom-login-btn {
+  background-color: #173067 !important;
+  border: none;
+  border-radius: 20px !important;
+  font-size: 1.3rem;
+  padding: 12px;
+  font-weight: bold;
+}
+
+/* Avatar/Image */
+.character-img-1 {
+  max-width: 150%;
+  height: auto;
+  margin-left: -150px;
+}
+
+/* Text & Link */
+.mb-0,
+.mb-0 a {
+  color: #3f567e !important;
+  font-size: 1.1rem;
+}
+
+/* Inputs */
+.custom-input-group {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #f9fafb;
+}
+
+.custom-input-group .input-group-text {
+  background-color: transparent;
+  border: none;
+  color: #555;
+  padding: 12px 15px;
+  font-size: 1.5rem;
+}
+
+.custom-input-group .form-control {
+  border: none;
+  box-shadow: none;
+  padding-left: 12px;
+  font-size: 1.2rem;
+  background-color: transparent;
+}
+
+.custom-input-group .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}

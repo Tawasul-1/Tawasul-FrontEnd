@@ -1,8 +1,7 @@
-import "../Style-pages/Login.css";
+import "../Style-pages/ResetPassword.css";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
-
-function Login() {
+function ResetPassword() {
   return (
     <div className="login-wrapper d-flex align-items-center justify-content-center background">
       <div className="container-fluid px-5">
@@ -16,6 +15,7 @@ function Login() {
 
               <div className="login-box shadow-sm">
                 <div className="text-center mb-4">
+                  <p className="text-center text">Reset Your Password</p>
                   <img
                     src="/image-2.png"
                     alt="Logo"
@@ -26,7 +26,7 @@ function Login() {
                 {/* Email Field */}
                 <div className="input-group mb-4 custom-input-group">
                   <span className="input-group-text">
-                    <FaEnvelope  style={{color:"#173067"}}/>
+                    <FaEnvelope style={{ color: "#173067" }} />
                   </span>
                   <input
                     type="email"
@@ -35,40 +35,17 @@ function Login() {
                   />
                 </div>
 
-                {/* Password Field */}
-                <div className="input-group mb-4 custom-input-group">
-                  <span className="input-group-text">
-                    <FaLock  style={{color:"#173067"}}/>
-                  </span>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Password"
-                  />
-                  <span className="input-group-text">
-                    <IoEyeSharp  style={{color:"#173067"}}/>
-                  </span>
-                </div>
-
                 {/* Login Button */}
                 <button className="btn btn-primary w-100 mb-3 custom-login-btn">
-                  Login
+                  Send Email
                 </button>
-
-                <p className="text-center mb-0">
-                  Don’t have an account? <a href="#">Sign Up</a>
-                </p>
               </div>
             </div>
           </div>
 
           {/* Right Side - Image */}
           <div className="col-md-6 text-center d-none d-md-block">
-            <img
-              src="/image-1.png"
-              alt="Character"
-              className="character-img-1"
-            />
+            <img src="/image-3.png" alt="Character" className="character-img" />
           </div>
         </div>
       </div>
@@ -76,4 +53,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ResetPassword;
