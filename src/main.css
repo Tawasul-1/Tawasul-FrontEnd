@@ -1,0 +1,79 @@
+body {
+  background-color: #d4e2f6;
+}
+
+* {
+  color: #304871 !important;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.form-control {
+  padding: 0;
+  box-shadow: none;
+  border: none;
+}
+
+.form-control[type="file"] {
+  margin: auto 0 !important;
+  background-color: transparent;
+  color: #304871;
+  box-shadow: none;
+}
+
+.form-control[type="file"]::file-selector-button {
+  background-color: transparent;
+  color: #304871;
+  cursor: pointer;
+}
+
+.form-control[type="file"]::file-selector-button:hover {
+  color: #1f2e4f;
+}
+
+.input-group:focus-within {
+  box-shadow: 0 0 0 0.2rem rgba(48, 72, 113, 0.25);
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #304871;
+}
+
+.input-group {
+  padding-right: 1rem;
+  border: 0.5px solid #304871;
+  border-radius: 1.75rem;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.input-group:focus-within {
+  box-shadow: 0 0 0 0.2rem rgba(212, 226, 246, 0.9); /* Light version of #304871 */
+}
+
+.input-group-text {
+  border: none;
+  background-color: transparent;
+}
+
+.input-group-text i {
+  font-size: 1.3rem;
+  color: #d4e2f6;
+}
+
+.btn {
+  width: 75%;
+  border-radius: 1.75rem;
+}
+
+.btn-primary {
+  color: #d4e2f6 !important;
+  background-color: #304871;
+  border-color: #304871;
+  padding: 0.5rem 1.5rem;
+}
