@@ -3,12 +3,12 @@ body {
 }
 
 * {
-  color: #304871 !important;
+  color: #173067 !important;
 }
 
 h2 {
   font-weight: 700;
-  font-size: 2.5rem;
+  font-size: 3rem;
   line-height: 1.2;
 }
 
@@ -47,7 +47,7 @@ h2 {
 .input-group {
   padding-right: 1rem;
   border: 0.5px solid #304871;
-  border-radius: 1.75rem;
+  border-radius: 1rem;
   box-shadow: none;
   overflow: hidden;
 }
@@ -73,7 +73,11 @@ h2 {
 
 .btn-primary {
   color: #d4e2f6 !important;
-  background-color: #304871;
-  border-color: #304871;
+  background-color: #173067 ;
+  border-color: none;
   padding: 0.5rem 1.5rem;
+}
+
+.btn-primary:hover {
+  background-color: #173067;
 }

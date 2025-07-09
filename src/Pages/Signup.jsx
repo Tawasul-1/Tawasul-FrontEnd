@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Card, InputGroup } from "react-boots
 import { signup } from "../services/authService";
 import singupImage from "../assets/signup.svg";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,29 +64,30 @@ function Signup() {
       className="d-flex justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}
     >
-      <Row className="w-100 justify-content-center">
-        <Col xs={12} md={8} lg={6} className="d-flex justify-content-center">
+      <Row className="w-100 justify-content-center algn-items-center">
+        <Col xs={12} lg={6} className="d-flex justify-content-center">
           <img
             src={singupImage}
             alt="Tawasul Logo"
-            className="img-fluid mb-4"
-            style={{ width: "100%", height: "auto" }}
+            className="img-fluid mb-4 d-none d-lg-block"
+            style={{ maxWidth: "600px", height: "auto" }}
           />
         </Col>
 
-        <Col xs={12} md={4} lg={6} className="d-flex justify-content-center align-items-center">
-          <Card style={{ width: "100%", maxWidth: "600px", borderRadius: "2rem", padding: "2rem" }}>
-            <Row className="text-center mb-4">
-              <Col>
-                <h2>Welcome to Tawasul</h2>
-              </Col>
-            </Row>
-
+        <Col xs={12} lg={6} className="d-flex flex-column justify-content-center">
+          <Row className="mb-4">
+            <Col>
+              <h2>
+                Welcome <br /> to Tawasul
+              </h2>
+            </Col>
+          </Row>
+          <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             {generalError && <div className="alert alert-danger text-center">{generalError}</div>}
 
             <Form onSubmit={handleSubmit}>
-              <Row className="mb-3">
-                <Col>
+              <Row className="mb-md-3">
+                <Col className="mb-3 mb-md-0">
                   <Form.Group controlId="formImageUpload">
                     <InputGroup>
                       <InputGroup.Text>
@@ -104,8 +105,8 @@ function Signup() {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
-                <Col md={6}>
+              <Row className="mb-md-3">
+                <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formFullName">
                     <InputGroup>
                       <InputGroup.Text>
@@ -122,7 +123,7 @@ function Signup() {
                   </Form.Group>
                 </Col>
 
-                <Col md={6}>
+                <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formEmail">
                     <InputGroup>
                       <InputGroup.Text>
@@ -140,8 +141,8 @@ function Signup() {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
-                <Col md={6}>
+              <Row className="mb-md-3">
+                <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formAge">
                     <InputGroup>
                       <InputGroup.Text>
@@ -158,7 +159,7 @@ function Signup() {
                   </Form.Group>
                 </Col>
 
-                <Col md={6}>
+                <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formPhone">
                     <InputGroup>
                       <InputGroup.Text>
@@ -176,8 +177,8 @@ function Signup() {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
-                <Col md={6}>
+              <Row className="mb-md-3">
+                <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formPassword">
                     <InputGroup>
                       <InputGroup.Text>
@@ -200,7 +201,7 @@ function Signup() {
                   </Form.Group>
                 </Col>
 
-                <Col md={6}>
+                <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formConfirmPassword">
                     <InputGroup>
                       <InputGroup.Text>
@@ -226,7 +227,7 @@ function Signup() {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
+              <Row className="mb-md-3">
                 <Col className="text-center">
                   <Button type="submit" className="w-75">
                     Sign Up
