@@ -1,0 +1,109 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #ffffff !important;
+}
+
+/* Header */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #dbe5ff;
+  padding: 10px 20px;
+}
+
+.header-bar h2 {
+  margin: 0;
+  color: #173067 !important;
+  font-weight: bold;
+}
+
+/* Menu icon as a button */
+.menu-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #173067 !important;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.menu-icon:focus {
+  outline: none;
+}
+
+/* Sentence box */
+.sentence-container {
+  position: relative;
+}
+
+.sentence-box {
+  position: relative;
+  min-height: 80px;
+  background: #e9f2fe;
+  border: 6px dashed #ccc;
+  border-radius: 10px;
+  padding: 18px 60px 62px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  overflow: auto;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sentence-box:focus {
+  outline: none;
+}
+
+.sentence-box:empty::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: #888;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.speaker-icon-inside {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    cursor: pointer;
+}
+
+/* card  */
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.pecs-card {
+  border: none;
+  background-color: #e9f2fe !important;
+  padding: 60px;
+
+}
+
+
+.card-img-top {
+  width: 100%;
+  height: 70px;
+  object-fit: contain;
+  padding: 6px;
+  background-color: #f3f7ff;
+  border-radius: 10px;
+}
+
+.card-label {
+  font-size: 12px;
+  color: #333;
+  margin-top: 6px;
+  display: inline-block;
+}

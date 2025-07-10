@@ -3,15 +3,19 @@ import Login from "../Pages/Login";
 import ResetPassword from "../Pages/ResetPassword";
 import NewPassword from "../Pages/NewPassword";
 import Signup from "../Pages/Signup";
-
+import Board from "../Pages/Board";
+import BoardPassword from "../Pages/BoardPassword";
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/reset" element={<ResetPassword/>} />
+        <Route path="/reset" element={<ResetPassword />} />
         <Route path="/new-password" element={<NewPassword />} />
-        <Route path="/signup" element={<Signup/>} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/board" element={<Board />} />
+        <Route path="/board-password" element={<BoardPassword />} />
+
       </Routes>
     </BrowserRouter>
   );
