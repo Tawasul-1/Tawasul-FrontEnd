@@ -79,7 +79,7 @@ h2 {
 
 .btn-primary:hover {
   background-color: #173067;
-}
+}home-puzzle-image 
 
 /* Home Main Section Styles */
 .home-main-section {
@@ -122,6 +122,7 @@ h2 {
 .home-title {
   font-size: 2.8rem;
   font-weight: 700;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   color: #23305e;
 }
@@ -160,20 +161,69 @@ h2 {
   position: relative;
   background-color: transparent;
   width: 100%;
-  margin-top: -95px;
+  margin-top: 95px;
   padding: 4rem 0 0;
   z-index: 3;
 }
 
 .home-stats-wrapper {
   position: relative;
-  margin-top: -30px;
+  margin-top: -140px;
   display: flex;
   gap: 2rem;
   justify-content: center;
   align-items: center;
   z-index: 3;
 }
+
+@media (max-width: 768px) {
+  .home-main-section {
+    padding: 3rem 1.5rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+  }
+
+  .home-content-wrapper {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .home-puzzle-image {
+    width: 260px;
+    height: 260px;
+  }
+
+  .home-text-content {
+    max-width: 100%;
+  }
+
+  .home-title {
+    font-size: 2rem;
+  }
+
+  .home-title span {
+    font-size: 2.3rem;
+    letter-spacing: 1px;
+  }
+
+  .home-description {
+    font-size: 1.05rem;
+  }
+
+  .home-read-more-btn {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+  }
+
+  .home-stats-wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+}
+
 
 .home-stat-card {
   min-width: 170px;
@@ -217,7 +267,7 @@ h2 {
 }
 
 .home-bottom-waves {
-  top: -150px;
+  top: -200px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -307,6 +357,7 @@ h2 {
   .home-content-wrapper {
     flex-direction: column;
     gap: 2rem;
+
   }
   .home-puzzle-image {
     width: 250px;
@@ -324,13 +375,23 @@ h2 {
   .home-stats-section {
     margin-top: -150px;
   }
+  .home-bottom-waves {
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: -1;
+}
   .home-main-section svg,
   .home-bottom-waves svg,
   .home-features-section svg,
   .home-stats-section svg,
   [class^="home-"] svg {
     height: 120px;
-    max-height: 120px;
+    /* display:none; */
+    top: 40px;
+
   }
   .home-categories-grid {
     grid-template-columns: 1fr;
@@ -388,8 +449,8 @@ h2 {
 }
 
 .home-testimonial-card {
-  background: #fff;
-  border: 1.5px solid #23305e;
+  background: #D4E2F6;
+  border: 2px solid #23305e;
   border-radius: 8px;
   box-shadow: 2px 4px 6px rgba(48, 72, 113, 0.08);
   min-width: 420px;
@@ -397,6 +458,7 @@ h2 {
   min-height: 260px;
   position: relative;
   padding: 2.5rem 2.5rem 3.5rem 2.5rem;
+  padding-bottom: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -516,6 +578,7 @@ h2 {
     min-width: 90vw;
     max-width: 98vw;
     padding: 1.2rem 0.7rem 2.5rem 0.7rem;
+    margin-bottom: 100px;
   }
   .home-testimonials-section {
     padding: 2rem 0 3rem 0;

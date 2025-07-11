@@ -1,9 +1,20 @@
 import React, { useState } from "react";
-import { Navbar, Nav, Container, Row, Col, Button, Card, Carousel } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Container,
+  Row,
+  Col,
+  Button,
+  Card,
+  Carousel,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
-import board from "../assets/board.svg";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import board from "../assets/tab.png";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const testimonials = [
@@ -24,20 +35,34 @@ function HomePage() {
   const handlePrev = () => {
     setAnimation("slide-right");
     setTimeout(() => {
-      setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+      setTestimonialIndex((prev) =>
+        prev === 0 ? testimonials.length - 1 : prev - 1
+      );
       setAnimation("");
     }, 350);
   };
   const handleNext = () => {
     setAnimation("slide-left");
     setTimeout(() => {
-      setTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+      setTestimonialIndex((prev) =>
+        prev === testimonials.length - 1 ? 0 : prev + 1
+      );
       setAnimation("");
     }, 350);
   };
+  const categories = [
+    { icon: "bi bi-controller", label: "Toys", bg: "#ffe0f0" },
+    { icon: "bi bi-cup-straw", label: "Food", bg: "#d9ecff" },
+    { icon: "bi bi-emoji-smile", label: "Feeling", bg: "#d6f5e8" },
+    { icon: "bi bi-bag", label: "Things", bg: "#fff6d6" },
+  ];
+
   return (
     <>
+      {/* nav  */}
       <Header />
+
+      {/* head */}
       <main
         className="home-main-section"
         style={{
@@ -45,22 +70,32 @@ function HomePage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
+          height:"60vh"
         }}
       >
         <div className="home-content-wrapper">
+          
           <div className="home-text-content text-center ms-auto">
             <h1 className="home-title">
               Welcome To <br /> <span>TAWASUL</span>
             </h1>
             <p className="home-description">
-              TAWASUL is an inclusive communication platform that empowers non-speaking individuals,
-              especially children with autism, through visual tools like PECS.
+              TAWASUL is an inclusive communication platform that empowers
+              non-speaking individuals, especially children with autism, through
+              visual tools like PECS.
             </p>
-            <button className="home-read-more-btn text-white">Read More</button>
+            <Link to="/about">
+              <button className="home-read-more-btn text-white">
+                Read More
+              </button>
+            </Link>
           </div>
         </div>
         <div className="home-wave-effect"></div>
+        
       </main>
+      
+      {/* num */}
       <section className="home-stats-section">
         <div className="home-stats-wrapper">
           <div className="home-stat-card home-stat-blue">
@@ -112,95 +147,212 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="home-categories-section">
-        <Container className="home-categories-container">
-          <div className="home-categories-title text-center mb-4">
-            <span
-              className="home-categories-icon"
-              style={{
-                fontSize: "2rem",
-                color: "#23305e",
-                marginRight: "0.5rem",
-                verticalAlign: "middle",
-              }}
-            >
-              <i className="bi bi-grid-3x3-gap-fill"></i>
-            </span>
-            <span
-              className="home-categories-heading"
-              style={{
-                fontWeight: 700,
-                fontSize: "2rem",
-                color: "#23305e",
-                verticalAlign: "middle",
-              }}
-            >
-              Categories
-            </span>
-          </div>
-          <div className="home-categories-grid">
-            <div className="home-category-card home-category-pink">
-              <div className="home-category-icon" style={{ fontSize: "3rem" }}>
-                🤖🚗
-              </div>
-              <div className="home-category-label">Toys</div>
-            </div>
-            <div className="home-category-card home-category-blue">
-              <div className="home-category-icon" style={{ fontSize: "3rem" }}>
-                🍷🍴
-              </div>
-              <div className="home-category-label">Food</div>
-            </div>
-            <div className="home-category-card home-category-green">
-              <div className="home-category-icon" style={{ fontSize: "3rem" }}>
-                🧑‍🤝‍🧑
-              </div>
-              <div className="home-category-label">Feeling</div>
-            </div>
-            <div className="home-category-card home-category-yellow">
-              <div className="home-category-icon" style={{ fontSize: "3rem" }}>
-                📦🙌
-              </div>
-              <div className="home-category-label">Things</div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="home-app-section">
+      {/* Discover */}
+      <section className="home-wow-highlight py-5 bg-white text-center">
         <Container>
-          <div className="home-app-title text-center mb-4">
-            <span
-              className="home-app-icon"
-              style={{
-                fontSize: "2rem",
-                color: "#23305e",
-                marginRight: "0.5rem",
-                verticalAlign: "middle",
-              }}
-            >
-              <i className="bi bi-kanban-fill"></i>
-            </span>
-            <span
-              className="home-app-heading"
-              style={{
-                fontWeight: 700,
-                fontSize: "2rem",
-                color: "#23305e",
-                verticalAlign: "middle",
-              }}
-            >
-              Board
-            </span>
+          <h2 className="fw-bold mb-4 display-6">
+            🌟 Discover More with TAWASUL
+          </h2>
+          <p className="lead mb-4">
+            Every interaction opens a new door to connection and discovery.
+            Here’s what makes us <strong>stand out</strong>:
+          </p>
+          <Row className="g-4">
+            <Col md={4}>
+              <div className="p-4 border rounded-4 shadow-sm h-100">
+                <i className="bi bi-magic text-success fs-1 mb-3"></i>
+                <h5 className="fw-bold">Visual Magic</h5>
+                <p>
+                  Engaging visuals that resonate with kids and spark joyful
+                  learning.
+                </p>
+              </div>
+            </Col>
+            <Col md={4}>
+              <div className="p-4 border rounded-4 shadow-sm h-100">
+                <i className="bi bi-cloud-upload text-info fs-1 mb-3"></i>
+                <h5 className="fw-bold">Seamless Access</h5>
+                <p>
+                  Access your personalized board anywhere — on any device, at
+                  any time.
+                </p>
+              </div>
+            </Col>
+            <Col md={4}>
+              <div className="p-4 border rounded-4 shadow-sm h-100">
+                <i className="bi bi-emoji-smile text-warning fs-1 mb-3"></i>
+                <h5 className="fw-bold">Joyful UX</h5>
+                <p>
+                  Kid-friendly design that brings smiles while empowering
+                  communication.
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* how use  */}
+      <section className="how-it-works-section py-5 bg-light">
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="fw-bold" style={{ color: "#23305e" }}>
+              How It Works
+            </h2>
+            <p className="text-muted">Just 3 simple steps to get started</p>
           </div>
-          <div className="home-app-content">
-            <div className="home-app-image d-flex justify-content-center">
-              <img src={board} alt="App" className="w-50" />
+          <Row className="g-4 text-center">
+            <Col md={4}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <i className="bi bi-person-check fs-1 text-primary mb-3"></i>
+                <h5 className="fw-bold">1. Create Account</h5>
+                <p>Sign up and set up your profile quickly and easily.</p>
+              </div>
+            </Col>
+            <Col md={4}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <i className="bi bi-kanban fs-1 text-success mb-3"></i>
+                <h5 className="fw-bold">2. Build Your Board</h5>
+                <p>Choose the PECS cards that suit your child’s needs.</p>
+              </div>
+            </Col>
+            <Col md={4}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <i className="bi bi-chat-dots fs-1 text-warning mb-3"></i>
+                <h5 className="fw-bold">3. Start Communicating</h5>
+                <p>Empower your child to express themselves visually.</p>
+              </div>
+            </Col>
+          </Row>
+          {/* Button under cards */}
+          <div className="text-center mt-4">
+            <Link
+              to="/how-use"
+              className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
+              style={{
+                backgroundColor: "#23305e",
+                border: "none",
+                width: "300px",
+              }}
+            >
+              Learn More
+              <i className="bi bi-arrow-right ms-2"></i>
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      {/* Categories */}
+      <section className="home-categories-section py-5">
+        <Container className="home-categories-container">
+          <div className="text-center mb-5">
+            <div className="d-flex justify-content-center align-items-center mb-2">
+              <i
+                className="bi bi-grid-3x3-gap-fill"
+                style={{
+                  fontSize: "2.2rem",
+                  color: "#23305e",
+                  marginRight: "0.5rem",
+                }}
+              ></i>
+              <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
+                Categories
+              </h2>
+            </div>
+            <p className="text-muted">Explore by interest</p>
+          </div>
+
+          <div className="row g-4 justify-content-center">
+            {categories.map((cat, idx) => (
+              <div key={idx} className="col-6 col-md-3">
+                <div
+                  className="p-4 text-center rounded-4 shadow-sm category-card h-100"
+                  style={{
+                    backgroundColor: cat.bg,
+                    transition: "all 0.3s",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-5px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 8px 20px rgba(0,0,0,0.15)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 12px rgba(0,0,0,0.1)";
+                  }}
+                >
+                  <div style={{ fontSize: "2.5rem", color: "#23305e" }}>
+                    <i className={cat.icon}></i>
+                  </div>
+                  <h5 className="mt-3 fw-semibold">{cat.label}</h5>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* board */}
+      <section
+        className="home-app-section py-5"
+        style={{
+          background: "linear-gradient(135deg, #f2f7fb 0%, #eaf0f8 100%)",
+        }}
+      >
+        <Container>
+          <div className="text-center mb-5 animate__animated animate__fadeInDown">
+            <div className="d-flex justify-content-center align-items-center mb-2">
+              <i
+                className="bi bi-kanban-fill"
+                style={{
+                  fontSize: "2.2rem",
+                  color: "#23305e",
+                  marginRight: "0.5rem",
+                }}
+              ></i>
+              <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
+                Board
+              </h2>
+            </div>
+            <p className="text-muted">Your smart communication panel</p>
+          </div>
+
+          <div className="home-app-content text-center">
+            <div className="home-app-image d-flex justify-content-center animate__animated animate__zoomIn">
+              <img
+                src={board}
+                alt="App"
+                className="img-fluid rounded-4 shadow"
+                style={{
+                  maxWidth: "600px",
+                  width: "100%",
+                  transition: "transform 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              />
+            </div>
+
+            {/* ✅ CTA Button */}
+            <div className="mt-4">
+              <Link
+                to="/board"
+                className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
+              >
+                Try it Now
+              </Link>
             </div>
           </div>
         </Container>
       </section>
 
+      {/* Testimonial */}
       <section className="home-testimonials-section">
         <div className="home-testimonials-title text-center mb-4">
           <span
@@ -216,7 +368,12 @@ function HomePage() {
           </span>
           <span
             className="home-testimonials-heading"
-            style={{ fontWeight: 700, fontSize: "2rem", color: "#23305e", verticalAlign: "middle" }}
+            style={{
+              fontWeight: 700,
+              fontSize: "2rem",
+              color: "#23305e",
+              verticalAlign: "middle",
+            }}
           >
             Testimonial
           </span>
@@ -231,7 +388,10 @@ function HomePage() {
           </button>
           <div className={`home-testimonial-card ${animation}`}>
             <div className="home-testimonial-quote-icon">
-              <i className="bi bi-quote" style={{ fontSize: "3rem", color: "#23305e" }}></i>
+              <i
+                className="bi bi-quote"
+                style={{ fontSize: "3rem", color: "#23305e" }}
+              ></i>
             </div>
             <div className="home-testimonial-content">
               <img
@@ -240,8 +400,12 @@ function HomePage() {
                 className="home-testimonial-avatar"
               />
               <div>
-                <p className="home-testimonial-name">{testimonials[testimonialIndex].name}</p>
-                <div className="home-testimonial-text">{testimonials[testimonialIndex].text}</div>
+                <p className="home-testimonial-name">
+                  {testimonials[testimonialIndex].name}
+                </p>
+                <div className="home-testimonial-text">
+                  {testimonials[testimonialIndex].text}
+                </div>
               </div>
             </div>
           </div>

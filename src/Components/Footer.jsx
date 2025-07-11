@@ -7,31 +7,34 @@ function Footer() {
   return (
     <footer className="footer-custom mt-5 pt-4 pb-3">
       <Container>
-        <Row className="mb-4 justify-content-around align-items-center">
-          <Col md={4} className="mb-4 mb-md-0 d-flex flex-column align-items-center">
+        <Row className="mb-4 justify-content-between align-items-start">
+          {/* Logo & Social */}
+          <Col
+            xs={12}
+            md={4}
+            className="mb-4 mb-md-0 d-flex flex-column align-items-center"
+          >
             <h1 className="mb-3">Tawasul</h1>
-            <div className="mx-auto">
-              <ul className="list-unstyled d-flex gap-3">
-                <li className="mb-2">
-                  <a href="#">
-                    <i className="bi bi-facebook footer-social-icon"></i>
-                  </a>
-                </li>
-                <li className="mb-2">
-                  <a href="#">
-                    <i className="bi bi-twitter-x footer-social-icon"></i>
-                  </a>
-                </li>
-                <li className="mb-2">
-                  <a href="#">
-                    <i className="bi bi-instagram footer-social-icon"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <ul className="list-unstyled d-flex gap-3">
+              <li>
+                <a href="#">
+                  <i className="bi bi-facebook footer-social-icon"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i className="bi bi-twitter-x footer-social-icon"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i className="bi bi-instagram footer-social-icon"></i>
+                </a>
+              </li>
+            </ul>
           </Col>
-
-          <Col sm={6} md={2} className="mb-4 mb-md-0">
+          {/* Left Links */}
+          <Col xs={6} md={2} className="mb-4 mb-md-0">
             <ul className="list-unstyled">
               <li className="mb-2">
                 <Link to="/add-card" className="text-decoration-none text-dark">
@@ -50,9 +53,8 @@ function Footer() {
               </li>
             </ul>
           </Col>
-
-          {/* Right Navigation Links */}
-          <Col sm={6} md={2} className="mb-4 mb-md-0">
+          {/* Right Links */}
+          <Col xs={6} md={2} className="mb-4 mb-md-0">
             <ul className="list-unstyled">
               <li className="mb-2">
                 <Link to="/profile" className="text-decoration-none text-dark">
@@ -60,7 +62,10 @@ function Footer() {
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/edit-profile" className="text-decoration-none text-dark">
+                <Link
+                  to="/edit-profile"
+                  className="text-decoration-none text-dark"
+                >
                   <i className="bi bi-pencil-square me-2"></i>Edit Profile
                 </Link>
               </li>
@@ -71,19 +76,29 @@ function Footer() {
               </li>
             </ul>
           </Col>
-
-          {/* Newsletter Section */}
-          <Col md={3} className="mb-4 mb-md-0 d-flex flex-column align-items-center newsletter-section py-3">
+          {/* Newsletter */}
+          <Col
+            xs={10}
+            md={3}
+            className="mb-4 mb-md-0 d-flex flex-column align-items-center newsletter-section px-4 py-3"
+          >
             <h5 className="mb-3 text-white">News Letters</h5>
-            <Form className="d-flex">
-              <div className="footer-newsletter-group w-100">
-                <Form.Group controlId="formEmail" className="mb-0">
-                  <Form.Control type="email" placeholder="Your Email" className="px-3" />
-                </Form.Group>
-                <Button variant="primary" type="submit" >
-                  Subscribe
-                </Button>
-              </div>
+            <Form className="d-flex w-100 gap-2">
+              <Form.Group controlId="formEmail" className="flex-grow-1 mb-0">
+                <Form.Control
+                  type="email"
+                  placeholder="Your Email"
+                  className="px-3"
+                  style={{ height: "45px" }}
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ height: "45px" }}
+              >
+                Subscribe
+              </Button>
             </Form>
           </Col>
         </Row>
