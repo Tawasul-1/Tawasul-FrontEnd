@@ -5,17 +5,17 @@ import { Link } from "react-router-dom";
 
 function Login() {
   return (
-    <div className="login-wrapper d-flex align-items-center justify-content-center background">
-      <div className="container-fluid px-5">
+    <div className="login-wrapper d-flex align-items-center justify-content-center background min-vh-100">
+      <div className="container px-3 px-md-5">
         <div className="row align-items-center justify-content-center">
           {/* Left Side - Login Box */}
-          <div className="col-md-6">
-            <div className="login-box-wrapper text-center">
-              <h1 className="welcome-text mb-4 text-md-start">
+          <div className="col-12 col-md-6">
+            <div className="login-box-wrapper text-center text-md-start">
+              <h1 className="welcome-text mb-4">
                 Welcome <br /> to Tawasul
               </h1>
 
-              <div className="login-box1 shadow-sm">
+              <div className="login-box1 shadow-sm mx-auto mx-md-0">
                 <div className="text-center mb-4">
                   <img
                     src="/image-2.png"
@@ -67,7 +67,7 @@ function Login() {
           </div>
 
           {/* Right Side - Image */}
-          <div className="col-md-6 text-center d-none d-md-block">
+          <div className="col-md-6 d-none d-md-flex justify-content-center">
             <img
               src="/image-1.png"
               alt="Character"

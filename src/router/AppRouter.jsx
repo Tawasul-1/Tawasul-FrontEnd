@@ -7,6 +7,8 @@ import Board from "../Pages/Board";
 import BoardPassword from "../Pages/BoardPassword";
 import HomePage from "../Pages/Home";
 import MainLayout from "../Layouts/MainLayout";
+import Profile from "../Pages/Profile";
+import EditProfile from "../Pages/EditProfile";
 
 function AppRouter() {
   return (
@@ -18,6 +20,10 @@ function AppRouter() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/board" element={<Board />} />
         <Route path="/board-password" element={<BoardPassword />} />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/edit-Profile" element={<EditProfile/>} />
+
+
 
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
