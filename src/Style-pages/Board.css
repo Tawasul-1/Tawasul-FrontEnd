@@ -20,7 +20,6 @@ body {
   font-weight: bold;
 }
 
-/* Menu icon as a button */
 .menu-icon {
   font-size: 24px;
   cursor: pointer;
@@ -39,8 +38,11 @@ body {
   position: relative;
 }
 
-.sentence-box {
+.sentence-box-wrapper {
   position: relative;
+}
+
+.sentence-box {
   min-height: 80px;
   background: #e9f2fe;
   border: 6px dashed #ccc;
@@ -68,15 +70,15 @@ body {
 }
 
 .speaker-icon-inside {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 40px;
-    cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  cursor: pointer;
 }
 
-/* card  */
+/* Cards */
 .section-title {
   font-size: 20px;
   font-weight: 600;
@@ -88,17 +90,10 @@ body {
   border: none;
   background-color: #e9f2fe !important;
   padding: 60px;
-
 }
 
-
-.card-img-top {
-  width: 100%;
-  height: 70px;
-  object-fit: contain;
-  padding: 6px;
-  background-color: #f3f7ff;
-  border-radius: 10px;
+.card-icon {
+  margin-bottom: 10px;
 }
 
 .card-label {
@@ -106,4 +101,20 @@ body {
   color: #333;
   margin-top: 6px;
   display: inline-block;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .pecs-card {
+    padding: 30px;
+  }
+
+  .sentence-box {
+    padding: 16px 40px 50px 10px;
+  }
+
+  .speaker-icon-inside {
+    font-size: 30px;
+    right: 10px;
+  }
 }
