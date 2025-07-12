@@ -1,6 +1,3 @@
-body {
-}
-
 * {
   color: #173067 !important;
 }
@@ -79,7 +76,8 @@ h2 {
 
 .btn-primary:hover {
   background-color: #173067;
-}home-puzzle-image 
+}
+home-puzzle-image 
 
 /* Home Main Section Styles */
 .home-main-section {
@@ -175,56 +173,6 @@ h2 {
   align-items: center;
   z-index: 3;
 }
-
-@media (max-width: 768px) {
-  .home-main-section {
-    padding: 3rem 1.5rem;
-    flex-direction: column;
-    justify-content: flex-start;
-    text-align: center;
-  }
-
-  .home-content-wrapper {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .home-puzzle-image {
-    width: 260px;
-    height: 260px;
-  }
-
-  .home-text-content {
-    max-width: 100%;
-  }
-
-  .home-title {
-    font-size: 2rem;
-  }
-
-  .home-title span {
-    font-size: 2.3rem;
-    letter-spacing: 1px;
-  }
-
-  .home-description {
-    font-size: 1.05rem;
-  }
-
-  .home-read-more-btn {
-    font-size: 1rem;
-    padding: 0.8rem 2rem;
-  }
-
-  .home-stats-wrapper {
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 4rem;
-  }
-
-}
-
-
 .home-stat-card {
   min-width: 170px;
   min-height: 100px;
@@ -269,6 +217,7 @@ h2 {
 .home-bottom-waves {
   top: -200px;
   left: 0;
+  width: 100%;
   right: 0;
   bottom: 0;
   position: absolute;
@@ -286,9 +235,7 @@ h2 {
 .home-features-section svg,
 .home-stats-section svg,
 [class^="home-"] svg {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  min-width: 100vw !important;
+  width: 100% !important;
   height: auto;
   display: block;
   overflow-x: hidden;
@@ -353,56 +300,6 @@ h2 {
 .home-category-yellow {
   background: #fff7e0;
 }
-@media (max-width: 900px) {
-  .home-content-wrapper {
-    flex-direction: column;
-    gap: 2rem;
-
-  }
-  .home-puzzle-image {
-    width: 250px;
-    height: 250px;
-  }
-  .home-title {
-    font-size: 2rem;
-  }
-  .home-title span {
-    font-size: 2.3rem;
-  }
-  .home-stats-wrapper {
-    gap: 1.2rem;
-  }
-  .home-stats-section {
-    margin-top: -150px;
-  }
-  .home-bottom-waves {
-  top: 100px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: absolute;
-  z-index: -1;
-}
-  .home-main-section svg,
-  .home-bottom-waves svg,
-  .home-features-section svg,
-  .home-stats-section svg,
-  [class^="home-"] svg {
-    height: 120px;
-    /* display:none; */
-    top: 40px;
-
-  }
-  .home-categories-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    gap: 1.2rem;
-  }
-  .home-categories-section {
-    padding: 1rem 0 0 0;
-  }
-}
-
 /* Home Board Section */
 .home-app-section {
   background-color: #d4e2f6;
@@ -449,7 +346,7 @@ h2 {
 }
 
 .home-testimonial-card {
-  background: #D4E2F6;
+  background: #d4e2f6;
   border: 2px solid #23305e;
   border-radius: 8px;
   box-shadow: 2px 4px 6px rgba(48, 72, 113, 0.08);
@@ -559,7 +456,15 @@ h2 {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   z-index: 1;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 50% 80%, 40% 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    60% 100%,
+    50% 80%,
+    40% 100%,
+    0 100%
+  );
 }
 .home-testimonial-card .home-testimonial-content,
 .home-testimonial-card .home-testimonial-quote-icon {
@@ -573,14 +478,165 @@ h2 {
 .home-testimonial-card .home-testimonial-text {
   color: #304871;
 }
-@media (max-width: 700px) {
+
+/* 👶 الموبايل  */
+@media (max-width: 576px) {
+  .home-main-section {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+  .home-main-section svg,
+  .home-bottom-waves svg,
+  .home-features-section svg,
+  .home-stats-section svg,
+  [class^="home-"] svg {
+    width: 100% !important;
+    height: auto;
+    display: block;
+    overflow-x: hidden;
+    top: 0;
+  }
+
+  .home-title {
+    font-size: 1.7rem;
+  }
+
+  .home-title span {
+    font-size: 2rem;
+  }
+
+  .home-description {
+    font-size: 1rem;
+  }
+
+  .home-puzzle-image {
+    width: 220px;
+    height: 220px;
+  }
+
+  .home-read-more-btn {
+    font-size: 0.95rem;
+    padding: 0.7rem 1.8rem;
+  }
+
+  .home-categories-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .home-testimonial-card {
+    min-width: 95vw;
+  }
+}
+
+/* 📱 التابلت  */
+@media (max-width: 768px) {
+  .home-main-section {
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  .home-content-wrapper {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .home-puzzle-image {
+    width: 260px;
+    height: 260px;
+  }
+
+  .home-title {
+    font-size: 2rem;
+  }
+
+  .home-title span {
+    font-size: 2.3rem;
+  }
+
+  .home-description {
+    font-size: 1.05rem;
+  }
+
+  .home-read-more-btn {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+  }
+
+  .home-stats-wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .home-categories-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  .home-categories-section {
+    padding: 2rem 1rem;
+  }
+
   .home-testimonial-card {
     min-width: 90vw;
     max-width: 98vw;
     padding: 1.2rem 0.7rem 2.5rem 0.7rem;
-    margin-bottom: 100px;
   }
-  .home-testimonials-section {
-    padding: 2rem 0 3rem 0;
+}
+
+/* 💻 لاب توب صغير (أقل من 992px) */
+@media (max-width: 992px) {
+  .home-content-wrapper {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .home-puzzle-image {
+    width: 280px;
+    height: 280px;
+  }
+
+  .home-title {
+    font-size: 2.4rem;
+  }
+
+  .home-title span {
+    font-size: 2.6rem;
+  }
+
+  .home-description {
+    font-size: 1.15rem;
+  }
+
+  .home-categories-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* 🖥️ ديسكتوب عادي (أقل من 1200px) */
+@media (max-width: 1200px) {
+  .home-bottom-waves {
+    top: 100px;
+  }
+
+  .home-categories-section {
+    padding: 10rem 0;
+  }
+
+  .home-categories-grid {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .home-testimonials-wrapper {
+    flex-direction: column;
+  }
+
+  .home-testimonial-card {
+    min-width: 80vw;
   }
 }

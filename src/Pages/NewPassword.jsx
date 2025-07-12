@@ -41,8 +41,8 @@ function NewPassword() {
 
   return (
     <Container
-      className="d-flex justify-content-center align-items-center py-4"
-      style={{ minHeight: "100vh" }}
+      className="d-flex justify-content-center align-items-center"
+      style={{ Height: "100vh"  }}
     >
       <Row className="w-100 justify-content-center align-items-center">
         {/* Image Column - Hidden on small screens */}

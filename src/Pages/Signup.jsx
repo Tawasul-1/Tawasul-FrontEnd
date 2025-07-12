@@ -4,6 +4,7 @@ import { signup } from "../services/authService";
 import singupImage from "../assets/signup.svg";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link } from "react-router-dom";
+import "../Style-pages/Login.css";
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -60,12 +61,12 @@ function Signup() {
   };
 
   return (
-    <Container
-      className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "100vh" }}
+    <Container fluid 
+      className="d-flex justify-content-center align-items-center background"
+      style={{ maxHeight: "100vh"  , background:"#D4E2F6"}}
     >
       <Row className="w-100 justify-content-center algn-items-center">
-        <Col xs={12} lg={6} className="d-flex justify-content-center">
+        <Col xs={12} lg={6} className="d-flex justify-content-center"  style={{ maxHeight: "100vh"}}>
           <img
             src={singupImage}
             alt="Tawasul Logo"

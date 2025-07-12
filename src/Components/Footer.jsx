@@ -89,7 +89,7 @@ function Footer() {
                   type="email"
                   placeholder="Your Email"
                   className="px-3"
-                  style={{ height: "45px" }}
+                  style={{ height: "45px"  ,borderRadius:"20px"}}
                 />
               </Form.Group>
               <Button

@@ -14,6 +14,7 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route index element={<HomePage />} />  
         <Route path="/login" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/new-password" element={<NewPassword />} />
@@ -21,17 +22,7 @@ function AppRouter() {
         <Route path="/board" element={<Board />} />
         <Route path="/board-password" element={<BoardPassword />} />
         <Route path="/profile" element={<Profile/>} />
-        <Route path="/edit-Profile" element={<EditProfile/>} />
-
-
-
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="reset" element={<ResetPassword />} />
-          <Route path="new-password" element={<NewPassword />} />
-          <Route path="signup" element={<Signup />} />
-        </Route>
+        <Route path="/edit-Profile" element={<EditProfile/>} />     
       </Routes>
     </BrowserRouter>
   );

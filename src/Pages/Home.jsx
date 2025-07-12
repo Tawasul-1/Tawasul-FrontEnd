@@ -345,7 +345,7 @@ function HomePage() {
                 to="/board"
                 className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
               >
-                Try it Now
+                Try Now
               </Link>
             </div>
           </div>
