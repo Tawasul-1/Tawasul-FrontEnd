@@ -478,6 +478,14 @@ home-puzzle-image
 .home-testimonial-card .home-testimonial-text {
   color: #304871;
 }
+.btn-primary {
+  background-color: #173067;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #1b254d;
+}
+
 
 /* 👶 الموبايل  */
 @media (max-width: 576px) {

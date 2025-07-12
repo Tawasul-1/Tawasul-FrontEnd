@@ -6,9 +6,10 @@ import Signup from "../Pages/Signup";
 import Board from "../Pages/Board";
 import BoardPassword from "../Pages/BoardPassword";
 import HomePage from "../Pages/Home";
-import MainLayout from "../Layouts/MainLayout";
 import Profile from "../Pages/Profile";
 import EditProfile from "../Pages/EditProfile";
+import Plan from "../Pages/Plan";
+import Selection from "../Pages/Selection";
 
 function AppRouter() {
   return (
@@ -22,7 +23,9 @@ function AppRouter() {
         <Route path="/board" element={<Board />} />
         <Route path="/board-password" element={<BoardPassword />} />
         <Route path="/profile" element={<Profile/>} />
-        <Route path="/edit-Profile" element={<EditProfile/>} />     
+        <Route path="/edit-Profile" element={<EditProfile/>} /> 
+        <Route path="/plan" element={<Plan/>}/>  
+        <Route path="/selection" element={<Selection/>}/> 
       </Routes>
     </BrowserRouter>
   );

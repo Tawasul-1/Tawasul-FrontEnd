@@ -70,11 +70,10 @@ function HomePage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          height:"60vh"
+          height: "60vh",
         }}
       >
         <div className="home-content-wrapper">
-          
           <div className="home-text-content text-center ms-auto">
             <h1 className="home-title">
               Welcome To <br /> <span>TAWASUL</span>
@@ -92,9 +91,8 @@ function HomePage() {
           </div>
         </div>
         <div className="home-wave-effect"></div>
-        
       </main>
-      
+
       {/* num */}
       <section className="home-stats-section">
         <div className="home-stats-wrapper">
@@ -230,7 +228,7 @@ function HomePage() {
               to="/how-use"
               className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
               style={{
-                backgroundColor: "#23305e",
+                backgroundColor: "#173067",
                 border: "none",
                 width: "300px",
               }}
@@ -291,6 +289,21 @@ function HomePage() {
               </div>
             ))}
           </div>
+
+          {/* View All Categories Button */}
+          <div className="text-center mt-4">
+            <a
+              href="/selection"
+              className="btn btn-primary px-4 py-2 rounded-pill"
+              style={{
+                backgroundColor: "#173067",
+                border: "none",
+                width: "300px",
+              }}
+            >
+              View All Categories
+            </a>
+          </div>
         </Container>
       </section>
 
@@ -344,6 +357,11 @@ function HomePage() {
               <Link
                 to="/board"
                 className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
+                style={{
+                backgroundColor: "#173067",
+                border: "none",
+                width: "300px",
+              }}
               >
                 Try Now
               </Link>
