@@ -1,6 +1,6 @@
 /* Background with puzzle image */
 .puzzle-bg {
-  background-image: url("/Group.png");
+  background-image: url("/bg4.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -15,12 +15,15 @@
   justify-content: center;
   align-items: center;
 }
+.marg{
+    margin-bottom: 100px !important;
+}
 
 /* Card design */
 .edit-card {
   max-width: 500px;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.6) !important;
+  background-color: #fff !important;
   border-radius: 50px !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }

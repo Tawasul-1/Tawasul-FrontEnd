@@ -15,8 +15,8 @@ const categories = [
       { label: "Apple", emoji: "🍎" },
       { label: "Banana", emoji: "🍌" },
       { label: "Kiwi", emoji: "🥝" },
-      { label: "Burger", emoji: "🍔" }
-    ]
+      { label: "Burger", emoji: "🍔" },
+    ],
   },
   {
     name: "Toys",
@@ -27,8 +27,8 @@ const categories = [
       { label: "Ball", emoji: "🏀" },
       { label: "Car", emoji: "🚗" },
       { label: "Blocks", emoji: "🧱" },
-      { label: "Doll", emoji: "🪆" }
-    ]
+      { label: "Doll", emoji: "🪆" },
+    ],
   },
   {
     name: "Things",
@@ -38,8 +38,8 @@ const categories = [
     cards: [
       { label: "Chair", emoji: "🪑" },
       { label: "Table", emoji: "🛋️" },
-      { label: "Bag", emoji: "🎒" }
-    ]
+      { label: "Bag", emoji: "🎒" },
+    ],
   },
   {
     name: "Feeling",
@@ -49,11 +49,10 @@ const categories = [
     cards: [
       { label: "Happy", emoji: "😊" },
       { label: "Sad", emoji: "😢" },
-      { label: "Angry", emoji: "😡" }
-    ]
-  }
+      { label: "Angry", emoji: "😡" },
+    ],
+  },
 ];
- 
 
 const Profile = () => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
@@ -64,7 +63,7 @@ const Profile = () => {
       if (cat.name === activeCategory.name) {
         return {
           ...cat,
-          cards: cat.cards.filter((card) => card.label !== label)
+          cards: cat.cards.filter((card) => card.label !== label),
         };
       }
       return cat;
@@ -77,12 +76,9 @@ const Profile = () => {
   return (
     <div className="profile-container bg-light min-vh-100">
       {/* Header */}
-       <Navbar onMenuClick={() => setShowSidebar(true)} />
+      <Navbar onMenuClick={() => setShowSidebar(true)} />
 
-      {showSidebar && (
-        <Menu setShowSidebar={setShowSidebar} />
-      )}
-      
+      {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
 
       {/* Main Content */}
       <div className="main-content container py-4">
@@ -97,12 +93,21 @@ const Profile = () => {
                 width="100"
                 height="100"
               />
-              <h5 className="fw-bold mb-1" style={{ color: "#173067" }}>Merna Ahmad</h5>
+              <h5 className="fw-bold mb-1" style={{ color: "#173067" }}>
+                Merna Ahmad
+              </h5>
               <p className="mb-1 text-muted">010000000000</p>
               <p className="mb-1 text-muted">Age: 8</p>
-              <a href="mailto:merna0@gmail.com" className="text-decoration-none text-muted">merna0@gmail.com</a>
+              <a
+                href="mailto:merna0@gmail.com"
+                className="text-decoration-none text-muted"
+              >
+                merna0@gmail.com
+              </a>
               <Link to="/edit-Profile">
-                <button className="btn btn-primary mt-3 rounded-pill px-4">Edit Profile</button>
+                <button className="btn btn-primary mt-3 rounded-pill px-4">
+                  Edit Profile
+                </button>
               </Link>
             </div>
           </div>
@@ -111,7 +116,9 @@ const Profile = () => {
           <div className="col-12 col-md-8">
             <h4 className="section-title d-flex align-items-center gap-2 mb-3">
               <img src="/Categorize.png" alt="" width="24" height="24" />
-              <span style={{ color: "#173067" }} className="fw-semibold">My Categories</span>
+              <span style={{ color: "#173067" }} className="fw-semibold">
+                My Categories
+              </span>
             </h4>
 
             {/* Categories */}
@@ -124,7 +131,9 @@ const Profile = () => {
                     onClick={() => setActiveCategory(cat)}
                   >
                     <img src={cat.image} alt={cat.name} className="mb-2" />
-                    <p className="m-0 fw-medium" style={{ color: "#173067" }}>{cat.name}</p>
+                    <p className="m-0 fw-medium" style={{ color: "#173067" }}>
+                      {cat.name}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -132,7 +141,12 @@ const Profile = () => {
 
             {/* Cards of Active Category */}
             <h5 className="mt-4 d-flex align-items-center gap-2">
-              <img src={activeCategory.icon} alt={activeCategory.name} width="24" height="24" />
+              <img
+                src={activeCategory.icon}
+                alt={activeCategory.name}
+                width="24"
+                height="24"
+              />
               <span style={{ color: "#173067" }}>{activeCategory.name}</span>
             </h5>
             <div className="row g-3">
@@ -140,7 +154,9 @@ const Profile = () => {
                 <div className="col-6 col-sm-4 col-md-3" key={index}>
                   <div className="food-card bg-white p-3 rounded text-center shadow-sm">
                     <div style={{ fontSize: "2rem" }}>{item.emoji}</div>
-                    <p className="m-0 fw-medium" style={{ color: "#173067" }}>{item.label}</p>
+                    <p className="m-0 fw-medium" style={{ color: "#173067" }}>
+                      {item.label}
+                    </p>
                     <button
                       className="btn btn-outline-danger btn-sm mt-2 rounded-pill"
                       onClick={() => handleDeleteCard(item.label)}
@@ -153,7 +169,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   );
 };
