@@ -7,10 +7,10 @@ function ResetPassword() {
       <div className="container px-3 px-md-5">
         <div className="row align-items-center justify-content-center">
           {/* Left Side - Login Box */}
-          <div className="col-12 col-md-6">
+          <div className="col-12 col-md-8">
             <div className="login-box-wrapper text-center text-md-start">
               <h1 className="welcome-text mb-4">
-                Welcome <br /> to Tawasul
+                Welcome to Tawasul
               </h1>
 
               <div className="login-box2 shadow-sm mx-auto mx-md-0">
@@ -44,7 +44,7 @@ function ResetPassword() {
           </div>
 
           {/* Right Side - Image */}
-          <div className="col-md-6 d-none d-md-flex justify-content-center">
+          <div className="col-md-4 d-none d-md-flex justify-content-center">
             <img
               src="/image-3.png"
               alt="Character"
