@@ -1,0 +1,9 @@
+.bg-light-blue {
+  background-image: url('/bg5.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.marg{
+    margin-bottom: 40px;
+}

@@ -10,6 +10,7 @@ import Profile from "../Pages/Profile";
 import EditProfile from "../Pages/EditProfile";
 import Plan from "../Pages/Plan";
 import Selection from "../Pages/Selection";
+import AddNewCard from "../Pages/AddNewCard";
 
 function AppRouter() {
   return (
@@ -26,6 +27,7 @@ function AppRouter() {
         <Route path="/edit-Profile" element={<EditProfile/>} /> 
         <Route path="/plan" element={<Plan/>}/>  
         <Route path="/selection" element={<Selection/>}/> 
+        <Route path="/addnewcard" element={<AddNewCard/>}/> 
       </Routes>
     </BrowserRouter>
   );
