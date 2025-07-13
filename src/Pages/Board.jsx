@@ -1,66 +1,323 @@
+import React, { useState } from "react";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "../Style-pages/Board.css";
-import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function Board() {
-  return (
-    <>
-      <header className="header-bar">
-        <h2 className="m-0">Tawasul</h2>
-        <div className="menu-icon">
-          <Link to="/board-password">
-            <button
-              className="menu-icon"
-              type="button"
-              aria-label="Toggle menu"
-              onClick={() => console.log("Menu clicked")}
-            >
-              ☰
-            </button>
-          </Link>
-        </div>
-      </header>
+const categories = {
+  feelings: [
+    { emoji: "😍", label: "Happy" },
+    { emoji: "😡", label: "Angry" },
+    { emoji: "😭", label: "Sad" },
+    { emoji: "😊", label: "Smile" },
+  ],
+  toys: [
+    { emoji: "🧸", label: "Teddy Bear" },
+    { emoji: "🧩", label: "Puzzle" },
+    { emoji: "🪀", label: "Yoyo" },
+  ],
+  food: [
+    { emoji: "🍎", label: "Apple" },
+    { emoji: "🍌", label: "Banana" },
+    { emoji: "🥝", label: "Kiwi" },
+  ],
+  needs: [
+    { emoji: "👐", label: "Help" },
+    { emoji: "🚽", label: "Toilet" },
+    { emoji: "💤", label: "Sleep" },
+  ],
+  reading: [
+    { emoji: "📘", label: "Book" },
+    { emoji: "📝", label: "Write" },
+    { emoji: "📖", label: "Read" },
+  ],
+  tools: [
+    { emoji: "🔧", label: "Wrench" },
+    { emoji: "🔨", label: "Hammer" },
+    { emoji: "🪛", label: "Screwdriver" },
+  ],
+};
 
-      <Container className="py-4">
-        <div className="sentence-container mb-4">
-          <div className="sentence-box-wrapper">
-            <div
-              className="sentence-box"
-              contentEditable
-              data-placeholder="Type your sentence here..."
-            ></div>
-            <span className="speaker-icon-inside">🔊</span>
+const Board = () => {
+  const [sentenceWords, setSentenceWords] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("");
+  const [recentCards, setRecentCards] = useState([]);
+  const [showPasswordCard, setShowPasswordCard] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const handleCardClick = (label) => {
+    setSentenceWords((prev) => [...prev, label]);
+    setRecentCards((prev) => {
+      const updated = [label, ...prev.filter((item) => item !== label)];
+      return updated.slice(0, 12);
+    });
+  };
+
+  const speakText = () => {
+    const sentence = sentenceWords.join(" ");
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(sentence);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Sorry, your browser doesn't support speech synthesis.");
+    }
+  };
+
+  const clearSentence = () => {
+    setSentenceWords([]);
+  };
+
+  const getCardsToDisplay = () => {
+    if (activeCategory) return categories[activeCategory];
+
+    return recentCards.map((label) => {
+      const found = Object.values(categories)
+        .flat()
+        .find((item) => item.label === label);
+      return found || { emoji: "❓", label };
+    });
+  };
+
+  return (
+    <div className="board-page d-flex flex-column min-vh-100 position-relative">
+      {/* Sentence Box */}
+      <Container className="d-flex align-items-center gap-3 mb-4 mt-3">
+        <div className="d-flex align-items-center gap-2 flex-grow-1 p-3 rounded-3 shadow-sm bg-white border-dashed">
+          <i
+            className="bi bi-x-circle text-danger fs-5"
+            onClick={clearSentence}
+            style={{ cursor: "pointer" }}
+          ></i>
+          <div
+            className="flex-grow-1 form-control bg-white"
+            style={{ Height: "44px" }}
+          >
+            {sentenceWords.join(" ")}
           </div>
+          <i
+            className="bi bi-volume-up-fill text-primary fs-5"
+            onClick={speakText}
+            style={{ cursor: "pointer" }}
+          ></i>
         </div>
+
+        <i
+          className="bi bi-box-arrow-right text-danger fs-5"
+          onClick={() => setShowPasswordCard(true)}
+          style={{ cursor: "pointer" }}
+          title="Logout"
+        />
       </Container>
 
-      <Container className="my-4">
-        <h4 className="section-title">😊 Feeling</h4>
-        <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
-          <div className="col">
-            <div className="card pecs-card text-center">
-              <div className="card-icon pt-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="60"
-                  height="60"
-                  fill="currentColor"
-                  className="bi bi-emoji-heart-eyes"
-                  viewBox="0 0 16 16"
+      {/* Cards Area */}
+      <div className="flex-grow-1 overflow-auto px-3 py-2">
+        <Container>
+          <Row className="g-2">
+            {getCardsToDisplay().map((item, idx) => (
+              <Col
+                key={idx}
+                className="text-center"
+                style={{ width: "10%", maxWidth: "10%" }}
+              >
+                <Card
+                  className="emoji-card shadow-sm mx-auto"
+                  onClick={() => handleCardClick(item.label)}
                 >
-                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                  <path d="M11.315 10.014a.5.5 0 0 1 .548.736A4.498 4.498 0 0 1 7.965 13a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .548-.736h.005l.017.005c.215.046.515.108.857.169.693.124 1.522.242 2.152.242.63 0 1.46-.118 2.152-.242a26.58 26.58 0 0 0 1.109-.224l.067-.015.017-.004.005-.002zM4.756 4.566c.763-1.424 4.02-.12.952 3.434-4.496-1.596-2.35-4.298-.952-3.434zm6.488 0c1.398-.864 3.544 1.838-.952 3.434-3.067-3.554.19-4.858.952-3.434z" />
-                </svg>
-              </div>
-              <div className="card-body">
-                <strong className="card-label">Love</strong>
-              </div>
+                  <Card.Body className="d-flex align-items-center justify-content-center p-3">
+                    <span style={{ fontSize: "2rem" }}>{item.emoji}</span>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </div>
+
+      {/* Categories Bar */}
+      <div className="category-bar bg-white py-2 border-top shadow-sm">
+        <div className="container">
+          <div
+            className="d-flex gap-2"
+            style={{ overflowX: "auto", whiteSpace: "nowrap" }}
+          >
+            <Button
+              variant={activeCategory === "" ? "primary" : "outline-primary"}
+              onClick={() => setActiveCategory("")}
+              className="flex-shrink-0 text-center"
+              style={{ width: "150px", borderRadius: "10px" }}
+            >
+              <span style={{ fontSize: "1.3rem" }}>🕘</span>
+            </Button>
+
+            {Object.keys(categories).map((key) => (
+              <Button
+                key={key}
+                variant={activeCategory === key ? "primary" : "outline-primary"}
+                onClick={() => setActiveCategory(key)}
+                className="flex-shrink-0 text-center"
+                style={{ width: "150px", borderRadius: "10px" }}
+              >
+                <span style={{ fontSize: "1.3rem" }}>
+                  {categories[key][0].emoji}
+                </span>
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Password Card Overlay */}
+      {showPasswordCard && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center"
+          style={{ zIndex: 9999 }}
+        >
+          <Card
+            className="p-4"
+            style={{ width: "350px", borderRadius: "20px" }}
+          >
+            <div className="text-center mb-3">
+              <img
+                src="/image-2.png"
+                alt="Profile"
+                className="rounded-circle"
+                width="80"
+                height="80"
+              />
+            </div>
+
+            <div className="mb-3 position-relative">
+              <i
+                className="bi bi-lock-fill position-absolute top-50 start-0 translate-middle-y color"
+                style={{ marginLeft: "10px" }}
+              ></i>
+              <input
+                type={showPass ? "text" : "password"}
+                className="form-control ps-5 rounded-pill"
+                placeholder="Enter Password"
+                style={{ border: "1px solid #173067", height: "40px" }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <i
+                className={`bi ${
+                  showPass ? "bi-eye-slash" : "bi-eye"
+                } position-absolute top-50 end-0 translate-middle-y color`}
+                style={{ marginRight: "10px", cursor: "pointer" }}
+                onClick={() => setShowPass((prev) => !prev)}
+              ></i>
+            </div>
+
+            <Button
+              variant="primary"
+              className="w-100"
+              onClick={() => {
+                if (password === "123") {
+                  setShowSidebar(true);
+                  setShowPasswordCard(false);
+                  setPassword("");
+                } else {
+                  alert("Wrong password!");
+                }
+              }}
+            >
+              🔓 Un_lock
+            </Button>
+
+            <Button
+              variant="outline-secondary"
+              className="w-100 mt-2"
+              onClick={() => setShowPasswordCard(false)}
+            >
+              Cancel
+            </Button>
+          </Card>
+        </div>
+      )}
+
+      {/* Sidebar Menu */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"
+          style={{ zIndex: 9998 }}
+          onClick={() => setShowSidebar(false)}
+        >
+          <div
+            className="h-100 shadow d-flex flex-column"
+            style={{
+              width: "250px",
+              backgroundColor: "#fff",
+              color: "#173067",
+              zIndex: 9999,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 border-bottom">
+              <h4 className="fw-bold" style={{ color: "#173067" }}>
+                TAWASUL
+              </h4>
+            </div>
+
+            <div className="px-4 py-3 d-flex flex-column gap-3">
+              <Link to="/" style={{ color: "#173067", textDecoration: "none" }}>
+                🏠 Home
+              </Link>
+              <Link
+                to="/addnewcard"
+                style={{ color: "#173067", textDecoration: "none" }}
+              >
+                ➕ Add New Card
+              </Link>
+              <Link
+                to="/about"
+                style={{ color: "#173067", textDecoration: "none" }}
+              >
+                ℹ️ About Us
+              </Link>
+              <Link
+                to="/profile"
+                style={{ color: "#173067", textDecoration: "none" }}
+              >
+                👤 Profile
+              </Link>
+              <Link
+                to="/selection"
+                style={{ color: "#173067", textDecoration: "none" }}
+              >
+                🗂️ Cards
+              </Link>
+              <Link
+                to="/contact"
+                style={{ color: "#173067", textDecoration: "none" }}
+              >
+                📞 Contact Us
+              </Link>
+            </div>
+
+            <div
+              className="text-center d-flex align-items-center justify-content-center text-white"
+              style={{
+                height: "50px",
+                background: "#173067",
+                color: "#ffffff",
+                cursor: "pointer",
+                marginTop: "auto",
+              }}
+              onClick={() => {
+                setShowSidebar(false);
+                alert("Logged out");
+              }}
+            >
+              <i className="bi bi-box-arrow-right fs-5 me-2 text-white"></i>{" "}
+              Logout
             </div>
           </div>
         </div>
-      </Container>
-    </>
+      )}
+    </div>
   );
-}
+};
 
 export default Board;
