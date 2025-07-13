@@ -10,6 +10,7 @@ import EditProfile from "../Pages/EditProfile";
 import Plan from "../Pages/Plan";
 import Selection from "../Pages/Selection";
 import AddNewCard from "../Pages/AddNewCard";
+import Success from "../Pages/Success";
 
 function AppRouter() {
   return (
@@ -25,7 +26,8 @@ function AppRouter() {
         <Route path="/edit-Profile" element={<EditProfile/>} /> 
         <Route path="/plan" element={<Plan/>}/>  
         <Route path="/selection" element={<Selection/>}/> 
-        <Route path="/addnewcard" element={<AddNewCard/>}/> 
+        <Route path="/addnewcard" element={<AddNewCard/>}/>
+        <Route path="/success" element={<Success />} />
       </Routes>
     </BrowserRouter>
   );

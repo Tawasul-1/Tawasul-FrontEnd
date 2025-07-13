@@ -37,7 +37,7 @@ function Footer() {
           <Col xs={6} md={2} className="mb-4 mb-md-0">
             <ul className="list-unstyled">
               <li className="mb-2">
-                <Link to="/add-card" className="text-decoration-none text-dark">
+                <Link to="/addnewcard" className="text-decoration-none text-dark">
                   <i className="bi bi-plus-square-fill me-2"></i>Add New Card
                 </Link>
               </li>

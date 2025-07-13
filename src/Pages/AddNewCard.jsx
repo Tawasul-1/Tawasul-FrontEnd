@@ -1,11 +1,20 @@
 import React from "react";
 import { Card, Form, Button, InputGroup, Container, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../Style-pages/AddNewCard.css";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 
 const AddNewCard = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // هنا ممكن تضيفي منطق الحفظ أو التحقق
+    navigate("/success");
+  };
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-column">
       {/* Navbar */}
@@ -15,23 +24,15 @@ const AddNewCard = () => {
       <Container fluid className="flex-grow-1 d-flex align-items-center justify-content-center bg-light-blue py-5 marg">
         <Row className="w-100 justify-content-center">
           <Col xs={11} sm={10} md={8} lg={6} xl={5}>
-            <Card
-              className="p-4 rounded-4 shadow-sm"
-              style={{
-                backgroundColor: "#fff",
-              }}
-            >
+            <Card className="p-4 rounded-4 shadow-sm" style={{ backgroundColor: "#fff" }}>
               <div className="text-center mb-3">
-                <i
-                  className="bi bi-puzzle"
-                  style={{ fontSize: "2rem", color: "#23305e" }}
-                ></i>
+                <i className="bi bi-puzzle" style={{ fontSize: "2rem", color: "#23305e" }}></i>
                 <h4 className="fw-bold mt-2" style={{ color: "#23305e" }}>
                   Add New Card
                 </h4>
               </div>
 
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 {/* Title Input */}
                 <InputGroup className="mb-3 rounded-pill">
                   <InputGroup.Text>
@@ -50,11 +51,10 @@ const AddNewCard = () => {
                     <option>Animals</option>
                     <option>Actions</option>
                     <option>Food</option>
-                    {/* Add more options as needed */}
                   </Form.Select>
                 </InputGroup>
 
-                {/* Picture Upload + Upload button on the right */}
+                {/* Picture Upload */}
                 <div className="mb-4 d-flex align-items-center">
                   <InputGroup className="flex-grow-1 me-2 rounded-pill">
                     <InputGroup.Text>
@@ -66,7 +66,7 @@ const AddNewCard = () => {
 
                 {/* Submit Button */}
                 <div className="d-grid">
-                  <Button variant="primary" className="rounded-pill w-100">
+                  <Button variant="primary" type="submit" className="rounded-pill w-100">
                     Add
                   </Button>
                 </div>
@@ -76,7 +76,7 @@ const AddNewCard = () => {
         </Row>
       </Container>
 
-      {/* footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );
