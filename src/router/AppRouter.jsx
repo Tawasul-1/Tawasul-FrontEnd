@@ -11,6 +11,7 @@ import Plan from "../Pages/Plan";
 import Selection from "../Pages/Selection";
 import AddNewCard from "../Pages/AddNewCard";
 import Success from "../Pages/Success";
+import Contact from "../Pages/Contact";
 
 function AppRouter() {
   return (
@@ -28,6 +29,7 @@ function AppRouter() {
         <Route path="/selection" element={<Selection/>}/> 
         <Route path="/addnewcard" element={<AddNewCard/>}/>
         <Route path="/success" element={<Success />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </BrowserRouter>
   );
