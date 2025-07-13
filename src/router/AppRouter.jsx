@@ -12,6 +12,7 @@ import Selection from "../Pages/Selection";
 import AddNewCard from "../Pages/AddNewCard";
 import Success from "../Pages/Success";
 import Contact from "../Pages/Contact";
+import About from "../Pages/About";
 
 function AppRouter() {
   return (
@@ -30,6 +31,7 @@ function AppRouter() {
         <Route path="/addnewcard" element={<AddNewCard/>}/>
         <Route path="/success" element={<Success />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </BrowserRouter>
   );
