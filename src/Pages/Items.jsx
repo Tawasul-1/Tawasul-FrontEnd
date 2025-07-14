@@ -43,7 +43,7 @@ const Items = () => {
           <Row className="justify-content-center">
             {items.map((item, index) => (
               <Col xs={4} sm={3} md={2} className="d-flex justify-content-center mb-4" key={index}>
-                <Link to={`/item`} className="text-decoration-none">
+                <Link to={`/item/${item.label.toLowerCase()}`} className="text-decoration-none">
                   <div className="item-card text-center">
                     <div className="item-emoji">{item.emoji}</div>
                     <div className="item-label text-white">{item.label}</div>
