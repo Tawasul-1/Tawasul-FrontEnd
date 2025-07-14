@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Navbar, Nav, Container, Row, Col, Button, Card, Carousel } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
@@ -20,6 +20,14 @@ function HomePage() {
       text: "Thanks to TAWASUL, my son can finally express his needs and feelings. It's made a world of difference for our family.",
     },
   ];
+
+  const categories = [
+    { label: "Feelings", icon: "bi bi-emoji-smile", bg: "#fce4ec" },
+    { label: "Toys", icon: "bi bi-controller", bg: "#e8f5e9" },
+    { label: "Food", icon: "bi bi-egg-fried", bg: "#fff3e0" },
+    { label: "Actions", icon: "bi bi-activity", bg: "#e3f2fd" },
+  ];
+
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [animation, setAnimation] = useState("");
 
@@ -30,6 +38,7 @@ function HomePage() {
       setAnimation("");
     }, 350);
   };
+
   const handleNext = () => {
     setAnimation("slide-left");
     setTimeout(() => {
@@ -37,44 +46,54 @@ function HomePage() {
       setAnimation("");
     }, 350);
   };
-  const categories = [
-    { icon: "bi bi-controller", label: "Toys", bg: "#ffe0f0" },
-    { icon: "bi bi-cup-straw", label: "Food", bg: "#d9ecff" },
-    { icon: "bi bi-emoji-smile", label: "Feeling", bg: "#d6f5e8" },
-    { icon: "bi bi-bag", label: "Things", bg: "#fff6d6" },
-  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimation("slide-left");
+      setTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+      setTimeout(() => setAnimation(""), 350);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
 
   return (
     <>
-      {/* nav  */}
       <Header />
 
-      {/* head */}
+      {/* Hero Section */}
       <main
-        className="home-main-section"
+        className="home-main-section d-flex align-items-center"
         style={{
           backgroundImage: `url('/src/assets/home.svg')`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          minHeight: "60vh",
+          minHeight: "80vh",
         }}
       >
-        <div className="home-content-wrapper">
-          <div className="home-text-content text-center mx-auto">
-            <h1 className="home-title">
-              Welcome To <br /> <span>TAWASUL</span>
-            </h1>
-            <p className="home-description">
-              TAWASUL is an inclusive communication platform that empowers non-speaking individuals,
-              especially children with autism, through visual tools like PECS.
-            </p>
-            <Link to="/about">
-              <button className="home-read-more-btn text-white">Read More</button>
-            </Link>
-          </div>
-        </div>
-        <div className="home-wave-effect"></div>
+        <Container>
+          <Row className="justify-content-end">
+            <Col
+              xs={12}
+              lg={6}
+              className="d-flex align-items-center justify-content-center text-center"
+            >
+              <div className="p-4" style={{ maxWidth: "500px" }}>
+                <h1 className="home-title">
+                  Welcome To <br /> <span>TAWASUL</span>
+                </h1>
+                <p className="home-description">
+                  TAWASUL is an inclusive communication platform that empowers non-speaking
+                  individuals, especially children with autism, through visual tools like PECS.
+                </p>
+                <Link to="/about">
+                  <button className="home-read-more-btn text-white">Read More</button>
+                </Link>
+              </div>
+            </Col>
+          </Row>
+        </Container>
       </main>
 
       {/* num */}
@@ -162,7 +181,7 @@ function HomePage() {
           </Row>
         </Container>
       </section>
-
+      
       {/* how use  */}
       <section className="how-it-works-section py-5 bg-light">
         <Container>
@@ -213,18 +232,14 @@ function HomePage() {
         </Container>
       </section>
 
-      {/* Categories */}
+      {/* Categories Section */}
       <section className="home-categories-section py-5">
         <Container className="home-categories-container">
           <div className="text-center mb-5">
             <div className="d-flex justify-content-center align-items-center mb-2">
               <i
                 className="bi bi-grid-3x3-gap-fill"
-                style={{
-                  fontSize: "2.2rem",
-                  color: "#23305e",
-                  marginRight: "0.5rem",
-                }}
+                style={{ fontSize: "2.2rem", color: "#23305e", marginRight: "0.5rem" }}
               ></i>
               <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
                 Categories
@@ -261,16 +276,11 @@ function HomePage() {
             ))}
           </div>
 
-          {/* View All Categories Button */}
           <div className="text-center mt-4">
             <a
               href="/selection"
               className="btn btn-primary px-4 py-2 rounded-pill"
-              style={{
-                backgroundColor: "#173067",
-                border: "none",
-                width: "300px",
-              }}
+              style={{ backgroundColor: "#173067", border: "none", width: "300px" }}
             >
               View All Categories
             </a>
@@ -278,95 +288,25 @@ function HomePage() {
         </Container>
       </section>
 
-      {/* board */}
-      <section
-        className="home-app-section py-5"
-        style={{
-          background: "linear-gradient(135deg, #f2f7fb 0%, #eaf0f8 100%)",
-        }}
-      >
-        <Container>
-          <div className="text-center mb-5 animate__animated animate__fadeInDown">
-            <div className="d-flex justify-content-center align-items-center mb-2">
-              <i
-                className="bi bi-kanban-fill"
-                style={{
-                  fontSize: "2.2rem",
-                  color: "#23305e",
-                  marginRight: "0.5rem",
-                }}
-              ></i>
-              <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
-                Board
-              </h2>
-            </div>
-            <p className="text-muted">Your smart communication panel</p>
-          </div>
-
-          <div className="home-app-content text-center">
-            <div className="home-app-image d-flex justify-content-center animate__animated animate__zoomIn">
-              <img
-                src={board}
-                alt="App"
-                className="img-fluid rounded-4 shadow"
-                style={{
-                  maxWidth: "600px",
-                  width: "100%",
-                  transition: "transform 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.05)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
-              />
-            </div>
-
-            {/* ✅ CTA Button */}
-            <div className="mt-4">
-              <Link to="/board" className="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
-                Try Now
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Testimonial */}
+      {/* Testimonials Section */}
       <section className="home-testimonials-section">
         <div className="home-testimonials-title text-center mb-4">
-          <span
-            className="home-testimonials-icon"
-            style={{
-              fontSize: "2rem",
-              color: "#23305e",
-              marginRight: "0.5rem",
-              verticalAlign: "middle",
-            }}
-          >
+          <span className="home-testimonials-icon" style={{ fontSize: "2rem", color: "#23305e" }}>
             <i className="bi bi-chat-left-quote-fill"></i>
           </span>
           <span
             className="home-testimonials-heading"
-            style={{
-              fontWeight: 700,
-              fontSize: "2rem",
-              color: "#23305e",
-              verticalAlign: "middle",
-            }}
+            style={{ fontWeight: 700, fontSize: "2rem", color: "#23305e" }}
           >
             Testimonial
           </span>
         </div>
+
         <div className="home-testimonials-wrapper">
-          <button
-            className="home-testimonials-arrow left"
-            aria-label="Previous testimonial"
-            onClick={handlePrev}
-          >
+          <button className="home-testimonials-arrow left" onClick={handlePrev}>
             <i className="bi bi-arrow-left-circle"></i>
           </button>
+
           <div className={`home-testimonial-card ${animation}`}>
             <div className="home-testimonial-quote-icon">
               <i className="bi bi-quote" style={{ fontSize: "3rem", color: "#23305e" }}></i>
@@ -383,17 +323,13 @@ function HomePage() {
               </div>
             </div>
           </div>
-          <button
-            className="home-testimonials-arrow right"
-            aria-label="Next testimonial"
-            onClick={handleNext}
-          >
+
+          <button className="home-testimonials-arrow right" onClick={handleNext}>
             <i className="bi bi-arrow-right-circle"></i>
           </button>
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </>
   );

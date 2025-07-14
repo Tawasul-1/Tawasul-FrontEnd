@@ -116,42 +116,27 @@ home-puzzle-image
   max-width: 540px;
   color: #23305e;
 }
-
 .home-title {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 700;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  color: #23305e;
+  color: #173067;
 }
 
 .home-title span {
-  color: #23305e;
-  font-size: 3.2rem;
-  letter-spacing: 2px;
+  color: #007bff;
 }
 
 .home-description {
-  font-size: 1.25rem;
-  color: #7a7a7a;
-  margin-bottom: 2rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 1.5rem;
 }
 
 .home-read-more-btn {
-  background: #23305e;
-  color: #fff;
+  background-color: #173067;
   border: none;
-  border-radius: 2rem;
-  padding: 0.9rem 2.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.home-read-more-btn:hover {
-  background: #1a2542;
+  padding: 10px 30px;
+  border-radius: 50px;
 }
 
 /* Home Stats Section Styles */
@@ -597,6 +582,7 @@ home-puzzle-image
   /* Testimonials mobile improvements */
   .home-testimonials-section {
     padding: 2rem 1rem;
+    margin-bottom: 100px;
   }
 
   .home-testimonials-title {
@@ -616,6 +602,9 @@ home-puzzle-image
   .home-testimonial-avatar {
     width: 60px;
     height: 60px;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .home-testimonial-name {
@@ -754,6 +743,7 @@ home-puzzle-image
   /* Testimonials tablet improvements */
   .home-testimonials-section {
     padding: 3rem 2rem;
+    margin-bottom: 100px;
   }
 
   .home-testimonial-content {
@@ -842,6 +832,7 @@ home-puzzle-image
   /* Testimonials small laptop improvements */
   .home-testimonials-section {
     padding: 4rem 3rem;
+    margin-bottom: 100px;
   }
 
   /* How it works section small laptop improvements */
@@ -953,6 +944,7 @@ home-puzzle-image
 
   .home-testimonials-section {
     padding: 6rem 4rem;
+    margin-bottom: 100px;
   }
 
   .home-testimonials-heading {
@@ -966,6 +958,9 @@ home-puzzle-image
   .home-testimonial-avatar {
     width: 80px;
     height: 80px;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .home-testimonial-name {
@@ -1051,6 +1046,9 @@ home-puzzle-image
   .home-testimonial-avatar {
     width: 50px;
     height: 50px;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .home-testimonial-name {
@@ -1173,6 +1171,9 @@ home-puzzle-image
   .home-testimonial-avatar {
     width: 50px;
     height: 50px;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .home-testimonial-name {
@@ -1310,6 +1311,9 @@ home-puzzle-image
   .home-testimonial-avatar {
     width: 90px;
     height: 90px;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .home-testimonial-name {
@@ -1332,8 +1336,7 @@ home-puzzle-image
 /* Ensure proper touch targets on mobile */
 @media (max-width: 768px) {
   .home-testimonials-arrow {
-    min-width: 44px;
-    min-height: 44px;
+    display: none;
   }
 
   .category-card {

@@ -11,6 +11,8 @@ import Plan from "../Pages/Plan";
 import Selection from "../Pages/Selection";
 import AddNewCard from "../Pages/AddNewCard";
 import EmailVerification from "../Pages/EmailVerification";
+import Contact from "../Pages/Contact";
+import About from "../Pages/About";
 
 function AppRouter() {
   return (
@@ -27,6 +29,8 @@ function AppRouter() {
         <Route path="/plan" element={<Plan />} />
         <Route path="/selection" element={<Selection />} />
         <Route path="/addnewcard" element={<AddNewCard />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/verify-email/:token" element={<EmailVerification />} />
       </Routes>
