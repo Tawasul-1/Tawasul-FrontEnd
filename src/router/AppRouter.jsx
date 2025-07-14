@@ -10,28 +10,25 @@ import EditProfile from "../Pages/EditProfile";
 import Plan from "../Pages/Plan";
 import Selection from "../Pages/Selection";
 import AddNewCard from "../Pages/AddNewCard";
-import Success from "../Pages/Success";
-import Contact from "../Pages/Contact";
-import About from "../Pages/About";
+import EmailVerification from "../Pages/EmailVerification";
 
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<HomePage />} />  
+        <Route index element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/new-password" element={<NewPassword />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/board" element={<Board />} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/edit-Profile" element={<EditProfile/>} /> 
-        <Route path="/plan" element={<Plan/>}/>  
-        <Route path="/selection" element={<Selection/>}/> 
-        <Route path="/addnewcard" element={<AddNewCard/>}/>
-        <Route path="/success" element={<Success />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/edit-Profile" element={<EditProfile />} />
+        <Route path="/plan" element={<Plan />} />
+        <Route path="/selection" element={<Selection />} />
+        <Route path="/addnewcard" element={<AddNewCard />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
+        <Route path="/verify-email/:token" element={<EmailVerification />} />
       </Routes>
     </BrowserRouter>
   );
