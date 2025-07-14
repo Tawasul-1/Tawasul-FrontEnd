@@ -15,6 +15,7 @@ import Contact from "../Pages/Contact";
 import About from "../Pages/About";
 import Success from "../Pages/Success";
 import Cat from "../Pages/Cat";
+import Items from "../Pages/Items";
 
 function AppRouter() {
   return (
@@ -34,6 +35,7 @@ function AppRouter() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cat" element={<Cat />} />
+        <Route path="/items" element={<Items />} />
         <Route path="/about" element={<About />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/verify-email/:token" element={<EmailVerification />} />
