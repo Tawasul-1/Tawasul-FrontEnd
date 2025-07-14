@@ -21,6 +21,7 @@ const About = () => {
 
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [animation, setAnimation] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false); // ✅ Fix: Add sidebar state
 
   const handlePrev = () => {
     setAnimation("slide-right");
