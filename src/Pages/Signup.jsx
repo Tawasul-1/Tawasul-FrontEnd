@@ -1,89 +1,245 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, Button, Card, InputGroup } from "react-bootstrap";
-import { signup } from "../services/authService";
-import singupImage from "../assets/signup.svg";
+import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
+import signupImage from "../assets/signup.svg";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../Style-pages/Login.css";
+import { authService } from "../api/services/AuthenticationService";
 
 function Signup() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+
+  // Debug: Log errors whenever they change
+  console.log("Current errors state:", errors);
   const [generalError, setGeneralError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    image: null,
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    age: "",
     phone: "",
+    birthdate: "",
+    profile_picture: null,
     password: "",
     confirmPassword: "",
   });
 
   const handleChange = (e) => {
-    const { name, value, files, type } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "file" ? files[0] : value,
-    }));
+    const { name, value, files } = e.target;
+
+    if (name === "profile_picture" && files) {
+      console.log("File selected:", files[0]);
+      console.log("File name:", files[0].name);
+      console.log("File size:", files[0].size);
+      console.log("File type:", files[0].type);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+    // Clear general error when user starts typing
+    if (generalError) {
+      setGeneralError("");
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // First name validation
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    } else if (formData.firstName.length < 2) {
+      newErrors.firstName = "First name must be at least 2 characters";
+    }
+
+    // Last name validation
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    } else if (formData.lastName.length < 2) {
+      newErrors.lastName = "Last name must be at least 2 characters";
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    // Phone validation
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^[0-9]{11}$/.test(formData.phone.replace(/\s/g, ""))) {
+      newErrors.phone = "Phone number must be 11 digits";
+    }
+
+    // Birthdate validation
+    if (!formData.birthdate) {
+      newErrors.birthdate = "Birthdate is required";
+    } else {
+      const birthDate = new Date(formData.birthdate);
+      const today = new Date();
+      let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        calculatedAge--;
+      }
+
+      if (calculatedAge < 1 || calculatedAge > 120) {
+        newErrors.birthdate = "Age must be between 1 and 120 years";
+      }
+    }
+
+    // Image validation
+    if (!formData.profile_picture) {
+      newErrors.profile_picture = "Profile image is required";
+    } else if (formData.profile_picture.size > 5 * 1024 * 1024) {
+      // 5MB limit
+      newErrors.profile_picture = "Image size must be less than 5MB";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    // Password confirmation validation
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords don't match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
     setGeneralError("");
+    setLoading(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrors({ confirmPassword: "Passwords do not match." });
+    if (!validateForm()) {
+      setLoading(false);
       return;
     }
 
     try {
-      const result = await signup(formData);
-      console.log("Signup successful:", result);
-      // Redirect or show success message
-    } catch (error) {
-      if (error.response) {
-        const { status, data } = error.response;
+      const cleanPhone = formData.phone.replace(/\s|-/g, "");
 
-        if (status === 400 && data.errors) {
-          setErrors(data.errors);
-        } else if (data.message) {
-          setGeneralError(data.message);
-        } else {
-          setGeneralError("Something went wrong. Please try again.");
-        }
-      } else {
-        setGeneralError("Network error. Please check your connection.");
+      const formDataToSend = new FormData();
+      formDataToSend.append("first_name", formData.firstName.trim());
+      formDataToSend.append("last_name", formData.lastName.trim());
+      formDataToSend.append("username", formData.email.trim().split("@")[0].toLowerCase());
+      formDataToSend.append("email", formData.email.trim().toLowerCase());
+      formDataToSend.append("phone", cleanPhone);
+      formDataToSend.append("birth_date", formData.birthdate);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("password2", formData.confirmPassword);
+
+      if (formData.profile_picture) {
+        console.log("Appending file to FormData:", formData.profile_picture);
+        console.log("File object:", formData.profile_picture);
+        console.log("File instanceof File:", formData.profile_picture instanceof File);
+        formDataToSend.append(
+          "profile_picture",
+          formData.profile_picture,
+          formData.profile_picture.name
+        );
       }
+
+      // Debug: Log the FormData contents
+      console.log("FormData contents:");
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(
+          `${key}:`,
+          value instanceof File
+            ? `File: ${value.name} (${value.size} bytes, type: ${value.type})`
+            : value
+        );
+      }
+
+      // Debug: Check if profile_picture is actually a File object
+      const profilePictureEntry = formDataToSend.get("profile_picture");
+      console.log("Profile picture entry:", profilePictureEntry);
+      console.log("Is File object:", profilePictureEntry instanceof File);
+      console.log("File name:", profilePictureEntry?.name);
+      console.log("File size:", profilePictureEntry?.size);
+      console.log("File type:", profilePictureEntry?.type);
+
+      await authService.register(formDataToSend);
+
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (error) {
+      if (error.response?.data) {
+        const serverErrors = error.response.data;
+
+        if (typeof serverErrors === "object") {
+          if (serverErrors.detail) {
+            setGeneralError(serverErrors.detail);
+          } else {
+            const processedErrors = {};
+            Object.keys(serverErrors).forEach((key) => {
+              if (Array.isArray(serverErrors[key])) {
+                processedErrors[key] = serverErrors[key][0];
+              } else {
+                processedErrors[key] = serverErrors[key];
+              }
+            });
+            setErrors(processedErrors);
+          }
+        } else if (typeof serverErrors === "string") {
+          setGeneralError(serverErrors);
+        } else {
+          setGeneralError("Registration failed. Please try again.");
+        }
+      } else if (error.message) {
+        setGeneralError(error.message);
+      } else {
+        setGeneralError("Registration failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Container fluid 
+    <Container
+      fluid
       className="d-flex justify-content-center align-items-center background"
-      style={{ maxHeight: "100vh"  , background:"#D4E2F6"}}
+      style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center algn-items-center">
-        <Col xs={12} lg={6} className="d-flex justify-content-center"  style={{ maxHeight: "100vh"}}>
+        <Col xs={12} lg={6} className="d-flex justify-content-center">
           <img
-            src={singupImage}
+            src={signupImage}
             alt="Tawasul Logo"
-            className="img-fluid mb-4 d-none d-lg-block"
+            className="img-fluid ms-auto mb-4 d-none d-lg-block"
             style={{ maxWidth: "600px", height: "auto" }}
           />
         </Col>
 
         <Col xs={12} lg={6} className="d-flex flex-column justify-content-center">
-          <Row className="mb-4">
-            <Col>
-              <h2>
-                Welcome <br /> to Tawasul
-              </h2>
-            </Col>
-          </Row>
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
+            <h2 className="text-center mb-4 px-3">Welcome to Tawasul</h2>
             {generalError && <div className="alert alert-danger text-center">{generalError}</div>}
 
             <Form onSubmit={handleSubmit}>
@@ -97,34 +253,56 @@ function Signup() {
                       <Form.Control
                         type="file"
                         accept="image/*"
-                        name="image"
+                        name="profile_picture"
                         onChange={handleChange}
+                        required
                       />
                     </InputGroup>
-                    {errors.image && <div className="text-danger mt-1">{errors.image}</div>}
+                    {errors.profile_picture && (
+                      <div className="text-danger mt-1">{errors.profile_picture}</div>
+                    )}
                   </Form.Group>
                 </Col>
               </Row>
 
               <Row className="mb-md-3">
                 <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formFullName">
+                  <Form.Group controlId="formFirstName">
                     <InputGroup>
                       <InputGroup.Text>
                         <i className="bi bi-person-circle"></i>
                       </InputGroup.Text>
                       <Form.Control
                         type="text"
-                        placeholder="Enter full name"
-                        name="fullName"
+                        placeholder="Enter first name"
+                        name="firstName"
                         onChange={handleChange}
                       />
                     </InputGroup>
-                    {errors.fullName && <div className="text-danger mt-1">{errors.fullName}</div>}
+                    {errors.firstName && <div className="text-danger mt-1">{errors.firstName}</div>}
                   </Form.Group>
                 </Col>
 
                 <Col md={6} className="mb-3 mb-md-0">
+                  <Form.Group controlId="formLastName">
+                    <InputGroup>
+                      <InputGroup.Text>
+                        <i className="bi bi-person-circle"></i>
+                      </InputGroup.Text>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter last name"
+                        name="lastName"
+                        onChange={handleChange}
+                      />
+                    </InputGroup>
+                    {errors.lastName && <div className="text-danger mt-1">{errors.lastName}</div>}
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row className="mb-md-3">
+                <Col className="mb-3 mb-md-0">
                   <Form.Group controlId="formEmail">
                     <InputGroup>
                       <InputGroup.Text>
@@ -144,22 +322,21 @@ function Signup() {
 
               <Row className="mb-md-3">
                 <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formAge">
+                  <Form.Group controlId="formBirthdate">
                     <InputGroup>
                       <InputGroup.Text>
                         <i className="bi bi-calendar-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
-                        type="number"
-                        placeholder="Enter age"
-                        name="age"
+                        type="date"
+                        placeholder="Enter birthdate"
+                        name="birthdate"
                         onChange={handleChange}
                       />
                     </InputGroup>
-                    {errors.age && <div className="text-danger mt-1">{errors.age}</div>}
+                    {errors.birthdate && <div className="text-danger mt-1">{errors.birthdate}</div>}
                   </Form.Group>
                 </Col>
-
                 <Col md={6} className="mb-3 mb-md-0">
                   <Form.Group controlId="formPhone">
                     <InputGroup>
@@ -230,8 +407,18 @@ function Signup() {
 
               <Row className="mb-md-3">
                 <Col className="text-center">
-                  <Button type="submit" className="w-75">
-                    Sign Up
+                  <Button type="submit" className="w-75" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                        Signing Up...
+                      </>
+                    ) : (
+                      "Sign Up"
+                    )}
                   </Button>
                 </Col>
               </Row>

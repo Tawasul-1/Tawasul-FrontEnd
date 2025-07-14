@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Navbar,
-  Nav,
-  Container,
-  Row,
-  Col,
-  Button,
-  Card,
-  Carousel,
-} from "react-bootstrap";
+import { Navbar, Nav, Container, Row, Col, Button, Card, Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
@@ -21,12 +12,12 @@ function HomePage() {
     {
       name: "Maha Ahmad",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      text: "TAWASUL gave my child a voice we thought we’d never hear. It’s more than an app — it’s a lifeline for communication.",
+      text: "TAWASUL gave my child a voice we thought we'd never hear. It's more than an app — it's a lifeline for communication.",
     },
     {
       name: "Omar Khaled",
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      text: "Thanks to TAWASUL, my son can finally express his needs and feelings. It’s made a world of difference for our family.",
+      text: "Thanks to TAWASUL, my son can finally express his needs and feelings. It's made a world of difference for our family.",
     },
   ];
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -35,18 +26,14 @@ function HomePage() {
   const handlePrev = () => {
     setAnimation("slide-right");
     setTimeout(() => {
-      setTestimonialIndex((prev) =>
-        prev === 0 ? testimonials.length - 1 : prev - 1
-      );
+      setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
       setAnimation("");
     }, 350);
   };
   const handleNext = () => {
     setAnimation("slide-left");
     setTimeout(() => {
-      setTestimonialIndex((prev) =>
-        prev === testimonials.length - 1 ? 0 : prev + 1
-      );
+      setTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
       setAnimation("");
     }, 350);
   };
@@ -70,23 +57,20 @@ function HomePage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          height: "60vh",
+          minHeight: "60vh",
         }}
       >
         <div className="home-content-wrapper">
-          <div className="home-text-content text-center ms-auto">
+          <div className="home-text-content text-center mx-auto">
             <h1 className="home-title">
               Welcome To <br /> <span>TAWASUL</span>
             </h1>
             <p className="home-description">
-              TAWASUL is an inclusive communication platform that empowers
-              non-speaking individuals, especially children with autism, through
-              visual tools like PECS.
+              TAWASUL is an inclusive communication platform that empowers non-speaking individuals,
+              especially children with autism, through visual tools like PECS.
             </p>
             <Link to="/about">
-              <button className="home-read-more-btn text-white">
-                Read More
-              </button>
+              <button className="home-read-more-btn text-white">Read More</button>
             </Link>
           </div>
         </div>
@@ -148,42 +132,31 @@ function HomePage() {
       {/* Discover */}
       <section className="home-wow-highlight py-5 bg-white text-center">
         <Container>
-          <h2 className="fw-bold mb-4 display-6">
-            🌟 Discover More with TAWASUL
-          </h2>
+          <h2 className="fw-bold mb-4 display-6">🌟 Discover More with TAWASUL</h2>
           <p className="lead mb-4">
-            Every interaction opens a new door to connection and discovery.
-            Here’s what makes us <strong>stand out</strong>:
+            Every interaction opens a new door to connection and discovery. Here's what makes us{" "}
+            <strong>stand out</strong>:
           </p>
           <Row className="g-4">
             <Col md={4}>
               <div className="p-4 border rounded-4 shadow-sm h-100">
                 <i className="bi bi-magic text-success fs-1 mb-3"></i>
                 <h5 className="fw-bold">Visual Magic</h5>
-                <p>
-                  Engaging visuals that resonate with kids and spark joyful
-                  learning.
-                </p>
+                <p>Engaging visuals that resonate with kids and spark joyful learning.</p>
               </div>
             </Col>
             <Col md={4}>
               <div className="p-4 border rounded-4 shadow-sm h-100">
                 <i className="bi bi-cloud-upload text-info fs-1 mb-3"></i>
                 <h5 className="fw-bold">Seamless Access</h5>
-                <p>
-                  Access your personalized board anywhere — on any device, at
-                  any time.
-                </p>
+                <p>Access your personalized board anywhere — on any device, at any time.</p>
               </div>
             </Col>
             <Col md={4}>
               <div className="p-4 border rounded-4 shadow-sm h-100">
                 <i className="bi bi-emoji-smile text-warning fs-1 mb-3"></i>
                 <h5 className="fw-bold">Joyful UX</h5>
-                <p>
-                  Kid-friendly design that brings smiles while empowering
-                  communication.
-                </p>
+                <p>Kid-friendly design that brings smiles while empowering communication.</p>
               </div>
             </Col>
           </Row>
@@ -211,7 +184,7 @@ function HomePage() {
               <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                 <i className="bi bi-kanban fs-1 text-success mb-3"></i>
                 <h5 className="fw-bold">2. Build Your Board</h5>
-                <p>Choose the PECS cards that suit your child’s needs.</p>
+                <p>Choose the PECS cards that suit your child's needs.</p>
               </div>
             </Col>
             <Col md={4}>
@@ -272,13 +245,11 @@ function HomePage() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-5px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 8px 20px rgba(0,0,0,0.15)";
+                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.15)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow =
-                      "0 4px 12px rgba(0,0,0,0.1)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
                   }}
                 >
                   <div style={{ fontSize: "2.5rem", color: "#23305e" }}>
@@ -354,15 +325,7 @@ function HomePage() {
 
             {/* ✅ CTA Button */}
             <div className="mt-4">
-              <Link
-                to="/board"
-                className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
-                style={{
-                backgroundColor: "#173067",
-                border: "none",
-                width: "300px",
-              }}
-              >
+              <Link to="/board" className="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
                 Try Now
               </Link>
             </div>
@@ -406,10 +369,7 @@ function HomePage() {
           </button>
           <div className={`home-testimonial-card ${animation}`}>
             <div className="home-testimonial-quote-icon">
-              <i
-                className="bi bi-quote"
-                style={{ fontSize: "3rem", color: "#23305e" }}
-              ></i>
+              <i className="bi bi-quote" style={{ fontSize: "3rem", color: "#23305e" }}></i>
             </div>
             <div className="home-testimonial-content">
               <img
@@ -418,12 +378,8 @@ function HomePage() {
                 className="home-testimonial-avatar"
               />
               <div>
-                <p className="home-testimonial-name">
-                  {testimonials[testimonialIndex].name}
-                </p>
-                <div className="home-testimonial-text">
-                  {testimonials[testimonialIndex].text}
-                </div>
+                <p className="home-testimonial-name">{testimonials[testimonialIndex].name}</p>
+                <div className="home-testimonial-text">{testimonials[testimonialIndex].text}</div>
               </div>
             </div>
           </div>

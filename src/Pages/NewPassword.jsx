@@ -41,16 +41,18 @@ function NewPassword() {
 
   return (
     <Container
+      fluid
       className="d-flex justify-content-center align-items-center"
-      style={{ Height: "100vh"  }}
+      style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
         {/* Image Column - Hidden on small screens */}
-        <Col xs={12} lg={6} className="d-none d-lg-flex justify-content-center align-items-center">
+        <Col xs={12} lg={6} className="d-none d-lg-flex justify-content-center">
           <img
             src={avatar}
             alt="Password Reset Illustration"
-            style={{ maxWidth: "350px", height: "auto" }}
+            className="img-fluid mb-4 d-none d-lg-block"
+            style={{ maxWidth: "300px", height: "auto" }}
           />
         </Col>
 
