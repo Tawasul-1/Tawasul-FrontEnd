@@ -181,7 +181,7 @@ function HomePage() {
           </Row>
         </Container>
       </section>
-      
+
       {/* how use  */}
       <section className="how-it-works-section py-5 bg-light">
         <Container>
@@ -284,6 +284,66 @@ function HomePage() {
             >
               View All Categories
             </a>
+          </div>
+        </Container>
+      </section>
+
+      {/* board */}
+      <section
+        className="home-app-section py-5"
+        style={{
+          background: "linear-gradient(135deg, #f2f7fb 0%, #eaf0f8 100%)",
+        }}
+      >
+        <Container>
+          <div className="text-center mb-5 animate__animated animate__fadeInDown">
+            <div className="d-flex justify-content-center align-items-center mb-2">
+              <i
+                className="bi bi-kanban-fill"
+                style={{
+                  fontSize: "2.2rem",
+                  color: "#23305e",
+                  marginRight: "0.5rem",
+                }}
+              ></i>
+              <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
+                Board
+              </h2>
+            </div>
+            <p className="text-muted">Your smart communication panel</p>
+          </div>
+
+          <div className="home-app-content text-center">
+            <div className="home-app-image d-flex justify-content-center animate__animated animate__zoomIn">
+              <img
+                src={board}
+                alt="App"
+                className="img-fluid rounded-4 shadow"
+                style={{
+                  maxWidth: "600px",
+                  width: "100%",
+                  transition: "transform 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              />
+            </div>
+
+            {/* ✅ CTA Button */}
+            <div className="mt-4">
+              <Link to="/board" className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
+              style={{
+                backgroundColor: "#173067",
+                border: "none",
+                width: "300px",
+              }}>
+                Try Now
+              </Link>
+            </div>
           </div>
         </Container>
       </section>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Style-pages/Contact.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
@@ -20,19 +20,33 @@ const About = () => {
   ];
 
   const [testimonialIndex, setTestimonialIndex] = useState(0);
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [animation, setAnimation] = useState("");
 
   const handlePrev = () => {
-    setTestimonialIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-    );
+    setAnimation("slide-right");
+    setTimeout(() => {
+      setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+      setAnimation("");
+    }, 350);
   };
 
   const handleNext = () => {
-    setTestimonialIndex((prevIndex) =>
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-    );
+    setAnimation("slide-left");
+    setTimeout(() => {
+      setTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+      setAnimation("");
+    }, 350);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimation("slide-left");
+      setTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+      setTimeout(() => setAnimation(""), 350);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
 
   return (
     <>
@@ -50,10 +64,9 @@ const About = () => {
         <div className="col-md-6">
           <h2 className="fw-bold">TawasuL</h2>
           <p className="text-secondary" style={{ fontSize: "1.25rem", fontWeight: 500 }}>
-            TawasuL is a visual communication platform designed to support
-            non-speaking children, especially those with autism. It uses
-            PECS-based tools to help them express needs, feelings, and thoughts
-            with ease and confidence.
+            TawasuL is a visual communication platform designed to support non-speaking children,
+            especially those with autism. It uses PECS-based tools to help them express needs,
+            feelings, and thoughts with ease and confidence.
           </p>
           <p className="text-secondary" style={{ fontSize: "1.25rem", fontWeight: 500 }}>
             Empowering every child to connect, communicate, and thrive.
@@ -77,12 +90,10 @@ const About = () => {
             />
           </div>
           <p className="text-secondary" style={{ fontSize: "1.25rem", fontWeight: 500 }}>
-            It’s simple, child-friendly, and designed with real therapeutic
-            needs in mind.
+            It’s simple, child-friendly, and designed with real therapeutic needs in mind.
           </p>
           <p className="text-secondary" style={{ fontSize: "1.25rem", fontWeight: 500 }}>
-            Parents and educators can easily customize boards to fit each
-            child’s journey.
+            Parents and educators can easily customize boards to fit each child’s journey.
           </p>
           <p className="fw-semibold text-primary" style={{ fontSize: "1.25rem", fontWeight: 500 }}>
             With TawasuL, communication becomes a right—not a challenge.
@@ -109,7 +120,7 @@ const About = () => {
                     src={member.img}
                     alt={member.name}
                     className="card-img-top rounded"
-                    style={{ height: "300px",width:"auto", objectFit: "cover" }}
+                    style={{ height: "300px", width: "auto", objectFit: "cover" }}
                   />
                   <div className="card-body p-2">
                     <p className="card-text fw-semibold">{member.name}</p>
@@ -121,62 +132,43 @@ const About = () => {
         </div>
       </section>
 
-      {/* Testimonial Section */}
+      {/* Testimonials Section */}
       <section className="home-testimonials-section">
         <div className="home-testimonials-title text-center mb-4">
-          <span
-            className="home-testimonials-icon"
-            style={{
-              fontSize: "2rem",
-              color: "#23305e",
-              marginRight: "0.5rem",
-              verticalAlign: "middle",
-            }}
-          >
+          <span className="home-testimonials-icon" style={{ fontSize: "2rem", color: "#23305e" }}>
             <i className="bi bi-chat-left-quote-fill"></i>
           </span>
           <span
             className="home-testimonials-heading"
-            style={{
-              fontWeight: 700,
-              fontSize: "2rem",
-              color: "#23305e",
-              verticalAlign: "middle",
-            }}
+            style={{ fontWeight: 700, fontSize: "2rem", color: "#23305e" }}
           >
             Testimonial
           </span>
         </div>
-        <div className="home-testimonials-wrapper d-flex align-items-center justify-content-center gap-4">
-          <button
-            className="home-testimonials-arrow left btn btn-outline-primary"
-            aria-label="Previous testimonial"
-            onClick={handlePrev}
-          >
+
+        <div className="home-testimonials-wrapper">
+          <button className="home-testimonials-arrow left" onClick={handlePrev}>
             <i className="bi bi-arrow-left-circle"></i>
           </button>
-          <div className="home-testimonial-card p-4 shadow-sm border rounded text-center" style={{ maxWidth: "600px" }}>
-            <div className="home-testimonial-quote-icon mb-3">
+
+          <div className={`home-testimonial-card ${animation}`}>
+            <div className="home-testimonial-quote-icon">
               <i className="bi bi-quote" style={{ fontSize: "3rem", color: "#23305e" }}></i>
             </div>
             <div className="home-testimonial-content">
               <img
                 src={testimonials[testimonialIndex].avatar}
                 alt={testimonials[testimonialIndex].name}
-                className="home-testimonial-avatar rounded-circle mb-2"
-                style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                className="home-testimonial-avatar"
               />
-              <p className="home-testimonial-name fw-bold">{testimonials[testimonialIndex].name}</p>
-              <div className="home-testimonial-text text-secondary">
-                {testimonials[testimonialIndex].text}
+              <div>
+                <p className="home-testimonial-name">{testimonials[testimonialIndex].name}</p>
+                <div className="home-testimonial-text">{testimonials[testimonialIndex].text}</div>
               </div>
             </div>
           </div>
-          <button
-            className="home-testimonials-arrow right btn btn-outline-primary"
-            aria-label="Next testimonial"
-            onClick={handleNext}
-          >
+
+          <button className="home-testimonials-arrow right" onClick={handleNext}>
             <i className="bi bi-arrow-right-circle"></i>
           </button>
         </div>
