@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../Style-pages/Login.css";
 import { authService } from "../api/services/AuthenticationService";
@@ -166,11 +164,11 @@ function Login() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={7}  xl={4}>
-          <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
+        <Col md={7} xl={4}>
+          <Card style={{ width: "100%", borderRadius: "2rem", padding: "2rem" }}>
             <Row className="mb-4">
               <Col>
-                <h2 className="text-center">Login to your account</h2>
+                <h2 className="text-center">Welcom To TAWASUL</h2>
               </Col>
             </Row>
             {generalError && (
@@ -272,12 +270,12 @@ function Login() {
             </Row>
           </Card>
         </Col>
-        <Col md={5} xl={3} className="d-flex justify-content-center">
+        <Col md={5} xl={4} className="d-flex justify-content-center align-items-center">
           <img
             src="/image-1.png"
-            alt="Login Illustration"
-            className="img-fluid ms-auto mb-4 d-none d-md-block"
-            style={{ width: "100%", maxWidth: "600px", height: "auto" }}
+            alt="Burger"
+            className="img-fluid burger-image d-none d-md-block"
+            style={{ maxWidth: "100%", height: "auto", borderRadius: "1rem" }}
           />
         </Col>
       </Row>

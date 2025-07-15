@@ -133,7 +133,7 @@ const Navbar = ({ onMenuClick }) => {
         )}
 
         {/* Menu Icon */}
-        <BsList size={24} style={{ color: "#173067", cursor: "pointer" }} onClick={onMenuClick} />
+        <BsList size={70} style={{ color: "#173067", cursor: "pointer" }} onClick={onMenuClick} />
       </div>
     </div>
   );

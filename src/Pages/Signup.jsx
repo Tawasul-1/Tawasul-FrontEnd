@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
-import signupImage from "../assets/signup.svg";
+import signupImage from "/Vector.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link, useNavigate } from "react-router-dom";
 import "../Style-pages/Login.css";
@@ -228,12 +228,12 @@ function Signup() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={5} xl={3} className="d-flex justify-content-center">
+        <Col md={5} xl={4} className="d-flex justify-content-center align-items-center">
           <img
             src={signupImage}
-            alt="Tawasul Logo"
-            className="img-fluid ms-auto mb-4 d-none d-md-block"
-            style={{ width: "100%", maxWidth: "600px", height: "auto" }}
+            alt="Burger"
+            className="img-fluid burger-image d-none d-md-block"
+            style={{ maxWidth: "100%", height: "auto", borderRadius: "1rem" }}
           />
         </Col>
 
