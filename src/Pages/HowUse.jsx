@@ -7,7 +7,7 @@ const HowUse = () => {
   return (
     <>
       <Header />
-      <div className="howuse-wrapper" style={{ backgroundColor: "#f9fbff" }}>
+      <div className="howuse-wrapper" style={{ backgroundColor: "#f9fbff" ,marginBottom:"200px"}}>
         <div className=" text-center">
           <div className="howuse-header-section">
             <h2 className="howuse-title mb-5" style={{ fontWeight: "700", color: "#173067" }}>
@@ -148,9 +148,18 @@ const HowUse = () => {
               </ul>
               <img src="/10.png" alt="Stage 1" className="stage-image mb-3" />
             </div>
+            <div className="start-learning text-center mt-4">
+              <p className="mb-3 fw-bold" style={{ color: "#173067", fontSize: "1.2rem" }}>
+                Ready to get started?
+              </p>
+              <a href="/cat" className="btn btn-primary start-learning-btn">
+                Start Learning
+              </a>
+            </div>
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };
