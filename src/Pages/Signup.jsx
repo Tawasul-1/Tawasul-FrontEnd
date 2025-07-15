@@ -233,7 +233,7 @@ function Signup() {
             src={signupImage}
             alt="Burger"
             className="img-fluid burger-image d-none d-md-block"
-            style={{ maxWidth: "90%", height: "auto", borderRadius: "1rem" }}
+            style={{ maxWidth: "80%", height: "auto", borderRadius: "1rem" }}
           />
         </Col>
 
