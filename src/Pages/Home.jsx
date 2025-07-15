@@ -335,16 +335,94 @@ function HomePage() {
 
             {/* ✅ CTA Button */}
             <div className="mt-4">
-              <Link to="/board" className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
-              style={{
-                backgroundColor: "#173067",
-                border: "none",
-                width: "300px",
-              }}>
+              <Link
+                to="/board"
+                className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
+                style={{
+                  backgroundColor: "#173067",
+                  border: "none",
+                  width: "300px",
+                }}
+              >
                 Try Now
               </Link>
             </div>
           </div>
+        </Container>
+      </section>
+
+      {/* Who Benefits Section */}
+      <section className="home-forwhom-section py-5 bg-light text-center">
+        <Container>
+          <h2 className="fw-bold mb-4" style={{ color: "#173067" }}>
+            Who Benefits from TAWASUL?
+          </h2>
+          <p className="text-muted mb-5" style={{ fontSize: "1.1rem" }}>
+            TAWASUL is designed to support a wide range of people who work with non-speaking
+            individuals.
+          </p>
+          <Row className="g-4">
+            <Col md={3} sm={6}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <div style={{ fontSize: "2.5rem" }}>👪</div>
+                <h5 className="fw-bold mt-3">Parents</h5>
+                <p className="text-muted">
+                  Helping them understand their child’s needs and communicate more easily.
+                </p>
+              </div>
+            </Col>
+            <Col md={3} sm={6}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <div style={{ fontSize: "2.5rem" }}>👩‍🏫</div>
+                <h5 className="fw-bold mt-3">Psychologists</h5>
+                <p className="text-muted">
+                  Offering insights into behavior and aiding in emotional analysis.
+                </p>
+              </div>
+            </Col>
+            <Col md={3} sm={6}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <div style={{ fontSize: "2.5rem" }}>🧑‍⚕️</div>
+                <h5 className="fw-bold mt-3">Therapists</h5>
+                <p className="text-muted">
+                  Supporting therapy sessions with engaging and personalized tools.
+                </p>
+              </div>
+            </Col>
+            <Col md={3} sm={6}>
+              <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
+                <div style={{ fontSize: "2.5rem" }}>🧒</div>
+                <h5 className="fw-bold mt-3">Non-speaking Children</h5>
+                <p className="text-muted">
+                  Empowering them to express themselves and connect with the world.
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Call To Action for Plan Page */}
+      <section
+        className="home-subscribe-section py-5 text-center"
+        style={{ backgroundColor: "#f0f4ff" }}
+      >
+        <Container>
+          <h2 className="fw-bold mb-3" style={{ color: "#173067" }}>
+            Ready to Unlock More?
+          </h2>
+          <p className="mb-4" style={{ maxWidth: "600px", margin: "0 auto", color: "#555" }}>
+            Upgrade your experience with TAWASUL by exploring our flexible subscription plans
+            designed to fit your needs — whether you're a parent, therapist, or educator.
+          </p>
+          <Link
+            to="/plan"
+            className="btn btn-primary px-4 py-2 rounded-pill shadow"
+            style={{ backgroundColor: "#173067", border: "none", width: "250px" }}
+          >
+            View Plans
+            <i className="bi bi-arrow-right ms-2"></i>
+          </Link>
         </Container>
       </section>
 
