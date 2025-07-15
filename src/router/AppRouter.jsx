@@ -20,6 +20,7 @@ import Item from "../Pages/Item";
 import Test from "../Pages/Test";
 import Test2 from "../Pages/Test2";
 import Test3 from "../Pages/Test3";
+import HowUse from "../Pages/HowUse";
 
 function AppRouter() {
   return (
@@ -44,6 +45,7 @@ function AppRouter() {
         <Route path="/test" element={<Test />} />
         <Route path="/test2" element={<Test2 />} />
         <Route path="/test3" element={<Test3 />} />
+        <Route path="/howuse" element={<HowUse />} />
         <Route path="/about" element={<About />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/verify-email/:token" element={<EmailVerification />} />

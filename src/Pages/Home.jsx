@@ -217,7 +217,7 @@ function HomePage() {
           {/* Button under cards */}
           <div className="text-center mt-4">
             <Link
-              to="/how-use"
+              to="/howuse"
               className="btn btn-primary px-4 py-2 rounded-pill shadow-sm"
               style={{
                 backgroundColor: "#173067",

@@ -21,7 +21,7 @@ const AddNewCard = () => {
       <Header />
 
       {/* Main Content */}
-      <Container fluid className="flex-grow-1 d-flex align-items-center justify-content-center bg-light-blue py-5 marg">
+      <Container fluid className="flex-grow-1 d-flex align-items-center justify-content-center bg-light-blue py-5 mb-4">
         <Row className="w-100 justify-content-center">
           <Col xs={11} sm={10} md={8} lg={6} xl={5}>
             <Card className="p-4 rounded-4 shadow-sm" style={{ backgroundColor: "#fff" }}>
