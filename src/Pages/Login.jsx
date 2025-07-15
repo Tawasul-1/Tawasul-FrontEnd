@@ -242,6 +242,14 @@ function Login() {
                 </Col>
               </Row>
 
+              <Row>
+                <Col className="text-center mb-1">
+                  <p>
+                    <Link to="/reset">Forget password?</Link>
+                  </p>
+                </Col>
+              </Row>
+
               <Row className="mb-3">
                 <Col className="text-center">
                   <Button type="submit" className="w-75" disabled={loading}>

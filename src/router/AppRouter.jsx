@@ -33,10 +33,11 @@ function AppRouter() {
           {/* Public Routes */}
           <Route index element={<HomePage />} />
           <Route path="/contact" element={<Contact />} />
+
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<ResetPassword />} />
-          <Route path="/new-password" element={<NewPassword />} />
+          <Route path="/newpass" element={<NewPassword />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/verify-email/:token" element={<EmailVerification />} />
