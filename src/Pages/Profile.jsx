@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../Style-pages/Profile.css";
 import { BsBellFill, BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
+import { userService } from "../api/services/UserService";
+import useApi from "../api/hooks/useApi";
+import { useAuth } from "../context/AuthContext";
 
 const categories = [
   {
@@ -58,6 +61,22 @@ const Profile = () => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const {
+    data: userProfile,
+    error,
+    loading,
+    request: fetchUserProfile,
+  } = useApi(userService.getProfile);
+
+  useEffect(() => {
+    console.log("Profile component mounted");
+    const authToken = localStorage.getItem("authToken");
+    console.log("Auth token in localStorage:", authToken ? "Token exists" : "No token");
+    console.log("Full localStorage contents:", Object.keys(localStorage));
+    console.log("localStorage authToken value:", authToken);
+    fetchUserProfile();
+  }, []);
+
   const handleDeleteCard = (label) => {
     const updatedCategories = categories.map((cat) => {
       if (cat.name === activeCategory.name) {
@@ -68,10 +87,56 @@ const Profile = () => {
       }
       return cat;
     });
-    setActiveCategory(
-      updatedCategories.find((cat) => cat.name === activeCategory.name)
-    );
+    setActiveCategory(updatedCategories.find((cat) => cat.name === activeCategory.name));
   };
+
+
+  if (loading) {
+    return (
+      <div className="profile-container bg-light min-vh-100">
+        <Navbar onMenuClick={() => setShowSidebar(true)} />
+        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+        <div className="main-content container py-4">
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: "400px" }}
+          >
+            <div className="text-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-3 text-muted">Loading profile...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="profile-container bg-light min-vh-100">
+        <Navbar onMenuClick={() => setShowSidebar(true)} />
+        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+        <div className="main-content container py-4">
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: "400px" }}
+          >
+            <div className="text-center">
+              <div className="alert alert-danger" role="alert">
+                <h5>Error Loading Profile</h5>
+                <p>{error}</p>
+                <button className="btn btn-primary" onClick={fetchUserProfile}>
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container bg-light min-vh-100">
@@ -87,28 +152,35 @@ const Profile = () => {
           <div className="col-12 col-md-4">
             <div className="profile-card bg-white rounded-4 p-4 text-center shadow-sm">
               <img
-                src="/image-2.png"
+                src={userProfile?.profile_picture || "/image-2.png"}
                 alt="User"
                 className="profile-img mb-3 rounded-circle border"
                 width="100"
                 height="100"
+                onError={(e) => {
+                  e.target.src = "/image-2.png";
+                }}
               />
               <h5 className="fw-bold mb-1" style={{ color: "#173067" }}>
-                Merna Ahmad
+                {userProfile?.first_name?.toUpperCase() +
+                  " " +
+                  userProfile?.last_name?.toUpperCase() || "User"}
               </h5>
-              <p className="mb-1 text-muted">010000000000</p>
-              <p className="mb-1 text-muted">Age: 8</p>
-              <a
-                href="mailto:merna0@gmail.com"
-                className="text-decoration-none text-muted"
-              >
-                merna0@gmail.com
+              <p className="mb-1 text-muted">{userProfile?.phone || "No phone number"}</p>
+              <p className="mb-1 text-muted">
+                Age:{" "}
+                {userProfile?.birth_date
+                  ? new Date().getFullYear() - new Date(userProfile.birth_date).getFullYear()
+                  : "Not specified"}
+              </p>
+              <a href={`mailto:${userProfile?.email}`} className="text-decoration-none text-muted">
+                {userProfile?.email || "No email"}
               </a>
-              <Link to="/edit-Profile">
-                <button className="btn btn-primary mt-3 rounded-pill px-4">
-                  Edit Profile
-                </button>
-              </Link>
+              <div className="mt-3">
+                <Link to="/edit-Profile">
+                  <button className="btn btn-primary rounded-pill px-4 me-2">Edit Profile</button>
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -141,12 +213,7 @@ const Profile = () => {
 
             {/* Cards of Active Category */}
             <h5 className="mt-4 d-flex align-items-center gap-2">
-              <img
-                src={activeCategory.icon}
-                alt={activeCategory.name}
-                width="24"
-                height="24"
-              />
+              <img src={activeCategory.icon} alt={activeCategory.name} width="24" height="24" />
               <span style={{ color: "#173067" }}>{activeCategory.name}</span>
             </h5>
             <div className="row g-3">

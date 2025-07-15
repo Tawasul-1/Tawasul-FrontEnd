@@ -227,17 +227,17 @@ function Signup() {
       className="d-flex justify-content-center align-items-center background"
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
-      <Row className="w-100 justify-content-center algn-items-center">
-        <Col xs={12} lg={6} className="d-flex justify-content-center">
+      <Row className="w-100 justify-content-center align-items-center">
+        <Col md={5} xl={3} className="d-flex justify-content-center">
           <img
             src={signupImage}
             alt="Tawasul Logo"
-            className="img-fluid ms-auto mb-4 d-none d-lg-block"
-            style={{ maxWidth: "600px", height: "auto" }}
+            className="img-fluid ms-auto mb-4 d-none d-md-block"
+            style={{ width: "100%", maxWidth: "600px", height: "auto" }}
           />
         </Col>
 
-        <Col xs={12} lg={6} className="d-flex flex-column justify-content-center">
+        <Col md={7}  xl={4}>
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             <h2 className="text-center mb-4 px-3">Welcome to Tawasul</h2>
             {generalError && <div className="alert alert-danger text-center">{generalError}</div>}

@@ -2,12 +2,16 @@ import { useState } from "react";
 import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../Style-pages/Login.css";
 import { authService } from "../api/services/AuthenticationService";
+import { useAuth } from "../context/AuthContext";
+import { decodeJWT } from "../utils/tokenExtractor";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -20,6 +24,9 @@ function Login() {
     email: "",
     password: "",
   });
+
+  // Get the intended destination from location state
+  const from = location.state?.from?.pathname || "/board";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,17 +84,41 @@ function Login() {
       const response = await authService.login(credentials);
 
       console.log("Login successful:", response.data);
+      console.log("Response data structure:", Object.keys(response.data));
 
-      // Store the token in localStorage
-      if (response.data?.token) {
-        localStorage.setItem("authToken", response.data.token);
-        if (response.data.user) {
-          localStorage.setItem("user", JSON.stringify(response.data.user));
+      // Use the AuthContext login function
+      if (response.data?.access) {
+        const userData = decodeJWT(response.data.access);
+        login(userData || null, response.data.access, response.data.refresh);
+        console.log("Access token stored successfully:", response.data.access);
+
+        // Also store refresh token if available
+        if (response.data?.refresh) {
+          console.log("Refresh token stored successfully");
         }
+
+        if (response.data.user) {
+          console.log("User data stored:", response.data.user);
+        }
+      } else if (response.data?.token) {
+        login(response.data.user || null, response.data.token);
+        console.log("Token stored successfully:", response.data.token);
+        if (response.data.user) {
+          console.log("User data stored:", response.data.user);
+        }
+      } else if (response.data?.access_token) {
+        login(response.data.user || null, response.data.access_token);
+        console.log("Access token stored successfully:", response.data.access_token);
+        if (response.data.user) {
+          console.log("User data stored:", response.data.user);
+        }
+      } else {
+        console.warn("No token found in response:", response.data);
+        console.log("Available keys in response:", Object.keys(response.data));
       }
 
-      // Redirect to home page
-      navigate("/board");
+      // Redirect to the intended page or default to board
+      navigate(from, { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
 
@@ -135,16 +166,7 @@ function Login() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col xs={12} lg={6} className="d-flex justify-content-center">
-          <img
-            src="/image-1.png"
-            alt="Login Illustration"
-            className="img-fluid ms-auto mb-4 d-none d-lg-block"
-            style={{ maxWidth: "600px", height: "auto" }}
-          />
-        </Col>
-
-        <Col xs={12} lg={6} className="d-flex flex-column justify-content-center">
+        <Col md={7}  xl={4}>
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             <Row className="mb-4">
               <Col>
@@ -154,6 +176,12 @@ function Login() {
             {generalError && (
               <Alert variant="danger" className="text-center">
                 {generalError}
+              </Alert>
+            )}
+
+            {location.state?.from && (
+              <Alert variant="info" className="text-center">
+                Please log in to access the requested page.
               </Alert>
             )}
 
@@ -243,6 +271,14 @@ function Login() {
               </Col>
             </Row>
           </Card>
+        </Col>
+        <Col md={5} xl={3} className="d-flex justify-content-center">
+          <img
+            src="/image-1.png"
+            alt="Login Illustration"
+            className="img-fluid ms-auto mb-4 d-none d-md-block"
+            style={{ width: "100%", maxWidth: "600px", height: "auto" }}
+          />
         </Col>
       </Row>
     </Container>
