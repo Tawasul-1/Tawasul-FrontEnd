@@ -1,7 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Menu = ({ setShowSidebar }) => {
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    setShowSidebar(false);
+    logout();
+  };
+
   return (
     <div
       className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"
@@ -28,34 +36,19 @@ const Menu = ({ setShowSidebar }) => {
           <Link to="/" style={{ color: "#173067", textDecoration: "none" }}>
             🏠 Home
           </Link>
-          <Link
-            to="/addnewcard"
-            style={{ color: "#173067", textDecoration: "none" }}
-          >
+          <Link to="/addnewcard" style={{ color: "#173067", textDecoration: "none" }}>
             ➕ Add New Card
           </Link>
-          <Link
-            to="/about"
-            style={{ color: "#173067", textDecoration: "none" }}
-          >
+          <Link to="/about" style={{ color: "#173067", textDecoration: "none" }}>
             ℹ️ About Us
           </Link>
-          <Link
-            to="/profile"
-            style={{ color: "#173067", textDecoration: "none" }}
-          >
+          <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
             👤 Profile
           </Link>
-          <Link
-            to="/selection"
-            style={{ color: "#173067", textDecoration: "none" }}
-          >
+          <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
             🗂️ Cards
           </Link>
-          <Link
-            to="/contact"
-            style={{ color: "#173067", textDecoration: "none" }}
-          >
+          <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
             📞 Contact Us
           </Link>
         </div>
@@ -69,10 +62,7 @@ const Menu = ({ setShowSidebar }) => {
             cursor: "pointer",
             marginTop: "auto",
           }}
-          onClick={() => {
-            setShowSidebar(false);
-            alert("Logged out");
-          }}
+          onClick={handleLogout}
         >
           <i className="bi bi-box-arrow-right fs-5 me-2 text-white"></i> Logout
         </div>

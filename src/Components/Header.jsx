@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useLocation } from "react-router-dom";
 import "./Header.css";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-  }, []);
+  const { isAuthenticated, logout } = useAuth();
 
   const handleSignout = () => {
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-    navigate("/login");
-    window.location.reload();
+    logout();
+    // navigate is already called in logout, so no need to call it here
   };
 
   return (
