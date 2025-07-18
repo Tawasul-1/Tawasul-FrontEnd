@@ -4,61 +4,12 @@ import { BsBellFill, BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
-import { userService } from "../api/services/UserService";
+import CategoryService from "../api/services/CategoryService";
 import useApi from "../api/hooks/useApi";
-import { useAuth } from "../context/AuthContext";
-
-const categories = [
-  {
-    name: "Food",
-    image: "/Food.png",
-    icon: "/fork.png",
-    bg: "light-blue",
-    cards: [
-      { label: "Apple", emoji: "🍎" },
-      { label: "Banana", emoji: "🍌" },
-      { label: "Kiwi", emoji: "🥝" },
-      { label: "Burger", emoji: "🍔" },
-    ],
-  },
-  {
-    name: "Toys",
-    image: "/Toys.png",
-    icon: "/Toys.png",
-    bg: "light-red",
-    cards: [
-      { label: "Ball", emoji: "🏀" },
-      { label: "Car", emoji: "🚗" },
-      { label: "Blocks", emoji: "🧱" },
-      { label: "Doll", emoji: "🪆" },
-    ],
-  },
-  {
-    name: "Things",
-    image: "/Holding.png",
-    icon: "/Holding.png",
-    bg: "light-yellow",
-    cards: [
-      { label: "Chair", emoji: "🪑" },
-      { label: "Table", emoji: "🛋️" },
-      { label: "Bag", emoji: "🎒" },
-    ],
-  },
-  {
-    name: "Feeling",
-    image: "/People.png",
-    icon: "/People.png",
-    bg: "light-green",
-    cards: [
-      { label: "Happy", emoji: "😊" },
-      { label: "Sad", emoji: "😢" },
-      { label: "Angry", emoji: "😡" },
-    ],
-  },
-];
+import { userService } from "../api/services/UserService";
 
 const Profile = () => {
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [activeCategory, setActiveCategory] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
 
   const {
@@ -67,6 +18,12 @@ const Profile = () => {
     loading,
     request: fetchUserProfile,
   } = useApi(userService.getProfile);
+  const {
+    data: categories,
+    error: categoriesError,
+    loading: categoriesLoading,
+    request: fetchCategories,
+  } = useApi(CategoryService.getAllCategories);
 
   useEffect(() => {
     console.log("Profile component mounted");
@@ -75,10 +32,24 @@ const Profile = () => {
     console.log("Full localStorage contents:", Object.keys(localStorage));
     console.log("localStorage authToken value:", authToken);
     fetchUserProfile();
+    fetchCategories();
   }, []);
 
+  useEffect(() => {
+    if (categoriesError) {
+      console.log("categoriesError", categoriesError);
+    }
+    if (categoriesLoading) {
+      console.log("categoriesLoading", categoriesLoading);
+    }
+    if (Array.isArray(categories?.results) && categories.results.length > 0) {
+      setActiveCategory(categories.results[0]);
+      console.log("categories", categories.results);
+    }
+  }, [categories, categoriesError, categoriesLoading]);
+
   const handleDeleteCard = (label) => {
-    const updatedCategories = categories.map((cat) => {
+    const updatedCategories = categories.results.map((cat) => {
       if (cat.name === activeCategory.name) {
         return {
           ...cat,
@@ -90,8 +61,7 @@ const Profile = () => {
     setActiveCategory(updatedCategories.find((cat) => cat.name === activeCategory.name));
   };
 
-
-  if (loading) {
+  if (loading || categoriesLoading) {
     return (
       <div className="profile-container bg-light min-vh-100">
         <Navbar onMenuClick={() => setShowSidebar(true)} />
@@ -113,7 +83,7 @@ const Profile = () => {
     );
   }
 
-  if (error) {
+  if (error || categoriesError) {
     return (
       <div className="profile-container bg-light min-vh-100">
         <Navbar onMenuClick={() => setShowSidebar(true)} />
@@ -137,6 +107,8 @@ const Profile = () => {
       </div>
     );
   }
+
+  console.log("categories", categories);
 
   return (
     <div className="profile-container bg-light min-vh-100">
@@ -195,44 +167,47 @@ const Profile = () => {
 
             {/* Categories */}
             <div className="row g-3 mb-4">
-              {categories.map((cat, index) => (
-                <div className="col-6 col-sm-6" key={index}>
-                  <div
-                    className={`category-box ${cat.bg} shadow-sm p-3 rounded text-center`}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    <img src={cat.image} alt={cat.name} className="mb-2" />
-                    <p className="m-0 fw-medium" style={{ color: "#173067" }}>
-                      {cat.name}
-                    </p>
+              {Array.isArray(categories?.results) &&
+                categories.results.map((cat, index) => (
+                  <div className="col-6 col-sm-6" key={index}>
+                    <div
+                      className={`category-box ${cat.bg} shadow-sm p-3 rounded text-center`}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setActiveCategory(cat)}
+                    >
+                      <img src={cat.image} alt={cat.name} className="mb-2" />
+                      <p className="m-0 fw-medium" style={{ color: "#173067" }}>
+                        {cat.name}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             {/* Cards of Active Category */}
             <h5 className="mt-4 d-flex align-items-center gap-2">
-              <img src={activeCategory.icon} alt={activeCategory.name} width="24" height="24" />
-              <span style={{ color: "#173067" }}>{activeCategory.name}</span>
+              <img src={activeCategory?.icon} alt={activeCategory?.name} width="24" height="24" />
+              <span style={{ color: "#173067" }}>{activeCategory?.name}</span>
             </h5>
             <div className="row g-3">
-              {activeCategory.cards.map((item, index) => (
-                <div className="col-6 col-sm-4 col-md-3" key={index}>
-                  <div className="food-card bg-white p-3 rounded text-center shadow-sm">
-                    <div style={{ fontSize: "2rem" }}>{item.emoji}</div>
-                    <p className="m-0 fw-medium" style={{ color: "#173067" }}>
-                      {item.label}
-                    </p>
-                    <button
-                      className="btn btn-outline-danger btn-sm mt-2 rounded-pill"
-                      onClick={() => handleDeleteCard(item.label)}
-                    >
-                      Delete
-                    </button>
+              {activeCategory &&
+                activeCategory.cards &&
+                activeCategory.cards.map((item, index) => (
+                  <div className="col-6 col-sm-4 col-md-3" key={index}>
+                    <div className="food-card bg-white p-3 rounded text-center shadow-sm">
+                      <div style={{ fontSize: "2rem" }}>{item.emoji}</div>
+                      <p className="m-0 fw-medium" style={{ color: "#173067" }}>
+                        {item.label}
+                      </p>
+                      <button
+                        className="btn btn-outline-danger btn-sm mt-2 rounded-pill"
+                        onClick={() => handleDeleteCard(item.label)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>

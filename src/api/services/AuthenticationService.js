@@ -27,7 +27,6 @@ class AuthenticationService extends BaseService {
         }
       }
 
-      // For FormData, don't set Content-Type header - let browser set it automatically
       const config = {
         timeout: 10000,
       };
@@ -38,7 +37,6 @@ class AuthenticationService extends BaseService {
 
       let response;
       if (isFormData) {
-        // For FormData, create a temporary axios instance without default headers
         const tempAxios = axios.create({
           baseURL: this.apiClient.defaults.baseURL,
           timeout: 10000,

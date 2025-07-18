@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { userService } from "../api/services/UserService";
 
 const AuthContext = createContext();
 
@@ -42,14 +43,24 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const login = (userData, token, refreshToken = null) => {
+  const login = async (userData, token, refreshToken = null) => {
     localStorage.setItem("authToken", token);
     if (refreshToken) {
       localStorage.setItem("refreshToken", refreshToken);
     }
-    if (userData) {
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+    // Fetch full profile from API
+    try {
+      const response = await userService.getProfile();
+      const profile = response.data;
+      localStorage.setItem("user", JSON.stringify(profile));
+      setUser(profile);
+    } catch (error) {
+      console.error("Failed to fetch user profile after login:", error);
+      // fallback to token info if profile fetch fails
+      if (userData) {
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
+      }
     }
     setIsAuthenticated(true);
   };

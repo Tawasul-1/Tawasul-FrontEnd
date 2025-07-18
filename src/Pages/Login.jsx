@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../Style-pages/Login.css";
 import { authService } from "../api/services/AuthenticationService";
@@ -160,15 +162,15 @@ function Login() {
   return (
     <Container
       fluid
-      className="d-flex justify-content-center align-items-center background"
+      className="d-flex px-5 justify-content-center align-items-center background"
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={7} xl={4}>
-          <Card style={{ width: "100%", borderRadius: "2rem", padding: "2rem" }}>
+        <Col md={7}  xl={4}>
+          <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             <Row className="mb-4">
               <Col>
-                <h2 className="text-center">Welcom To TAWASUL</h2>
+                <h2 className="text-center">Login to your account</h2>
               </Col>
             </Row>
             {generalError && (
@@ -242,14 +244,6 @@ function Login() {
                 </Col>
               </Row>
 
-              <Row>
-                <Col className="text-center mb-1">
-                  <p>
-                    <Link to="/reset">Forget password?</Link>
-                  </p>
-                </Col>
-              </Row>
-
               <Row className="mb-3">
                 <Col className="text-center">
                   <Button type="submit" className="w-75" disabled={loading}>
@@ -278,12 +272,12 @@ function Login() {
             </Row>
           </Card>
         </Col>
-        <Col md={5} xl={4} className="d-flex justify-content-center align-items-center">
+        <Col md={5} xl={3} className="d-flex justify-content-center">
           <img
             src="/image-1.png"
-            alt="Burger"
-            className="img-fluid burger-image d-none d-md-block"
-            style={{ maxWidth: "100%", height: "auto", borderRadius: "1rem" }}
+            alt="Login Illustration"
+            className="img-fluid ms-auto mb-4 d-none d-md-block"
+            style={{ width: "100%", maxWidth: "600px", height: "auto" }}
           />
         </Col>
       </Row>

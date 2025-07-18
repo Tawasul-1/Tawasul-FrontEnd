@@ -3,13 +3,16 @@ import { BsBellFill, BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useAuth } from "../context/AuthContext";
+import { userService } from "../api/services/UserService";
 
 const Navbar = ({ onMenuClick }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const { logout, isAuthenticated, user } = useAuth();
+  const { logout, isAuthenticated, user, setUser } = useAuth();
 
   console.log("isAuthenticated", isAuthenticated);
+  console.log("user object:", user);
+  console.log("user.profile_picture:", user && user.profile_picture);
 
   const notifications = ["You have a new message", "New card added", "Profile updated"];
 

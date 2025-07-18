@@ -224,7 +224,7 @@ function Signup() {
   return (
     <Container
       fluid
-      className="d-flex justify-content-center align-items-center background"
+      className="d-flex px-5 justify-content-center align-items-center background"
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
