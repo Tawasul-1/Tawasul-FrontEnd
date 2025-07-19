@@ -2,12 +2,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const Menu = ({ setShowSidebar }) => {
+const Menu = ({ setShowSidebar, onEditProfile }) => {
   const { logout } = useAuth();
 
   const handleLogout = () => {
     setShowSidebar(false);
     logout();
+  };
+
+  const handleEditProfile = () => {
+    setShowSidebar(false);
+    if (onEditProfile) {
+      onEditProfile();
+    }
   };
 
   return (
@@ -45,6 +52,12 @@ const Menu = ({ setShowSidebar }) => {
           <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
             👤 Profile
           </Link>
+          <div 
+            style={{ color: "#173067", textDecoration: "none", cursor: "pointer" }}
+            onClick={handleEditProfile}
+          >
+            ✏️ Edit Profile
+          </div>
           <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
             🗂️ Cards
           </Link>

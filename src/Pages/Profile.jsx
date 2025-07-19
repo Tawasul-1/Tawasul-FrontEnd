@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
+import { useLocation, Link } from "react-router-dom";
 import "../Style-pages/Profile.css";
 import { BsBellFill, BsList } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
+import EditProfileModal from "../Pages/EditProfile";
 import CategoryService from "../api/services/CategoryService";
 import CardService from "../api/services/CardService";
 import useApi from "../api/hooks/useApi";
 import { userService } from "../api/services/UserService";
-import { getUserLanguage, setUserLanguage, getCategoryName } from "../utils/languageUtils";
+import { getUserLanguage, getCategoryName } from "../utils/languageUtils";
 
 const Profile = () => {
+  const location = useLocation();
   const [activeCategory, setActiveCategory] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState(getUserLanguage());
+  const [showEditModal, setShowEditModal] = useState(false);
   const [userCards, setUserCards] = useState([]);
   const [loadingCards, setLoadingCards] = useState(false);
 
@@ -41,6 +44,29 @@ const Profile = () => {
     fetchUserCards();
   }, []);
 
+  // Refresh data when navigating back to the profile page
+  useEffect(() => {
+    console.log("Location changed, refreshing profile data");
+    fetchUserProfile();
+    fetchCategories();
+    fetchUserCards();
+  }, [location.pathname]);
+
+  // Refresh cards when component becomes visible (e.g., returning from AddNewCard)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log("Profile page became visible, refreshing cards");
+        fetchUserCards();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   useEffect(() => {
     if (categoriesError) {
       console.log("categoriesError", categoriesError);
@@ -52,7 +78,11 @@ const Profile = () => {
     if (Array.isArray(categories?.results) && categories.results.length > 0) {
       const firstCategory = categories.results[0];
       console.log("Setting initial active category:", firstCategory);
-      updateActiveCategoryWithCards(firstCategory);
+      const categoryCards = getCardsForCategory(firstCategory.id);
+      setActiveCategory({
+        ...firstCategory,
+        cards: categoryCards,
+      });
     }
   }, [categories, categoriesError, categoriesLoading, userCards]);
 
@@ -106,22 +136,6 @@ const Profile = () => {
     return filteredCards;
   };
 
-  // Update active category with its cards
-  const updateActiveCategoryWithCards = (category) => {
-    const categoryCards = getCardsForCategory(category.id);
-    const updatedCategory = {
-      ...category,
-      cards: categoryCards,
-    };
-    setActiveCategory(updatedCategory);
-  };
-
-  const handleLanguageChange = (language) => {
-    setUserLanguage(language);
-    setCurrentLanguage(language);
-    window.location.reload();
-  };
-
   const handleDeleteCard = async (cardId) => {
     try {
       await CardService.deleteCard(cardId);
@@ -136,7 +150,11 @@ const Profile = () => {
 
       // Update active category with updated cards
       if (activeCategory) {
-        updateActiveCategoryWithCards(activeCategory);
+        const updatedCards = getCardsForCategory(activeCategory.id);
+        setActiveCategory({
+          ...activeCategory,
+          cards: updatedCards,
+        });
       }
 
       console.log("Card deleted successfully");
@@ -148,14 +166,29 @@ const Profile = () => {
 
   // Handle category selection
   const handleCategorySelect = (category) => {
-    updateActiveCategoryWithCards(category);
+    const categoryCards = getCardsForCategory(category.id);
+    setActiveCategory({
+      ...category,
+      cards: categoryCards,
+    });
+  };
+
+  // Handle profile update
+  const handleProfileUpdate = () => {
+    fetchUserProfile();
+    fetchUserCards(); // Also refresh user cards after profile update
   };
 
   if (loading || categoriesLoading) {
     return (
       <div className="profile-container bg-light min-vh-100">
-        <Navbar onMenuClick={() => setShowSidebar(true)} />
-        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+        <Navbar
+          onMenuClick={() => setShowSidebar(true)}
+          onEditProfile={() => setShowEditModal(true)}
+        />
+        {showSidebar && (
+          <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+        )}
         <div className="main-content container py-4">
           <div
             className="d-flex justify-content-center align-items-center"
@@ -176,8 +209,13 @@ const Profile = () => {
   if (error || categoriesError) {
     return (
       <div className="profile-container bg-light min-vh-100">
-        <Navbar onMenuClick={() => setShowSidebar(true)} />
-        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+        <Navbar
+          onMenuClick={() => setShowSidebar(true)}
+          onEditProfile={() => setShowEditModal(true)}
+        />
+        {showSidebar && (
+          <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+        )}
         <div className="main-content container py-4">
           <div
             className="d-flex justify-content-center align-items-center"
@@ -198,15 +236,17 @@ const Profile = () => {
     );
   }
 
-  console.log("categories", categories);
-  console.log("userCards", userCards);
-
   return (
     <div className="profile-container bg-light min-vh-100">
       {/* Header */}
-      <Navbar onMenuClick={() => setShowSidebar(true)} />
+      <Navbar
+        onMenuClick={() => setShowSidebar(true)}
+        onEditProfile={() => setShowEditModal(true)}
+      />
 
-      {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+      {showSidebar && (
+        <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+      )}
 
       {/* Main Content */}
       <div className="main-content container py-4">
@@ -240,37 +280,14 @@ const Profile = () => {
                 {userProfile?.email || "No email"}
               </a>
 
-              {/* Language Settings */}
-              <div className="mt-3 mb-3">
-                <h6 className="fw-semibold mb-2" style={{ color: "#173067" }}>
-                  Language Preference
-                </h6>
-                <div className="btn-group" role="group">
-                  <button
-                    type="button"
-                    className={`btn btn-sm ${
-                      currentLanguage === "en" ? "btn-primary" : "btn-outline-primary"
-                    }`}
-                    onClick={() => handleLanguageChange("en")}
-                  >
-                    English
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-sm ${
-                      currentLanguage === "ar" ? "btn-primary" : "btn-outline-primary"
-                    }`}
-                    onClick={() => handleLanguageChange("ar")}
-                  >
-                    العربية
-                  </button>
-                </div>
-              </div>
-
               <div className="mt-3">
-                <Link to="/edit-Profile">
-                  <button className="btn btn-primary rounded-pill px-4 me-2">Edit Profile</button>
-                </Link>
+                <Button
+                  className="px-4 me-2"
+                  style={{ backgroundColor: "#173067", borderColor: "#173067" }}
+                  onClick={() => setShowEditModal(true)}
+                >
+                  Edit Profile
+                </Button>
               </div>
             </div>
           </div>
@@ -288,7 +305,7 @@ const Profile = () => {
             <div className="row g-3 mb-4">
               {Array.isArray(categories?.results) &&
                 categories.results.map((cat, index) => (
-                  <div className="col-6 col-sm-6" key={index}>
+                  <div className="col-4" key={index}>
                     <div
                       className={`category-box ${
                         cat.bg || "bg-light"
@@ -362,7 +379,7 @@ const Profile = () => {
                             <div style={{ fontSize: "2rem" }}>📄</div>
                           )}
                           <p className="m-0 fw-medium" style={{ color: "#173067" }}>
-                            {currentLanguage === "ar" && card.title_ar
+                            {getUserLanguage() === "ar" && card.title_ar
                               ? card.title_ar
                               : card.title_en}
                           </p>
@@ -379,7 +396,7 @@ const Profile = () => {
                 ) : (
                   <div className="text-center py-4">
                     <p className="text-muted">No cards in this category yet.</p>
-                    <Link to="/add-new-card">
+                    <Link to="/addnewcard">
                       <button className="btn btn-primary rounded-pill">Add New Card</button>
                     </Link>
                   </div>
@@ -389,6 +406,14 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        userProfile={userProfile}
+        onProfileUpdate={handleProfileUpdate}
+      />
     </div>
   );
 };

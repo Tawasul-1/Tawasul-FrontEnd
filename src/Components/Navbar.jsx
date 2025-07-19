@@ -3,12 +3,13 @@ import { BsBellFill, BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useAuth } from "../context/AuthContext";
-import { userService } from "../api/services/UserService";
+import { getUserLanguage, setUserLanguage } from "../utils/languageUtils";
 
-const Navbar = ({ onMenuClick }) => {
+const Navbar = ({ onMenuClick, onEditProfile }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const { logout, isAuthenticated, user, setUser } = useAuth();
+  const [currentLanguage, setCurrentLanguage] = useState(getUserLanguage());
+  const { logout, isAuthenticated, user } = useAuth();
 
   console.log("isAuthenticated", isAuthenticated);
   console.log("user object:", user);
@@ -19,6 +20,12 @@ const Navbar = ({ onMenuClick }) => {
   const handleLogout = () => {
     logout();
     setShowProfileMenu(false);
+  };
+
+  const handleLanguageChange = (language) => {
+    setUserLanguage(language);
+    setCurrentLanguage(language);
+    window.location.reload();
   };
 
   const hasProfileImage = !!(user && user.profile_picture);
@@ -97,7 +104,7 @@ const Navbar = ({ onMenuClick }) => {
             {showProfileMenu && (
               <div
                 className="position-absolute end-0 mt-2 bg-white border rounded shadow-sm"
-                style={{ width: "200px", zIndex: 9999 }}
+                style={{ width: "250px", zIndex: 9999 }}
               >
                 <div className="p-2 fw-bold border-bottom" style={{ color: "#173067" }}>
                   Profile
@@ -113,14 +120,77 @@ const Navbar = ({ onMenuClick }) => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/edit-Profile"
-                      className="px-3 py-2 d-block text-decoration-none text-muted"
-                      onClick={() => setShowProfileMenu(false)}
+                    <button
+                      className="px-3 py-2 d-block w-100 text-start border-0 bg-transparent text-muted"
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        if (onEditProfile) {
+                          onEditProfile();
+                        }
+                      }}
                     >
                       Edit Profile
-                    </Link>
+                    </button>
                   </li>
+
+                  {/* Language Preferences */}
+                  <li className="border-top">
+                    <div className="px-3 py-2">
+                      <div className="d-flex align-items-center justify-content-between mb-2">
+                        <span className="small text-muted">Language</span>
+                        <div className="position-relative">
+                          <div
+                            className="bg-light rounded-pill d-flex align-items-center p-1"
+                            style={{
+                              width: "80px",
+                              height: "28px",
+                              cursor: "pointer",
+                              transition: "all 0.3s ease",
+                            }}
+                            onClick={() =>
+                              handleLanguageChange(currentLanguage === "en" ? "ar" : "en")
+                            }
+                          >
+                            <div
+                              className={`rounded-circle d-flex align-items-center justify-content-center ${
+                                currentLanguage === "en"
+                                  ? "bg-primary text-white"
+                                  : "bg-white text-muted"
+                              }`}
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                fontSize: "10px",
+                                fontWeight: "bold",
+                                transition: "all 0.3s ease",
+                                transform:
+                                  currentLanguage === "en" ? "translateX(0)" : "translateX(52px)",
+                              }}
+                            >
+                              {currentLanguage === "en" ? "EN" : "ع"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span
+                          className={`small ${
+                            currentLanguage === "en" ? "text-primary fw-bold" : "text-muted"
+                          }`}
+                        >
+                          English
+                        </span>
+                        <span
+                          className={`small ${
+                            currentLanguage === "ar" ? "text-primary fw-bold" : "text-muted"
+                          }`}
+                        >
+                          العربية
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+
                   <li className="border-top">
                     <button
                       className="px-3 py-2 d-block w-100 text-start border-0 bg-transparent text-danger"

@@ -1,12 +1,38 @@
-import React, { useState } from "react";
-import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
-import Menu from "../Components/Menu";
+import React, { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
 import "../Style-pages/EditProfile.css";
+import { userService } from "../api/services/UserService";
+import useApi from "../api/hooks/useApi";
 
-function EditProfile() {
-  const [showSidebar, setShowSidebar] = useState(false);
+function EditProfileModal({ isOpen, onClose, userProfile, onProfileUpdate }) {
   const [profileImage, setProfileImage] = useState("/image-2.png");
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    birth_date: "",
+  });
+
+  const {
+    data: updateResponse,
+    error: updateError,
+    loading: updateLoading,
+    request: updateProfile,
+  } = useApi(userService.updateProfile);
+
+  useEffect(() => {
+    if (userProfile) {
+      setFormData({
+        first_name: userProfile.first_name || "",
+        last_name: userProfile.last_name || "",
+        email: userProfile.email || "",
+        phone: userProfile.phone || "",
+        birth_date: userProfile.birth_date ? userProfile.birth_date.split("T")[0] : "",
+      });
+      setProfileImage(userProfile.profile_picture || "/image-2.png");
+    }
+  }, [userProfile]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -15,94 +41,221 @@ function EditProfile() {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateProfile(formData);
+      if (onProfileUpdate) {
+        onProfileUpdate();
+      }
+      onClose();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <>
-      {/* Navbar */}
-      <Navbar onMenuClick={() => setShowSidebar(true)} />
-      {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+    <div
+      className="modal-overlay"
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1050,
+        padding: "1rem",
+        borderRadius: "10px",
+      }}
+    >
+      <div
+        className="edit-card bg-white p-4 shadow-lg"
+        style={{
+          maxWidth: "500px",
+          width: "100%",
+          maxHeight: "90vh",
+          overflowY: "auto",
+          position: "relative",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "1rem",
+            right: "1rem",
+            background: "none",
+            border: "none",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+            color: "#666",
+            zIndex: 1,
+          }}
+        >
+          ×
+        </button>
 
-      {/* Main Section */}
-      <div className="puzzle-bg d-flex justify-content-center align-items-center marg">
-        <div className="edit-card-wrapper container">
-          <div className="edit-card bg-white p-4 rounded-4 shadow-lg mx-auto" style={{ maxWidth: "500px" }}>
-            {/* Profile Image */}
-            <div className="position-relative text-center mb-4">
-              <img
-                src={profileImage}
-                alt="avatar"
-                className="rounded-circle border border-3"
-                style={{ width: "130px", height: "130px", objectFit: "cover" }}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                id="upload-avatar"
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-              />
-              <label
-                htmlFor="upload-avatar"
-                className="position-absolute bottom-0 end-50 translate-middle-x"
-                style={{
-                  backgroundColor: "#173067",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  width: "36px",
-                  height: "36px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  border: "2px solid white"
-                }}
-                title="Change Photo"
-              >
-                📷
-              </label>
-            </div>
-
-            {/* Form */}
-            <form>
-              <div className="mb-3 input-group">
-                <span className="input-group-text">
-                  <img className="icon" src="/Profile.png" alt="" />
-                </span>
-                <input type="text" className="form-control" placeholder="Merna Ahmad" />
-              </div>
-
-              <div className="mb-3 input-group">
-                <span className="input-group-text">
-                  <img className="icon" src="/Email.png" alt="" />
-                </span>
-                <input type="email" className="form-control" placeholder="merna0@gmail.com" />
-              </div>
-
-              <div className="mb-3 input-group">
-                <span className="input-group-text">
-                  <img className="icon" src="/Phone.png" alt="" />
-                </span>
-                <input type="tel" className="form-control" placeholder="010000000000" />
-              </div>
-
-              <div className="mb-4 input-group">
-                <span className="input-group-text">
-                  <img className="icon" src="/Age.png" alt="" />
-                </span>
-                <input type="number" className="form-control" placeholder="8" />
-              </div>
-
-              <button type="submit" className="btn w-100 rounded-pill text-white" style={{ backgroundColor: "#173067" }}>
-                Save
-              </button>
-            </form>
-          </div>
+        {/* Profile Image */}
+        <div className="position-relative text-center mb-4">
+          <img
+            src={profileImage}
+            alt="avatar"
+            className="rounded-circle border border-3"
+            style={{ width: "130px", height: "130px", objectFit: "cover" }}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            id="upload-avatar"
+            onChange={handleImageChange}
+            style={{ display: "none" }}
+          />
+          <label
+            htmlFor="upload-avatar"
+            className="position-absolute bottom-0 end-50 translate-middle-x"
+            style={{
+              backgroundColor: "#173067",
+              color: "#fff",
+              borderRadius: "50%",
+              width: "36px",
+              height: "36px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "1rem",
+              cursor: "pointer",
+              border: "2px solid white",
+            }}
+            title="Change Photo"
+          >
+            📷
+          </label>
         </div>
-      </div>
 
-      <Footer />
-    </>
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3 input-group">
+            <span className="input-group-text">
+              <img className="icon" src="/Profile.png" alt="" />
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="First Name"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mb-3 input-group">
+            <span className="input-group-text">
+              <img className="icon" src="/Profile.png" alt="" />
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Last Name"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mb-3 input-group">
+            <span className="input-group-text">
+              <img className="icon" src="/Email.png" alt="" />
+            </span>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mb-3 input-group">
+            <span className="input-group-text">
+              <img className="icon" src="/Phone.png" alt="" />
+            </span>
+            <input
+              type="tel"
+              className="form-control"
+              placeholder="Phone Number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mb-4 input-group">
+            <span className="input-group-text">
+              <img className="icon" src="/Age.png" alt="" />
+            </span>
+            <input
+              type="date"
+              className="form-control"
+              placeholder="Birth Date"
+              name="birth_date"
+              value={formData.birth_date}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          {updateError && <div className="alert alert-danger mb-3">{updateError}</div>}
+
+          <div className="d-flex gap-2">
+            <Button
+              type="button"
+              className="flex-fill"
+              variant="outline-secondary"
+              style={{
+                backgroundColor: "white",
+                borderColor: "#dee2e6",
+                color: "#6c757d",
+              }}
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="flex-fill"
+              style={{ backgroundColor: "#173067", borderColor: "#173067" }}
+              disabled={updateLoading}
+            >
+              {updateLoading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                  Saving...
+                </>
+              ) : (
+                "Save"
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 
-export default EditProfile;
+export default EditProfileModal;
+

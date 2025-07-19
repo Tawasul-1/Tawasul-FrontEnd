@@ -6,7 +6,7 @@ import Signup from "../Pages/Signup";
 import Board from "../Pages/Board";
 import HomePage from "../Pages/Home";
 import Profile from "../Pages/Profile";
-import EditProfile from "../Pages/EditProfile";
+
 import Plan from "../Pages/Plan";
 import Selection from "../Pages/Selection";
 import AddNewCard from "../Pages/AddNewCard";
@@ -68,14 +68,7 @@ function AppRouter() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/edit-Profile"
-            element={
-              <ProtectedRoute>
-                <EditProfile />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/plan"
             element={
