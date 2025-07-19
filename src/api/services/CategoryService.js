@@ -1,4 +1,5 @@
 import apiClient from "../config/apiClient";
+import { handleApiError } from "../utils/handleApiErrors";
 
 const CategoryService = {
   async getAllCategories() {
@@ -7,7 +8,7 @@ const CategoryService = {
       return response; // Return the full axios response object
     } catch (error) {
       console.error("Error fetching categories:", error);
-      throw error;
+      throw handleApiError(error);
     }
   },
 };

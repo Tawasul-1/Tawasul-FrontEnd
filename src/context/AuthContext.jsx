@@ -19,20 +19,15 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = () => {
+    // Restore auth state from localStorage on mount
     const token = localStorage.getItem("authToken");
     const userData = localStorage.getItem("user");
-
     if (token) {
       setIsAuthenticated(true);
       if (userData) {
         try {
           setUser(JSON.parse(userData));
-        } catch (error) {
-          console.error("Error parsing user data:", error);
+        } catch {
           setUser(null);
         }
       }
@@ -41,28 +36,27 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     }
     setLoading(false);
-  };
+  }, []);
 
-  const login = async (userData, token, refreshToken = null) => {
+  const login = (userData, token, refreshToken = null) => {
     localStorage.setItem("authToken", token);
     if (refreshToken) {
       localStorage.setItem("refreshToken", refreshToken);
     }
-    // Fetch full profile from API
-    try {
-      const response = await userService.getProfile();
-      const profile = response.data;
-      localStorage.setItem("user", JSON.stringify(profile));
-      setUser(profile);
-    } catch (error) {
-      console.error("Failed to fetch user profile after login:", error);
-      // fallback to token info if profile fetch fails
-      if (userData) {
-        localStorage.setItem("user", JSON.stringify(userData));
-        setUser(userData);
-      }
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
     }
     setIsAuthenticated(true);
+    // Fetch full profile in background
+    userService
+      .getProfile()
+      .then((response) => {
+        const profile = response.data;
+        localStorage.setItem("user", JSON.stringify(profile));
+        setUser(profile);
+      })
+      .catch(() => {});
   };
 
   const logout = () => {
@@ -88,7 +82,6 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     updateUser,
-    checkAuthStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

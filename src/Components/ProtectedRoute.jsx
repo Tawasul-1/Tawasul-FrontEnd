@@ -19,6 +19,20 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
+  // Fallback: If not authenticated but token exists, let AuthContext restore state
+  if (!isAuthenticated && localStorage.getItem('authToken')) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-3 text-muted">Restoring session...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;

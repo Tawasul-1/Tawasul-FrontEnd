@@ -5,8 +5,8 @@ import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../Style-pages/Login.css";
 import { authService } from "../api/services/AuthenticationService";
-import { useAuth } from "../context/AuthContext";
 import { decodeJWT } from "../utils/tokenExtractor";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
@@ -166,7 +166,7 @@ function Login() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={7}  xl={4}>
+        <Col md={7} xl={4}>
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             <Row className="mb-4">
               <Col>
