@@ -35,6 +35,49 @@ const CardService = {
       throw handleApiError(error);
     }
   },
+
+  async addCardToBoard(title) {
+    try {
+      const response = await apiClient.post("/cards/board/add/", { title });
+      return response;
+    } catch (error) {
+      console.error("Error adding card to board:", error);
+      throw handleApiError(error);
+    }
+  },
+
+  async removeCardFromBoard(title) {
+    try {
+      const response = await apiClient.delete("/cards/board/remove/", { data: { title } });
+      return response;
+    } catch (error) {
+      console.error("Error removing card from board:", error);
+      throw handleApiError(error);
+    }
+  },
+
+  async getBoardCards() {
+    try {
+      const response = await apiClient.get("/cards/board/");
+      return response;
+    } catch (error) {
+      console.error("Error fetching board cards:", error);
+      throw handleApiError(error);
+    }
+  },
+
+  async getBoardWithCategories(categoryId = null) {
+    try {
+      const url = categoryId
+        ? `/cards/board/with-categories/?category_id=${categoryId}`
+        : "/cards/board/with-categories/";
+      const response = await apiClient.get(url);
+      return response;
+    } catch (error) {
+      console.error("Error fetching board with categories:", error);
+      throw handleApiError(error);
+    }
+  },
 };
 
-export default CardService; 
+export default CardService;

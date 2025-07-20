@@ -67,8 +67,6 @@ const Board = () => {
         }
         setUserCards(cardsData);
 
-        console.log("Loaded categories:", categoriesData);
-        console.log("Loaded user cards:", cardsData);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load data. Please try again.");
@@ -195,33 +193,28 @@ const Board = () => {
       const item = statementArray[i];
 
       if (!item.audio) {
-        console.log(`No audio available for: ${item.word}`);
         continue;
       }
 
       try {
-        console.log(`Playing audio for: ${item.word}`);
 
         // Create new audio element for this item
         const audio = new Audio();
 
         // Set up audio event listeners
-        audio.onloadstart = () => {
+        audio.onloadstart = () => {}
           console.log(`Loading audio for: ${item.word}`);
-        };
+        ;
 
         audio.oncanplay = () => {
-          console.log(`Can play audio for: ${item.word}`);
           audio.play();
         };
 
         audio.onended = () => {
-          console.log(`Finished playing audio for: ${item.word}`);
           setCurrentAudio(null);
 
           // If this is the last item, stop playing
           if (i === statementArray.length - 1) {
-            console.log("Finished playing all audios");
             setIsPlayingAudio(false);
           }
         };

@@ -30,10 +30,6 @@ const AddNewCard = () => {
         setError("");
         const response = await CategoryService.getAllCategories();
 
-        console.log("Raw API response:", response);
-        console.log("Response data:", response.data);
-
-        // Handle different possible response structures
         let categoriesData = [];
         if (response && response.data) {
           // Check if response.data is an array
@@ -55,7 +51,6 @@ const AddNewCard = () => {
           }
         }
 
-        console.log("Processed categories data:", categoriesData);
         setCategories(categoriesData);
       } catch (error) {
         console.error("Error loading categories:", error);
