@@ -3,29 +3,29 @@ import { BsBellFill, BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useAuth } from "../context/AuthContext";
-import { getUserLanguage, setUserLanguage } from "../utils/languageUtils";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 
 const Navbar = ({ onMenuClick, onEditProfile }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState(getUserLanguage());
   const { logout, isAuthenticated, user } = useAuth();
+  const { currentLanguage, changeLanguage } = useLanguage();
 
-  console.log("isAuthenticated", isAuthenticated);
-  console.log("user object:", user);
-  console.log("user.profile_picture:", user && user.profile_picture);
-
-  const notifications = ["You have a new message", "New card added", "Profile updated"];
+  const notifications = [
+    getTranslation("notifications.newMessage", currentLanguage),
+    getTranslation("notifications.newCardAdded", currentLanguage),
+    getTranslation("notifications.profileUpdated", currentLanguage),
+  ];
 
   const handleLogout = () => {
     logout();
     setShowProfileMenu(false);
   };
 
-  const handleLanguageChange = (language) => {
-    setUserLanguage(language);
-    setCurrentLanguage(language);
-    window.location.reload();
+  const handleLanguageChange = () => {
+    const newLanguage = currentLanguage === "en" ? "ar" : "en";
+    changeLanguage(newLanguage);
   };
 
   const hasProfileImage = !!(user && user.profile_picture);
@@ -35,7 +35,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
       {/* Logo */}
       <Link to="/" className="text-decoration-none">
         <h3 className="fw-bold m-0" style={{ color: "#173067" }}>
-          Tawasul
+          {getTranslation("nav.brand", currentLanguage)}
         </h3>
       </Link>
 
@@ -57,7 +57,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                 style={{ width: "250px", zIndex: 9999 }}
               >
                 <div className="p-2 fw-bold border-bottom" style={{ color: "#173067" }}>
-                  Notifications
+                  {getTranslation("nav.notifications", currentLanguage)}
                 </div>
                 <ul className="list-unstyled m-0">
                   {notifications.length > 0 ? (
@@ -67,7 +67,9 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                       </li>
                     ))
                   ) : (
-                    <li className="px-3 py-2 text-muted small">No notifications</li>
+                    <li className="px-3 py-2 text-muted small">
+                      {getTranslation("nav.noNotifications", currentLanguage)}
+                    </li>
                   )}
                 </ul>
               </div>
@@ -79,10 +81,10 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
         {!isAuthenticated ? (
           <>
             <Link to="/login" className="btn btn-outline-primary rounded-pill px-3 me-2">
-              Login
+              {getTranslation("nav.login", currentLanguage)}
             </Link>
             <Link to="/signup" className="btn btn-primary rounded-pill px-3">
-              Signup
+              {getTranslation("nav.signup", currentLanguage)}
             </Link>
           </>
         ) : (
@@ -107,7 +109,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                 style={{ width: "250px", zIndex: 9999 }}
               >
                 <div className="p-2 fw-bold border-bottom" style={{ color: "#173067" }}>
-                  Profile
+                  {getTranslation("nav.profile", currentLanguage)}
                 </div>
                 <ul className="list-unstyled m-0">
                   <li>
@@ -116,7 +118,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                       className="px-3 py-2 d-block text-decoration-none text-muted"
                       onClick={() => setShowProfileMenu(false)}
                     >
-                      View Profile
+                      {getTranslation("nav.viewProfile", currentLanguage)}
                     </Link>
                   </li>
                   <li>
@@ -129,7 +131,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                         }
                       }}
                     >
-                      Edit Profile
+                      {getTranslation("profile.editProfile", currentLanguage)}
                     </button>
                   </li>
 
@@ -137,7 +139,9 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                   <li className="border-top">
                     <div className="px-3 py-2">
                       <div className="d-flex align-items-center justify-content-between mb-2">
-                        <span className="small text-muted">Language</span>
+                        <span className="small text-muted">
+                          {getTranslation("profile.language", currentLanguage)}
+                        </span>
                         <div className="position-relative">
                           <div
                             className="bg-light rounded-pill d-flex align-items-center p-1"
@@ -147,9 +151,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                               cursor: "pointer",
                               transition: "all 0.3s ease",
                             }}
-                            onClick={() =>
-                              handleLanguageChange(currentLanguage === "en" ? "ar" : "en")
-                            }
+                            onClick={handleLanguageChange}
                           >
                             <div
                               className={`rounded-circle d-flex align-items-center justify-content-center ${
@@ -178,14 +180,14 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                             currentLanguage === "en" ? "text-primary fw-bold" : "text-muted"
                           }`}
                         >
-                          English
+                          {getTranslation("nav.english", currentLanguage)}
                         </span>
                         <span
                           className={`small ${
                             currentLanguage === "ar" ? "text-primary fw-bold" : "text-muted"
                           }`}
                         >
-                          العربية
+                          {getTranslation("nav.arabic", currentLanguage)}
                         </span>
                       </div>
                     </div>
@@ -196,7 +198,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                       className="px-3 py-2 d-block w-100 text-start border-0 bg-transparent text-danger"
                       onClick={handleLogout}
                     >
-                      Logout
+                      {getTranslation("nav.logout", currentLanguage)}
                     </button>
                   </li>
                 </ul>
@@ -206,7 +208,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
         )}
 
         {/* Menu Icon */}
-        <BsList size={70} style={{ color: "#173067", cursor: "pointer" }} onClick={onMenuClick} />
+        <BsList size={40} style={{ color: "#173067", cursor: "pointer" }} onClick={onMenuClick} />
       </div>
     </div>
   );

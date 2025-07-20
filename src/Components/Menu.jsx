@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 
 const Menu = ({ setShowSidebar, onEditProfile }) => {
   const { logout } = useAuth();
+  const { currentLanguage } = useLanguage();
 
   const handleLogout = () => {
     setShowSidebar(false);
@@ -35,34 +38,34 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
       >
         <div className="p-4 border-bottom">
           <h4 className="fw-bold" style={{ color: "#173067" }}>
-            TAWASUL
+            {getTranslation("nav.brand", currentLanguage)}
           </h4>
         </div>
 
         <div className="px-4 py-3 d-flex flex-column gap-3">
           <Link to="/" style={{ color: "#173067", textDecoration: "none" }}>
-            🏠 Home
+            🏠 {getTranslation("nav.home", currentLanguage)}
           </Link>
           <Link to="/addnewcard" style={{ color: "#173067", textDecoration: "none" }}>
-            ➕ Add New Card
+            ➕ {getTranslation("cards.addNewCard", currentLanguage)}
           </Link>
           <Link to="/about" style={{ color: "#173067", textDecoration: "none" }}>
-            ℹ️ About Us
+            ℹ️ {getTranslation("nav.about", currentLanguage)}
           </Link>
           <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
-            👤 Profile
+            👤 {getTranslation("nav.profile", currentLanguage)}
           </Link>
-          <div 
+          <div
             style={{ color: "#173067", textDecoration: "none", cursor: "pointer" }}
             onClick={handleEditProfile}
           >
-            ✏️ Edit Profile
+            ✏️ {getTranslation("profile.editProfile", currentLanguage)}
           </div>
           <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
-            🗂️ Cards
+            🗂️ {getTranslation("nav.categories", currentLanguage)}
           </Link>
           <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
-            📞 Contact Us
+            📞 {getTranslation("nav.contact", currentLanguage)}
           </Link>
         </div>
 
@@ -77,7 +80,8 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
           }}
           onClick={handleLogout}
         >
-          <i className="bi bi-box-arrow-right fs-5 me-2 text-white"></i> Logout
+          <i className="bi bi-box-arrow-right fs-5 me-2 text-white"></i>{" "}
+          {getTranslation("nav.logout", currentLanguage)}
         </div>
       </div>
     </div>

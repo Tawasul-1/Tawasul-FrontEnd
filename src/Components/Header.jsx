@@ -4,10 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useLocation } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function Header() {
   const location = useLocation();
   const { isAuthenticated, logout } = useAuth();
+  const { currentLanguage } = useLanguage();
 
   const handleSignout = () => {
     logout();
@@ -19,7 +23,7 @@ function Header() {
       <Container>
         <Navbar.Brand>
           <Link to="/" className="text-bold text-decoration-none text-dark">
-            Tawasul
+            {getTranslation("nav.brand", currentLanguage)}
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -27,7 +31,7 @@ function Header() {
           <Nav className="mx-auto d-flex gap-3">
             <Nav.Item>
               <Link to="/" className={`nav-link ${location.pathname === "/" ? "active" : ""}`}>
-                Home
+                {getTranslation("nav.home", currentLanguage)}
               </Link>
             </Nav.Item>
             <Nav.Item>
@@ -35,7 +39,7 @@ function Header() {
                 to="/about"
                 className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}
               >
-                About
+                {getTranslation("nav.about", currentLanguage)}
               </Link>
             </Nav.Item>
             <Nav.Item>
@@ -43,18 +47,19 @@ function Header() {
                 to="/contact"
                 className={`nav-link ${location.pathname === "/contact" ? "active" : ""}`}
               >
-                Contact
+                {getTranslation("nav.contact", currentLanguage)}
               </Link>
             </Nav.Item>
           </Nav>
-          <Nav>
+          <Nav className="d-flex align-items-center gap-2">
+            <LanguageSwitcher />
             {isAuthenticated ? (
               <Nav.Item>
                 <span
                   className="nav-link"
                   style={{ cursor: "pointer" }}
                   onClick={handleSignout}
-                  title="Sign Out"
+                  title={getTranslation("nav.logout", currentLanguage)}
                 >
                   <i className="bi bi-box-arrow-right" style={{ fontSize: "1.5rem" }}></i>
                 </span>
@@ -66,7 +71,7 @@ function Header() {
                     to="/login"
                     className={`nav-link ${location.pathname === "/login" ? "active" : ""}`}
                   >
-                    Login
+                    {getTranslation("nav.login", currentLanguage)}
                   </Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -74,7 +79,7 @@ function Header() {
                     to="/signup"
                     className={`nav-link ${location.pathname === "/signup" ? "active" : ""}`}
                   >
-                    Sign Up
+                    {getTranslation("nav.signup", currentLanguage)}
                   </Link>
                 </Nav.Item>
               </>
