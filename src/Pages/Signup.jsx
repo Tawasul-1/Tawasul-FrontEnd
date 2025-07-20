@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
 import signupImage from "/Vector.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link, useNavigate } from "react-router-dom";
 import "../Style-pages/Login.css";
 import { authService } from "../api/services/AuthenticationService";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
+import { useAuth } from "../context/AuthContext";
 
 function Signup() {
   const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
 
   // Debug: Log errors whenever they change
-  console.log("Current errors state:", errors);
   const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,14 +32,17 @@ function Signup() {
     confirmPassword: "",
   });
 
+  // Redirect if user is already authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate("/board", { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate]);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (name === "profile_picture" && files) {
-      console.log("File selected:", files[0]);
-      console.log("File name:", files[0].name);
-      console.log("File size:", files[0].size);
-      console.log("File type:", files[0].type);
       setFormData((prev) => ({
         ...prev,
         [name]: files[0],
@@ -62,35 +69,35 @@ function Signup() {
 
     // First name validation
     if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = getTranslation("validation.firstNameRequired", currentLanguage);
     } else if (formData.firstName.length < 2) {
-      newErrors.firstName = "First name must be at least 2 characters";
+      newErrors.firstName = getTranslation("validation.firstNameTooShort", currentLanguage);
     }
 
     // Last name validation
     if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = getTranslation("validation.lastNameRequired", currentLanguage);
     } else if (formData.lastName.length < 2) {
-      newErrors.lastName = "Last name must be at least 2 characters";
+      newErrors.lastName = getTranslation("validation.lastNameTooShort", currentLanguage);
     }
 
     // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = getTranslation("validation.emailRequired", currentLanguage);
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = getTranslation("validation.invalidEmail", currentLanguage);
     }
 
     // Phone validation
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
+      newErrors.phone = getTranslation("validation.phoneRequired", currentLanguage);
     } else if (!/^[0-9]{11}$/.test(formData.phone.replace(/\s/g, ""))) {
-      newErrors.phone = "Phone number must be 11 digits";
+      newErrors.phone = getTranslation("validation.invalidPhone", currentLanguage);
     }
 
     // Birthdate validation
     if (!formData.birthdate) {
-      newErrors.birthdate = "Birthdate is required";
+      newErrors.birthdate = getTranslation("validation.birthdateRequired", currentLanguage);
     } else {
       const birthDate = new Date(formData.birthdate);
       const today = new Date();
@@ -102,30 +109,36 @@ function Signup() {
       }
 
       if (calculatedAge < 1 || calculatedAge > 120) {
-        newErrors.birthdate = "Age must be between 1 and 120 years";
+        newErrors.birthdate = getTranslation("validation.invalidAge", currentLanguage);
       }
     }
 
     // Image validation
     if (!formData.profile_picture) {
-      newErrors.profile_picture = "Profile image is required";
+      newErrors.profile_picture = getTranslation(
+        "validation.profileImageRequired",
+        currentLanguage
+      );
     } else if (formData.profile_picture.size > 5 * 1024 * 1024) {
       // 5MB limit
-      newErrors.profile_picture = "Image size must be less than 5MB";
+      newErrors.profile_picture = getTranslation("validation.imageSizeTooLarge", currentLanguage);
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = getTranslation("validation.passwordRequired", currentLanguage);
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password = getTranslation("validation.passwordTooShort", currentLanguage);
     }
 
     // Password confirmation validation
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
+      newErrors.confirmPassword = getTranslation(
+        "validation.confirmPasswordRequired",
+        currentLanguage
+      );
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords don't match";
+      newErrors.confirmPassword = getTranslation("validation.passwordsDoNotMatch", currentLanguage);
     }
 
     setErrors(newErrors);
@@ -156,9 +169,6 @@ function Signup() {
       formDataToSend.append("password2", formData.confirmPassword);
 
       if (formData.profile_picture) {
-        console.log("Appending file to FormData:", formData.profile_picture);
-        console.log("File object:", formData.profile_picture);
-        console.log("File instanceof File:", formData.profile_picture instanceof File);
         formDataToSend.append(
           "profile_picture",
           formData.profile_picture,
@@ -166,24 +176,8 @@ function Signup() {
         );
       }
 
-      // Debug: Log the FormData contents
-      console.log("FormData contents:");
       for (let [key, value] of formDataToSend.entries()) {
-        console.log(
-          `${key}:`,
-          value instanceof File
-            ? `File: ${value.name} (${value.size} bytes, type: ${value.type})`
-            : value
-        );
       }
-
-      // Debug: Check if profile_picture is actually a File object
-      const profilePictureEntry = formDataToSend.get("profile_picture");
-      console.log("Profile picture entry:", profilePictureEntry);
-      console.log("Is File object:", profilePictureEntry instanceof File);
-      console.log("File name:", profilePictureEntry?.name);
-      console.log("File size:", profilePictureEntry?.size);
-      console.log("File type:", profilePictureEntry?.type);
 
       await authService.register(formDataToSend);
 
@@ -209,17 +203,39 @@ function Signup() {
         } else if (typeof serverErrors === "string") {
           setGeneralError(serverErrors);
         } else {
-          setGeneralError("Registration failed. Please try again.");
+          setGeneralError(getTranslation("errors.signupFailed", currentLanguage));
         }
       } else if (error.message) {
         setGeneralError(error.message);
       } else {
-        setGeneralError("Registration failed. Please try again.");
+        setGeneralError(getTranslation("errors.signupFailed", currentLanguage));
       }
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading spinner while checking authentication
+  if (authLoading) {
+    return (
+      <Container
+        fluid
+        className="d-flex px-5 justify-content-center align-items-center background"
+        style={{ height: "100vh", background: "#D4E2F6" }}
+      >
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
+  // Don't render the form if user is already authenticated
+  if (isAuthenticated) {
+    return null;
+  }
 
   return (
     <Container
@@ -237,9 +253,11 @@ function Signup() {
           />
         </Col>
 
-        <Col md={7}  xl={4}>
+        <Col md={7} xl={4}>
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
-            <h2 className="text-center mb-4 px-3">Welcome to Tawasul</h2>
+            <h2 className="text-center mb-4 px-3">
+              {getTranslation("auth.signupTitle", currentLanguage)}
+            </h2>
             {generalError && <div className="alert alert-danger text-center">{generalError}</div>}
 
             <Form onSubmit={handleSubmit}>
@@ -274,7 +292,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type="text"
-                        placeholder="Enter first name"
+                        placeholder={getTranslation("auth.firstName", currentLanguage)}
                         name="firstName"
                         onChange={handleChange}
                       />
@@ -291,7 +309,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type="text"
-                        placeholder="Enter last name"
+                        placeholder={getTranslation("auth.lastName", currentLanguage)}
                         name="lastName"
                         onChange={handleChange}
                       />
@@ -310,7 +328,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type="email"
-                        placeholder="Enter email"
+                        placeholder={getTranslation("auth.email", currentLanguage)}
                         name="email"
                         onChange={handleChange}
                       />
@@ -329,7 +347,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type="date"
-                        placeholder="Enter birthdate"
+                        placeholder={getTranslation("auth.birthdate", currentLanguage)}
                         name="birthdate"
                         onChange={handleChange}
                       />
@@ -345,7 +363,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type="tel"
-                        placeholder="Enter phone number"
+                        placeholder={getTranslation("auth.phone", currentLanguage)}
                         name="phone"
                         onChange={handleChange}
                       />
@@ -364,7 +382,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type={showPassword ? "text" : "password"}
-                        placeholder="Enter password"
+                        placeholder={getTranslation("auth.password", currentLanguage)}
                         name="password"
                         onChange={handleChange}
                       />
@@ -387,7 +405,7 @@ function Signup() {
                       </InputGroup.Text>
                       <Form.Control
                         type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm password"
+                        placeholder={getTranslation("auth.confirmPassword", currentLanguage)}
                         name="confirmPassword"
                         onChange={handleChange}
                       />
@@ -414,10 +432,10 @@ function Signup() {
                           className="spinner-border spinner-border-sm me-2"
                           aria-hidden="true"
                         ></span>
-                        Signing Up...
+                        {getTranslation("auth.signingUp", currentLanguage)}
                       </>
                     ) : (
-                      "Sign Up"
+                      getTranslation("auth.signUp", currentLanguage)
                     )}
                   </Button>
                 </Col>
@@ -427,7 +445,8 @@ function Signup() {
             <Row>
               <Col className="text-center">
                 <p>
-                  Have an account already? <Link to="/login">Log In</Link>
+                  {getTranslation("auth.haveAccount", currentLanguage)}{" "}
+                  <Link to="/login">{getTranslation("auth.signIn", currentLanguage)}</Link>
                 </p>
               </Col>
             </Row>

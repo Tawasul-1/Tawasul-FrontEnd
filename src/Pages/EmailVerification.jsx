@@ -40,8 +40,6 @@ function EmailVerification() {
             setMessage("Verification link has expired. Please request a new verification email.");
             return;
           }
-
-          console.log("JWT Token decoded:", decoded);
         }
 
         // Call the verification API
@@ -183,11 +181,7 @@ function EmailVerification() {
                       )}
                     </Button>
 
-                    <Button
-                      variant="outline-primary"
-                      className="w-75"
-                      onClick={handleGoToLogin}
-                    >
+                    <Button variant="outline-primary" className="w-75" onClick={handleGoToLogin}>
                       Go to Login
                     </Button>
                   </>
