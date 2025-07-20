@@ -6,26 +6,46 @@ import Header from "../Components/Header";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import board from "../assets/tab.png";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 
 function HomePage() {
+  const { currentLanguage } = useLanguage();
+
   const testimonials = [
     {
       name: "Maha Ahmad",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      text: "TAWASUL gave my child a voice we thought we'd never hear. It's more than an app — it's a lifeline for communication.",
+      text: getTranslation("home.testimonialDetails.maha", currentLanguage),
     },
     {
       name: "Omar Khaled",
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      text: "Thanks to TAWASUL, my son can finally express his needs and feelings. It's made a world of difference for our family.",
+      text: getTranslation("home.testimonialDetails.omar", currentLanguage),
     },
   ];
 
   const categories = [
-    { label: "Feelings", icon: "bi bi-emoji-smile", bg: "#fce4ec" },
-    { label: "Toys", icon: "bi bi-controller", bg: "#e8f5e9" },
-    { label: "Food", icon: "bi bi-egg-fried", bg: "#fff3e0" },
-    { label: "Actions", icon: "bi bi-activity", bg: "#e3f2fd" },
+    {
+      label: getTranslation("categories.feelings", currentLanguage),
+      icon: "bi bi-emoji-smile",
+      bg: "#fce4ec",
+    },
+    {
+      label: getTranslation("categories.toys", currentLanguage),
+      icon: "bi bi-controller",
+      bg: "#e8f5e9",
+    },
+    {
+      label: getTranslation("categories.food", currentLanguage),
+      icon: "bi bi-egg-fried",
+      bg: "#fff3e0",
+    },
+    {
+      label: getTranslation("categories.actions", currentLanguage),
+      icon: "bi bi-activity",
+      bg: "#e3f2fd",
+    },
   ];
 
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -83,15 +103,14 @@ function HomePage() {
                   className="d-flex align-items-center justify-content-center text-center"
                 >
                   <div className="p-4" style={{ maxWidth: "500px" }}>
-                    <h1 className="home-title">
-                      Welcome To <br /> <span>TAWASUL</span>
-                    </h1>
+                    <h1 className="home-title">{getTranslation("home.title", currentLanguage)}</h1>
                     <p className="home-description">
-                      TAWASUL is an inclusive communication platform that empowers non-speaking
-                      individuals, especially children with autism, through visual tools like PECS.
+                      {getTranslation("home.description", currentLanguage)}
                     </p>
                     <Link to="/about">
-                      <button className="home-read-more-btn text-white">Read More</button>
+                      <button className="home-read-more-btn text-white">
+                        {getTranslation("home.readMore", currentLanguage)}
+                      </button>
                     </Link>
                   </div>
                 </Col>
@@ -104,15 +123,21 @@ function HomePage() {
             <div className="home-stats-wrapper">
               <div className="home-stat-card home-stat-blue">
                 <div className="home-stat-value">12</div>
-                <div className="home-stat-label">Sentences</div>
+                <div className="home-stat-label">
+                  {getTranslation("home.stats.sentences", currentLanguage)}
+                </div>
               </div>
               <div className="home-stat-card home-stat-yellow">
                 <div className="home-stat-value">500</div>
-                <div className="home-stat-label">Users</div>
+                <div className="home-stat-label">
+                  {getTranslation("home.stats.users", currentLanguage)}
+                </div>
               </div>
               <div className="home-stat-card home-stat-pink">
                 <div className="home-stat-value">200</div>
-                <div className="home-stat-label">PECS Cards</div>
+                <div className="home-stat-label">
+                  {getTranslation("home.stats.pecsCards", currentLanguage)}
+                </div>
               </div>
             </div>
             <div className="home-bottom-waves">
@@ -154,31 +179,36 @@ function HomePage() {
           {/* Discover */}
           <section className="home-wow-highlight py-5 bg-white text-center">
             <Container>
-              <h2 className="fw-bold mb-4 display-6">🌟 Discover More with TAWASUL</h2>
+              <h2 className="fw-bold mb-4 display-6">
+                {getTranslation("home.discoverTitle", currentLanguage)}
+              </h2>
               <p className="lead mb-4">
-                Every interaction opens a new door to connection and discovery. Here's what makes us{" "}
-                <strong>stand out</strong>:
+                {getTranslation("home.discoverSubtitle", currentLanguage)}
               </p>
               <Row className="g-4">
                 <Col md={4}>
                   <div className="p-4 border rounded-4 shadow-sm h-100">
                     <i className="bi bi-magic text-success fs-1 mb-3"></i>
-                    <h5 className="fw-bold">Visual Magic</h5>
-                    <p>Engaging visuals that resonate with kids and spark joyful learning.</p>
+                    <h5 className="fw-bold">
+                      {getTranslation("home.visualMagic", currentLanguage)}
+                    </h5>
+                    <p>{getTranslation("home.visualMagicDesc", currentLanguage)}</p>
                   </div>
                 </Col>
                 <Col md={4}>
                   <div className="p-4 border rounded-4 shadow-sm h-100">
                     <i className="bi bi-cloud-upload text-info fs-1 mb-3"></i>
-                    <h5 className="fw-bold">Seamless Access</h5>
-                    <p>Access your personalized board anywhere — on any device, at any time.</p>
+                    <h5 className="fw-bold">
+                      {getTranslation("home.seamlessAccess", currentLanguage)}
+                    </h5>
+                    <p>{getTranslation("home.seamlessAccessDesc", currentLanguage)}</p>
                   </div>
                 </Col>
                 <Col md={4}>
                   <div className="p-4 border rounded-4 shadow-sm h-100">
                     <i className="bi bi-emoji-smile text-warning fs-1 mb-3"></i>
-                    <h5 className="fw-bold">Joyful UX</h5>
-                    <p>Kid-friendly design that brings smiles while empowering communication.</p>
+                    <h5 className="fw-bold">{getTranslation("home.joyfulUX", currentLanguage)}</h5>
+                    <p>{getTranslation("home.joyfulUXDesc", currentLanguage)}</p>
                   </div>
                 </Col>
               </Row>
@@ -190,30 +220,38 @@ function HomePage() {
             <Container>
               <div className="text-center mb-5">
                 <h2 className="fw-bold" style={{ color: "#23305e" }}>
-                  How It Works
+                  {getTranslation("home.howItWorks", currentLanguage)}
                 </h2>
-                <p className="text-muted">Just 3 simple steps to get started</p>
+                <p className="text-muted">
+                  {getTranslation("home.howItWorksSubtitle", currentLanguage)}
+                </p>
               </div>
               <Row className="g-4 text-center">
                 <Col md={4}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <i className="bi bi-person-check fs-1 text-primary mb-3"></i>
-                    <h5 className="fw-bold">1. Create Account</h5>
-                    <p>Sign up and set up your profile quickly and easily.</p>
+                    <h5 className="fw-bold">
+                      {getTranslation("home.createAccount", currentLanguage)}
+                    </h5>
+                    <p>{getTranslation("home.createAccountDesc", currentLanguage)}</p>
                   </div>
                 </Col>
                 <Col md={4}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <i className="bi bi-kanban fs-1 text-success mb-3"></i>
-                    <h5 className="fw-bold">2. Build Your Board</h5>
-                    <p>Choose the PECS cards that suit your child's needs.</p>
+                    <h5 className="fw-bold">
+                      {getTranslation("home.buildBoard", currentLanguage)}
+                    </h5>
+                    <p>{getTranslation("home.buildBoardDesc", currentLanguage)}</p>
                   </div>
                 </Col>
                 <Col md={4}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <i className="bi bi-chat-dots fs-1 text-warning mb-3"></i>
-                    <h5 className="fw-bold">3. Start Communicating</h5>
-                    <p>Empower your child to express themselves visually.</p>
+                    <h5 className="fw-bold">
+                      {getTranslation("home.startCommunicating", currentLanguage)}
+                    </h5>
+                    <p>{getTranslation("home.startCommunicatingDesc", currentLanguage)}</p>
                   </div>
                 </Col>
               </Row>
@@ -228,7 +266,7 @@ function HomePage() {
                     width: "300px",
                   }}
                 >
-                  Learn More
+                  {getTranslation("home.learnMore", currentLanguage)}
                   <i className="bi bi-arrow-right ms-2"></i>
                 </Link>
               </div>
@@ -245,10 +283,12 @@ function HomePage() {
                     style={{ fontSize: "2.2rem", color: "#23305e", marginRight: "0.5rem" }}
                   ></i>
                   <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
-                    Categories
+                    {getTranslation("home.categoriesTitle", currentLanguage)}
                   </h2>
                 </div>
-                <p className="text-muted">Explore by interest</p>
+                <p className="text-muted">
+                  {getTranslation("home.categoriesSubtitle", currentLanguage)}
+                </p>
               </div>
 
               <div className="row g-4 justify-content-center">
@@ -285,7 +325,7 @@ function HomePage() {
                   className="btn btn-primary px-4 py-2 rounded-pill"
                   style={{ backgroundColor: "#173067", border: "none", width: "300px" }}
                 >
-                  View All Categories
+                  {getTranslation("home.viewAllCategories", currentLanguage)}
                 </a>
               </div>
             </Container>
@@ -310,10 +350,12 @@ function HomePage() {
                     }}
                   ></i>
                   <h2 className="fw-bold m-0" style={{ color: "#23305e" }}>
-                    Board
+                    {getTranslation("home.boardTitle", currentLanguage)}
                   </h2>
                 </div>
-                <p className="text-muted">Your smart communication panel</p>
+                <p className="text-muted">
+                  {getTranslation("home.boardSubtitle", currentLanguage)}
+                </p>
               </div>
 
               <div className="home-app-content text-center">
@@ -347,7 +389,7 @@ function HomePage() {
                       width: "300px",
                     }}
                   >
-                    Try Now
+                    {getTranslation("home.tryNow", currentLanguage)}
                   </Link>
                 </div>
               </div>
@@ -358,46 +400,53 @@ function HomePage() {
           <section className="home-forwhom-section py-5 bg-light text-center">
             <Container>
               <h2 className="fw-bold mb-4" style={{ color: "#173067" }}>
-                Who Benefits from TAWASUL?
+                {getTranslation("home.whoBenefits", currentLanguage)}
               </h2>
               <p className="text-muted mb-5" style={{ fontSize: "1.1rem" }}>
-                TAWASUL is designed to support a wide range of people who work with non-speaking
-                individuals.
+                {getTranslation("home.whoBenefitsDesc", currentLanguage)}
               </p>
               <Row className="g-4">
                 <Col md={3} sm={6}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <div style={{ fontSize: "2.5rem" }}>👪</div>
-                    <h5 className="fw-bold mt-3">Parents</h5>
+                    <h5 className="fw-bold mt-3">
+                      {getTranslation("home.parents", currentLanguage)}
+                    </h5>
                     <p className="text-muted">
-                      Helping them understand their child’s needs and communicate more easily.
+                      {getTranslation("home.parentsDesc", currentLanguage)}
                     </p>
                   </div>
                 </Col>
                 <Col md={3} sm={6}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <div style={{ fontSize: "2.5rem" }}>👩‍🏫</div>
-                    <h5 className="fw-bold mt-3">Psychologists</h5>
+                    <h5 className="fw-bold mt-3">
+                      {getTranslation("home.psychologists", currentLanguage)}
+                    </h5>
                     <p className="text-muted">
-                      Offering insights into behavior and aiding in emotional analysis.
+                      {getTranslation("home.psychologistsDesc", currentLanguage)}
                     </p>
                   </div>
                 </Col>
                 <Col md={3} sm={6}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <div style={{ fontSize: "2.5rem" }}>🧑‍⚕️</div>
-                    <h5 className="fw-bold mt-3">Therapists</h5>
+                    <h5 className="fw-bold mt-3">
+                      {getTranslation("home.therapists", currentLanguage)}
+                    </h5>
                     <p className="text-muted">
-                      Supporting therapy sessions with engaging and personalized tools.
+                      {getTranslation("home.therapistsDesc", currentLanguage)}
                     </p>
                   </div>
                 </Col>
                 <Col md={3} sm={6}>
                   <div className="p-4 border rounded-4 shadow-sm h-100 bg-white">
                     <div style={{ fontSize: "2.5rem" }}>🧒</div>
-                    <h5 className="fw-bold mt-3">Non-speaking Children</h5>
+                    <h5 className="fw-bold mt-3">
+                      {getTranslation("home.nonSpeakingChildren", currentLanguage)}
+                    </h5>
                     <p className="text-muted">
-                      Empowering them to express themselves and connect with the world.
+                      {getTranslation("home.nonSpeakingChildrenDesc", currentLanguage)}
                     </p>
                   </div>
                 </Col>
@@ -412,18 +461,17 @@ function HomePage() {
           >
             <Container>
               <h2 className="fw-bold mb-3" style={{ color: "#173067" }}>
-                Ready to Unlock More?
+                {getTranslation("home.readyToUnlock", currentLanguage)}
               </h2>
               <p className="mb-4" style={{ maxWidth: "600px", margin: "0 auto", color: "#555" }}>
-                Upgrade your experience with TAWASUL by exploring our flexible subscription plans
-                designed to fit your needs — whether you're a parent, therapist, or educator.
+                {getTranslation("home.readyToUnlockDesc", currentLanguage)}
               </p>
               <Link
                 to="/plan"
                 className="btn btn-primary px-4 py-2 rounded-pill shadow"
                 style={{ backgroundColor: "#173067", border: "none", width: "250px" }}
               >
-                View Plans
+                {getTranslation("home.viewPlans", currentLanguage)}
                 <i className="bi bi-arrow-right ms-2"></i>
               </Link>
             </Container>
@@ -442,7 +490,7 @@ function HomePage() {
                 className="home-testimonials-heading"
                 style={{ fontWeight: 700, fontSize: "2rem", color: "#23305e" }}
               >
-                Testimonial
+                {getTranslation("home.testimonials", currentLanguage)}
               </span>
             </div>
 

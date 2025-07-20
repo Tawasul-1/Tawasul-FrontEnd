@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import "../Style-pages/Contact.css";
 import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
-import Menu from "../Components/Menu";
+import Header from "../Components/Header";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 
 const Contact = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const { currentLanguage } = useLanguage();
+
   return (
     <>
       <div id="root">
         {/* Header Section */}
-        <Navbar onMenuClick={() => setShowSidebar(true)} />
-        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+        <Header />
 
         <div className="main-content">
           {/* Contact Title */}
           <div className="contact-hero d-flex justify-content-center align-items-center">
-            <h2 className="fw-bold color">Contact Us</h2>
+            <h2 className="fw-bold color">{getTranslation("contact.title", currentLanguage)}</h2>
           </div>
 
           {/* Form + Map */}
@@ -28,7 +29,7 @@ const Contact = () => {
               <Col md={6}>
                 <div className="bg-light p-4 rounded-4 shadow-sm">
                   <h5 className="text-center fw-bold mb-4" style={{ color: "#173067" }}>
-                    Contact Us
+                    {getTranslation("contact.title", currentLanguage)}
                   </h5>
                   <Form>
                     <Form.Group className="mb-3">
@@ -38,7 +39,7 @@ const Contact = () => {
                         </InputGroup.Text>
                         <Form.Control
                           type="text"
-                          placeholder="Full Name"
+                          placeholder={getTranslation("contact.fullName", currentLanguage)}
                           className="rounded-end-pill custom-input"
                         />
                       </InputGroup>
@@ -51,7 +52,7 @@ const Contact = () => {
                         </InputGroup.Text>
                         <Form.Control
                           type="tel"
-                          placeholder="Phone"
+                          placeholder={getTranslation("contact.phone", currentLanguage)}
                           className="rounded-end-pill custom-input"
                         />
                       </InputGroup>
@@ -64,7 +65,7 @@ const Contact = () => {
                         </InputGroup.Text>
                         <Form.Control
                           type="email"
-                          placeholder="Email"
+                          placeholder={getTranslation("contact.email", currentLanguage)}
                           className="rounded-end-pill custom-input"
                         />
                       </InputGroup>
@@ -78,7 +79,7 @@ const Contact = () => {
                         <Form.Control
                           as="textarea"
                           rows={3}
-                          placeholder="Your Message"
+                          placeholder={getTranslation("contact.message", currentLanguage)}
                           className="rounded-end-4 custom-input"
                         />
                       </InputGroup>
@@ -89,7 +90,7 @@ const Contact = () => {
                       className="w-100 rounded-pill"
                       style={{ backgroundColor: "#173067", borderColor: "#173067" }}
                     >
-                      Send Message
+                      {getTranslation("contact.sendMessage", currentLanguage)}
                     </Button>
                   </Form>
                 </div>
@@ -105,7 +106,7 @@ const Contact = () => {
                     style={{ border: "0" }}
                     allowFullScreen=""
                     loading="lazy"
-                    title="Map"
+                    title={getTranslation("contact.map", currentLanguage)}
                   ></iframe>
                 </div>
               </Col>

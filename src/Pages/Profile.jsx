@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import "../Style-pages/Profile.css";
 import { BsBellFill, BsList } from "react-icons/bs";
 import Navbar from "../Components/Navbar";
@@ -10,10 +10,14 @@ import CategoryService from "../api/services/CategoryService";
 import CardService from "../api/services/CardService";
 import useApi from "../api/hooks/useApi";
 import { userService } from "../api/services/UserService";
-import { getUserLanguage, getCategoryName } from "../utils/languageUtils";
+import { getCategoryName } from "../utils/languageUtils";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 
 const Profile = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
   const [activeCategory, setActiveCategory] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -34,11 +38,11 @@ const Profile = () => {
   } = useApi(CategoryService.getAllCategories);
 
   useEffect(() => {
-    console.log("Profile component mounted");
     const authToken = localStorage.getItem("authToken");
-    console.log("Auth token in localStorage:", authToken ? "Token exists" : "No token");
-    console.log("Full localStorage contents:", Object.keys(localStorage));
-    console.log("localStorage authToken value:", authToken);
+    if (!authToken) {
+      navigate("/login");
+      return;
+    }
     fetchUserProfile();
     fetchCategories();
     fetchUserCards();
@@ -46,7 +50,6 @@ const Profile = () => {
 
   // Refresh data when navigating back to the profile page
   useEffect(() => {
-    console.log("Location changed, refreshing profile data");
     fetchUserProfile();
     fetchCategories();
     fetchUserCards();
@@ -56,7 +59,6 @@ const Profile = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        console.log("Profile page became visible, refreshing cards");
         fetchUserCards();
       }
     };
@@ -68,21 +70,10 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    if (categoriesError) {
-      console.log("categoriesError", categoriesError);
-    }
-    if (categoriesLoading) {
-      console.log("categoriesLoading", categoriesLoading);
-    }
     // Updated to work with cards_category table structure
     if (Array.isArray(categories?.results) && categories.results.length > 0) {
       const firstCategory = categories.results[0];
-      console.log("Setting initial active category:", firstCategory);
-      const categoryCards = getCardsForCategory(firstCategory.id);
-      setActiveCategory({
-        ...firstCategory,
-        cards: categoryCards,
-      });
+      setActiveCategory(firstCategory);
     }
   }, [categories, categoriesError, categoriesLoading, userCards]);
 
@@ -91,9 +82,6 @@ const Profile = () => {
     try {
       setLoadingCards(true);
       const response = await CardService.getUserCards();
-      console.log("User cards response:", response);
-
-      // Handle different possible response structures
       let cardsData = [];
       if (response && response.data) {
         // Check if response.data is an array
@@ -115,7 +103,6 @@ const Profile = () => {
         }
       }
 
-      console.log("Processed user cards data:", cardsData);
       setUserCards(cardsData);
     } catch (error) {
       console.error("Error fetching user cards:", error);
@@ -132,7 +119,6 @@ const Profile = () => {
       return [];
     }
     const filteredCards = userCards.filter((card) => card.category.id === categoryId);
-    console.log(`Filtering cards for category ${categoryId}:`, filteredCards);
     return filteredCards;
   };
 
@@ -156,8 +142,6 @@ const Profile = () => {
           cards: updatedCards,
         });
       }
-
-      console.log("Card deleted successfully");
     } catch (error) {
       console.error("Error deleting card:", error);
       // You might want to show an error message to the user here
@@ -198,7 +182,9 @@ const Profile = () => {
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
-              <p className="mt-3 text-muted">Loading profile...</p>
+              <p className="mt-3 text-muted">
+                {getTranslation("actions.loading", currentLanguage)}
+              </p>
             </div>
           </div>
         </div>
@@ -223,10 +209,10 @@ const Profile = () => {
           >
             <div className="text-center">
               <div className="alert alert-danger" role="alert">
-                <h5>Error Loading Profile</h5>
+                <h5>{getTranslation("errors.general", currentLanguage)}</h5>
                 <p>{error}</p>
                 <button className="btn btn-primary" onClick={fetchUserProfile}>
-                  Try Again
+                  {getTranslation("actions.tryAgain", currentLanguage)}
                 </button>
               </div>
             </div>
@@ -267,17 +253,20 @@ const Profile = () => {
               <h5 className="fw-bold mb-1" style={{ color: "#173067" }}>
                 {userProfile?.first_name?.toUpperCase() +
                   " " +
-                  userProfile?.last_name?.toUpperCase() || "User"}
+                  userProfile?.last_name?.toUpperCase() ||
+                  getTranslation("profile.user", currentLanguage)}
               </h5>
-              <p className="mb-1 text-muted">{userProfile?.phone || "No phone number"}</p>
               <p className="mb-1 text-muted">
-                Age:{" "}
+                {userProfile?.phone || getTranslation("profile.noPhone", currentLanguage)}
+              </p>
+              <p className="mb-1 text-muted">
+                {getTranslation("profile.age", currentLanguage)}:{" "}
                 {userProfile?.birth_date
                   ? new Date().getFullYear() - new Date(userProfile.birth_date).getFullYear()
-                  : "Not specified"}
+                  : getTranslation("profile.notSpecified", currentLanguage)}
               </p>
               <a href={`mailto:${userProfile?.email}`} className="text-decoration-none text-muted">
-                {userProfile?.email || "No email"}
+                {userProfile?.email || getTranslation("profile.noEmail", currentLanguage)}
               </a>
 
               <div className="mt-3">
@@ -286,7 +275,7 @@ const Profile = () => {
                   style={{ backgroundColor: "#173067", borderColor: "#173067" }}
                   onClick={() => setShowEditModal(true)}
                 >
-                  Edit Profile
+                  {getTranslation("profile.editProfile", currentLanguage)}
                 </Button>
               </div>
             </div>
@@ -297,7 +286,7 @@ const Profile = () => {
             <h4 className="section-title d-flex align-items-center gap-2 mb-3">
               <img src="/Categorize.png" alt="" width="24" height="24" />
               <span style={{ color: "#173067" }} className="fw-semibold">
-                My Categories
+                {getTranslation("profile.myCategories", currentLanguage)}
               </span>
             </h4>
 
@@ -328,7 +317,8 @@ const Profile = () => {
                         {getCategoryName(cat)}
                       </p>
                       <small className="text-muted">
-                        {getCardsForCategory(cat.id).length} cards
+                        {getCardsForCategory(cat.id).length}{" "}
+                        {getTranslation("profile.cards", currentLanguage)}
                       </small>
                     </div>
                   </div>
@@ -351,13 +341,12 @@ const Profile = () => {
                   <span style={{ color: "#173067" }}>{getCategoryName(activeCategory)}</span>
                 </h5>
 
-                {console.log("Active category for display:", activeCategory)}
-                {console.log("Active category cards:", activeCategory.cards)}
-
                 {loadingCards ? (
                   <div className="text-center py-4">
                     <div className="spinner-border text-primary" role="status">
-                      <span className="visually-hidden">Loading cards...</span>
+                      <span className="visually-hidden">
+                        {getTranslation("profile.loadingCards", currentLanguage)}
+                      </span>
                     </div>
                   </div>
                 ) : activeCategory.cards && activeCategory.cards.length > 0 ? (
@@ -379,7 +368,7 @@ const Profile = () => {
                             <div style={{ fontSize: "2rem" }}>📄</div>
                           )}
                           <p className="m-0 fw-medium" style={{ color: "#173067" }}>
-                            {getUserLanguage() === "ar" && card.title_ar
+                            {currentLanguage === "ar" && card.title_ar
                               ? card.title_ar
                               : card.title_en}
                           </p>
@@ -387,7 +376,7 @@ const Profile = () => {
                             className="btn btn-outline-danger btn-sm mt-2 rounded-pill"
                             onClick={() => handleDeleteCard(card.id)}
                           >
-                            Delete
+                            {getTranslation("actions.delete", currentLanguage)}
                           </button>
                         </div>
                       </div>
@@ -395,9 +384,13 @@ const Profile = () => {
                   </div>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-muted">No cards in this category yet.</p>
+                    <p className="text-muted">
+                      {getTranslation("profile.noCardsInCategory", currentLanguage)}
+                    </p>
                     <Link to="/addnewcard">
-                      <button className="btn btn-primary rounded-pill">Add New Card</button>
+                      <button className="btn btn-primary rounded-pill">
+                        {getTranslation("cards.addNewCard", currentLanguage)}
+                      </button>
                     </Link>
                   </div>
                 )}
