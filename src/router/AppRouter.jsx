@@ -36,8 +36,9 @@ function AppRouter() {
 
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/reset" element={<ResetPassword />} />
-          <Route path="/newpass" element={<NewPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/new-password" element={<NewPassword />} />
+          <Route path="/new-password/:token" element={<NewPassword />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/verify-email/:token" element={<EmailVerification />} />

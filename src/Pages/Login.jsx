@@ -1,22 +1,19 @@
-import { useState } from "react";
-import { Container, Row, Col, Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
+import { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Button, Alert, Card, InputGroup } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../Style-pages/Login.css";
 import { authService } from "../api/services/AuthenticationService";
-import { decodeJWT } from "../utils/tokenExtractor";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { currentLanguage } = useLanguage();
+  const { isAuthenticated, loading: authLoading, login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-
-  // Debug: Log errors whenever they change
-  console.log("Current errors state:", errors);
   const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -27,6 +24,13 @@ function Login() {
 
   // Get the intended destination from location state
   const from = location.state?.from?.pathname || "/board";
+
+  // Redirect if user is already authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate, from]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,14 +53,14 @@ function Login() {
 
     // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = getTranslation("validation.emailRequired", currentLanguage);
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = getTranslation("validation.invalidEmail", currentLanguage);
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = getTranslation("validation.passwordRequired", currentLanguage);
     }
 
     setErrors(newErrors);
@@ -79,46 +83,30 @@ function Login() {
         password: formData.password,
       };
 
-      console.log("Sending login request:", credentials);
-
       const response = await authService.login(credentials);
 
-      console.log("Login successful:", response.data);
-      console.log("Response data structure:", Object.keys(response.data));
-
-      // Use the AuthContext login function
+      // Extract token from response
+      let token = null;
       if (response.data?.access) {
-        const userData = decodeJWT(response.data.access);
-        login(userData || null, response.data.access, response.data.refresh);
-        console.log("Access token stored successfully:", response.data.access);
-
-        // Also store refresh token if available
-        if (response.data?.refresh) {
-          console.log("Refresh token stored successfully");
-        }
-
-        if (response.data.user) {
-          console.log("User data stored:", response.data.user);
-        }
+        token = response.data.access;
+      } else if (response.data?.refresh) {
+        token = response.data.refresh;
+      } else if (response.data?.user) {
+        token = response.data.user.token;
       } else if (response.data?.token) {
-        login(response.data.user || null, response.data.token);
-        console.log("Token stored successfully:", response.data.token);
-        if (response.data.user) {
-          console.log("User data stored:", response.data.user);
-        }
+        token = response.data.token;
       } else if (response.data?.access_token) {
-        login(response.data.user || null, response.data.access_token);
-        console.log("Access token stored successfully:", response.data.access_token);
-        if (response.data.user) {
-          console.log("User data stored:", response.data.user);
-        }
-      } else {
-        console.warn("No token found in response:", response.data);
-        console.log("Available keys in response:", Object.keys(response.data));
+        token = response.data.access_token;
       }
 
-      // Redirect to the intended page or default to board
-      navigate(from, { replace: true });
+      if (token) {
+        // Use AuthContext login function
+        login(response.data?.user || response.data, token, response.data?.refresh);
+        // Redirect to the intended page or default to board
+        navigate(from, { replace: true });
+      } else {
+        setGeneralError(getTranslation("errors.loginFailed", currentLanguage));
+      }
     } catch (error) {
       console.error("Login failed:", error);
 
@@ -141,23 +129,44 @@ function Login() {
                 processedErrors[key] = serverErrors[key];
               }
             });
-            console.log("Processed errors:", processedErrors);
             setErrors(processedErrors);
           }
         } else if (typeof serverErrors === "string") {
           setGeneralError(serverErrors);
         } else {
-          setGeneralError("Login failed. Please try again.");
+          setGeneralError(getTranslation("errors.loginFailed", currentLanguage));
         }
       } else if (error.message) {
         setGeneralError(error.message);
       } else {
-        setGeneralError("Login failed. Please try again.");
+        setGeneralError(getTranslation("errors.loginFailed", currentLanguage));
       }
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading spinner while checking authentication
+  if (authLoading) {
+    return (
+      <Container
+        fluid
+        className="d-flex px-5 justify-content-center align-items-center background"
+        style={{ height: "100vh", background: "#D4E2F6" }}
+      >
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
+  // Don't render the form if user is already authenticated
+  if (isAuthenticated) {
+    return null;
+  }
 
   return (
     <Container
@@ -170,7 +179,9 @@ function Login() {
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             <Row className="mb-4">
               <Col>
-                <h2 className="text-center">Login to your account</h2>
+                <h2 className="text-center">
+                  {getTranslation("auth.loginTitle", currentLanguage)}
+                </h2>
               </Col>
             </Row>
             {generalError && (
@@ -181,7 +192,7 @@ function Login() {
 
             {location.state?.from && (
               <Alert variant="info" className="text-center">
-                Please log in to access the requested page.
+                {getTranslation("auth.pleaseLogin", currentLanguage)}
               </Alert>
             )}
 
@@ -195,7 +206,7 @@ function Login() {
                       </InputGroup.Text>
                       <Form.Control
                         type="email"
-                        placeholder="Email"
+                        placeholder={getTranslation("auth.email", currentLanguage)}
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
@@ -221,7 +232,7 @@ function Login() {
                       </InputGroup.Text>
                       <Form.Control
                         type={showPassword ? "text" : "password"}
-                        placeholder="Password"
+                        placeholder={getTranslation("auth.password", currentLanguage)}
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
@@ -244,6 +255,19 @@ function Login() {
                 </Col>
               </Row>
 
+              {/* Forgot Password Link */}
+              <Row className="mb-3">
+                <Col className="text-end">
+                  <Link
+                    to="/reset-password"
+                    className="text-decoration-none"
+                    style={{ color: "#173067", fontSize: "0.9rem" }}
+                  >
+                    {getTranslation("auth.forgotPassword", currentLanguage)}
+                  </Link>
+                </Col>
+              </Row>
+
               <Row className="mb-3">
                 <Col className="text-center">
                   <Button type="submit" className="w-75" disabled={loading}>
@@ -253,10 +277,10 @@ function Login() {
                           className="spinner-border spinner-border-sm me-2"
                           aria-hidden="true"
                         ></span>
-                        Logging In...
+                        {getTranslation("auth.loggingIn", currentLanguage)}
                       </>
                     ) : (
-                      "Log In"
+                      getTranslation("auth.login", currentLanguage)
                     )}
                   </Button>
                 </Col>
@@ -266,7 +290,8 @@ function Login() {
             <Row>
               <Col className="text-center">
                 <p>
-                  Don't have an account? <Link to="/signup">Sign Up</Link>
+                  {getTranslation("auth.noAccount", currentLanguage)}{" "}
+                  <Link to="/signup">{getTranslation("auth.signUp", currentLanguage)}</Link>
                 </p>
               </Col>
             </Row>

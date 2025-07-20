@@ -1,8 +1,60 @@
-import "../Style-pages/ResetPassword.css";
+import { useState } from "react";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { FaEnvelope } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "../Style-pages/ResetPassword.css";
+import { authService } from "../api/services/AuthenticationService";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../utils/translations";
 
 function ResetPassword() {
+  const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
+    try {
+      await authService.requestPasswordReset(email.trim().toLowerCase());
+      setSuccess(getTranslation("success.passwordResetSuccess", currentLanguage));
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    } catch (error) {
+      if (error.response?.data) {
+        const serverErrors = error.response.data;
+        if (typeof serverErrors === "object") {
+          if (serverErrors.detail) {
+            setError(serverErrors.detail);
+          } else if (serverErrors.email) {
+            setError(
+              Array.isArray(serverErrors.email) ? serverErrors.email[0] : serverErrors.email
+            );
+          } else {
+            setError(getTranslation("errors.passwordResetFailed", currentLanguage));
+          }
+        } else if (typeof serverErrors === "string") {
+          setError(serverErrors);
+        } else {
+          setError(getTranslation("errors.passwordResetFailed", currentLanguage));
+        }
+      } else if (error.message) {
+        setError(error.message);
+      } else {
+        setError(getTranslation("errors.passwordResetFailed", currentLanguage));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-wrapper d-flex align-items-center justify-content-center background min-vh-100">
       <div className="container px-3 px-md-5">
@@ -10,29 +62,68 @@ function ResetPassword() {
           {/* Left Side - Login Box */}
           <div className="col-12 col-md-8">
             <div className="login-box-wrapper text-center text-md-start">
-              <h1 className="welcome-text mb-4">Welcome to Tawasul</h1>
-
               <div className="login-box2 shadow-sm mx-auto mx-md-0">
                 <div className="text-center mb-4">
-                  <p className="text-center text">Reset Your Password</p>
+                  <p className="text-center text">
+                    {getTranslation("auth.resetPassword", currentLanguage)}
+                  </p>
                   <img src="/image-2.png" alt="Logo" style={{ width: "100px" }} />
                 </div>
 
-                {/* Email Field */}
-                <div className="input-group mb-4 custom-input-group">
-                  <span className="input-group-text">
-                    <FaEnvelope style={{ color: "#173067" }} />
-                  </span>
-                  <input type="email" className="form-control" placeholder="Email" />
-                </div>
+                {error && (
+                  <Alert variant="danger" className="mb-3">
+                    {error}
+                  </Alert>
+                )}
 
-                {/* Login Button */}
-                <Link
-                  to="/newpass"
-                  className="btn btn-primary w-100 mb-3 custom-login-btn text-center"
-                >
-                  Send Email
-                </Link>
+                {success && (
+                  <Alert variant="success" className="mb-3">
+                    {success}
+                  </Alert>
+                )}
+
+                <Form onSubmit={handleSubmit}>
+                  {/* Email Field */}
+                  <div className="input-group mb-4 custom-input-group">
+                    <span className="input-group-text">
+                      <FaEnvelope style={{ color: "#173067" }} />
+                    </span>
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder={getTranslation("auth.email", currentLanguage)}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    className="btn btn-primary w-100 mb-3 custom-login-btn text-center"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                        {getTranslation("auth.sending", currentLanguage)}
+                      </>
+                    ) : (
+                      getTranslation("auth.sendResetEmail", currentLanguage)
+                    )}
+                  </Button>
+                </Form>
+
+                {/* Back to Login Link */}
+                <div className="text-center">
+                  <Link to="/login" className="text-decoration-none">
+                    {getTranslation("auth.backToLogin", currentLanguage)}
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
