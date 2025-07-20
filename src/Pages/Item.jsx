@@ -56,36 +56,41 @@ const Item = () => {
       <div
         style={{
           backgroundColor: "#ffffff",
-          borderRadius: "50px",
-          padding: "0.75rem 1.5rem",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          borderRadius: "60px",
+          padding: "1rem 2rem",
+          boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
           display: "flex",
           alignItems: "center",
           marginBottom: "2rem",
           cursor: "pointer",
+          transition: "transform 0.3s ease",
         }}
         onClick={speak}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        <span style={{ fontSize: "1.5rem", fontWeight: "bold", marginRight: "10px" }}>
+        <span style={{ fontSize: "2rem", fontWeight: "bold", marginRight: "15px" }}>
           {item.label}
         </span>
-        <BsVolumeUp size={24} />
+        <BsVolumeUp size={32} color="#0073e6" />
       </div>
 
       {/* دائرة الإيموجي */}
       <div
         style={{
-          width: "220px",
-          height: "220px",
+          width: "300px",
+          height: "300px",
           borderRadius: "50%",
           backgroundColor: "#fff",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+          border: "5px dashed #173067",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          boxShadow: "0 12px 30px rgba(0,0,0,0.1)",
+          marginBottom: "2rem",
         }}
       >
-        <span style={{ fontSize: "5rem" }}>{item.emoji}</span>
+        <span style={{ fontSize: "6rem" }}>{item.emoji}</span>
       </div>
 
       {/* الأزرار */}
@@ -93,30 +98,35 @@ const Item = () => {
         <button className="text-white"
           onClick={() => navigate("/test")}
           style={{
-            backgroundColor: "#005184",
+            backgroundColor: "#173067",
             color: "#fff",
             border: "none",
-            padding: "0.7rem 1.5rem",
-            borderRadius: "30px",
-            fontSize: "1rem",
-            fontWeight: "500",
+            padding: "0.8rem 2rem",
+            borderRadius: "40px",
+            fontSize: "1.1rem",
+            fontWeight: "600",
             cursor: "pointer",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+            transition: "background 0.3s ease",
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#005bb5")}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0073e6")}
         >
           Go to Test
         </button>
 
-        <button className="text-white"
+        <button
           onClick={() => navigate("/cat")}
           style={{
             backgroundColor: "#A1A8B0",
             color: "#fff",
             border: "none",
-            padding: "0.7rem 1.5rem",
-            borderRadius: "30px",
-            fontSize: "1rem",
-            fontWeight: "500",
+            padding: "0.8rem 2rem",
+            borderRadius: "40px",
+            fontSize: "1.1rem",
+            fontWeight: "600",
             cursor: "pointer",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
           }}
         >
           ← Back to Categories

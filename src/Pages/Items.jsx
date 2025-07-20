@@ -32,31 +32,42 @@ const Items = () => {
 
   return (
     <>
-      {/* nav  */}
-      <Navbar onMenuClick={() => setShowSidebar(true)} />
-      {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
-      <section className="items-section mb-5 marg">
-        <Container>
-          <div className="items-header text-center">
-            <h2 className="category-title text-white">Food</h2>
-          </div>
-          <Row className="justify-content-center">
-            {items.map((item, index) => (
-              <Col xs={4} sm={3} md={2} className="d-flex justify-content-center mb-4" key={index}>
-                <Link to={`/item/${item.label.toLowerCase()}`} className="text-decoration-none">
-                  <div className="item-card text-center">
-                    <div className="item-emoji">{item.emoji}</div>
-                    <div className="item-label text-white">{item.label}</div>
-                  </div>
-                </Link>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
+      <div id="root">
+        {/* Header Section */}
+        <Navbar onMenuClick={() => setShowSidebar(true)} />
+        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
 
-      {/* footer  */}
-      <Footer />
+        <div className="main-content">
+          <section className="items-section mb-5 mt-5">
+            <Container>
+              <div className="items-header text-center">
+                <h2 className="category-title">Food</h2>
+              </div>
+              <Row className="justify-content-center">
+                {items.map((item, index) => (
+                  <Col
+                    xs={4}
+                    sm={3}
+                    md={2}
+                    className="d-flex justify-content-center mb-4"
+                    key={index}
+                  >
+                    <Link to={`/item/${item.label.toLowerCase()}`} className="text-decoration-none">
+                      <div className="item-card text-center" role="button">
+                        <div className="item-emoji">{item.emoji}</div>
+                        <div className="item-label">{item.label}</div>
+                      </div>
+                    </Link>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          </section>
+        </div>
+
+        {/* Footer */}
+        <Footer />
+      </div>
     </>
   );
 };

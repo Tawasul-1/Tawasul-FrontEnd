@@ -60,13 +60,13 @@ const Plan = () => {
   const plans = isYearly ? yearlyPlans : monthlyPlans;
 
   return (
-    <div className="bg-light min-vh-100">
+    <div className="bg-light min-vh-100" id="root">
       {/* Navbar */}
       <Header />
 
       {/* Hero Section */}
       <section
-        className="hero-section text-center text-white py-5"
+        className="hero-section text-center text-white py-5 main-content"
         style={{
           backgroundImage: "url('/bg2.png')",
           backgroundSize: "cover",

@@ -44,7 +44,7 @@ const Selection = () => {
   const [selectedCategory, setSelectedCategory] = useState("Feeling");
 
   return (
-    <div className="bg-light min-vh-100">
+    <div className="bg-light min-vh-100" id="root">
       <Header />
 
       {/* Hero */}

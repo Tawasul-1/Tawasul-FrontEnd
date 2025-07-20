@@ -122,14 +122,14 @@ const AddNewCard = () => {
   };
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-column">
+    <div className="bg-light min-vh-100 d-flex flex-column" id="root">
       {/* Navbar */}
       <Header />
 
       {/* Main Content */}
       <Container
         fluid
-        className="flex-grow-1 d-flex align-items-center justify-content-center bg-light-blue py-5 mb-4"
+        className="main-content flex-grow-1 d-flex align-items-center justify-content-center bg-light-blue py-5 mb-4"
       >
         <Row className="w-100 justify-content-center">
           <Col xs={11} sm={10} md={8} lg={6} xl={5}>

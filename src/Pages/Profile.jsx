@@ -237,7 +237,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-container bg-light min-vh-100">
+    <div className="profile-container bg-light min-vh-100" id="root">
       {/* Header */}
       <Navbar
         onMenuClick={() => setShowSidebar(true)}

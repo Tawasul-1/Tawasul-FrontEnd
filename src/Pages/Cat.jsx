@@ -48,46 +48,52 @@ const Cat = () => {
 
   return (
     <>
-      <Navbar onMenuClick={() => setShowSidebar(true)} />
-      {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+      <div id="root">
+        {/* Header Section */}
+        <Navbar onMenuClick={() => setShowSidebar(true)} />
+        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
 
-      <div className="container-fluid text-center py-5">
-        <h2
-          className="fw-bold text-white"
-          style={{
-            backgroundColor: "#162b67",
-            color: "white",
-            borderRadius: "1rem",
-            display: "inline-block",
-            padding: "0.5rem 2rem",
-          }}
-        >
-          Categories
-        </h2>
+        <div className="main-content">
+          <div className="container-fluid text-center py-5">
+            <h2
+              className="fw-bold text-white"
+              style={{
+                backgroundColor: "#162b67",
+                color: "white",
+                borderRadius: "1rem",
+                display: "inline-block",
+                padding: "0.5rem 2rem",
+              }}
+            >
+              Categories
+            </h2>
 
-        <div className="row justify-content-center mt-5 g-4">
-          {categories.map((cat, i) => (
-            <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={i}>
-              <Link to={cat.path} style={{ textDecoration: "none" }}>
-                <div className="cat-card" style={{ backgroundColor: cat.bg }}>
-                  <div className="cat-icon">
-                    <img src={cat.icon} alt={cat.title} />
-                  </div>
-                  <h5 className="cat-title">{cat.title}</h5>
-                  <img
-                    src={cat.character}
-                    alt={cat.title}
-                    className="cat-character"
-                    style={{ width: "180px", height: "auto" }}
-                  />
+            <div className="row justify-content-center mt-5 g-4">
+              {categories.map((cat, i) => (
+                <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={i}>
+                  <Link to={cat.path} style={{ textDecoration: "none" }}>
+                    <div className="cat-card" style={{ backgroundColor: cat.bg }}>
+                      <div className="cat-icon">
+                        <img src={cat.icon} alt={cat.title} />
+                      </div>
+                      <h5 className="cat-title">{cat.title}</h5>
+                      <img
+                        src={cat.character}
+                        alt={cat.title}
+                        className="cat-character"
+                        style={{ width: "180px", height: "auto" }}
+                      />
+                    </div>
+                  </Link>
                 </div>
-              </Link>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-      </div>
 
-      <Footer />
+        {/* Footer */}
+        <Footer />
+      </div>
     </>
   );
 };

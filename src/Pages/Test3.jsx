@@ -69,8 +69,8 @@ const Test3 = () => {
             key={index}
             onClick={() => handleClick(option)}
             style={{
-              width: "140px",
-              height: "140px",
+              width: "180px",
+              height: "180px",
               borderRadius: "25px",
               backgroundColor: "#fff",
               boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
