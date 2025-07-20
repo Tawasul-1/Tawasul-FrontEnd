@@ -5,17 +5,16 @@ import {
   setupRequestInterceptor,
   setupResponseInterceptor,
 } from "./api/interceptors/requestInterceptors";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
   useEffect(() => {
     const getAuthToken = () => {
       const token = localStorage.getItem("authToken");
-      console.log("getAuthToken called, token:", token ? "Token exists" : "No token");
       return token;
     };
 
     const onUnauthenticated = () => {
-      console.log("User is unauthenticated");
       // Clear localStorage and redirect to login
       localStorage.removeItem("authToken");
       localStorage.removeItem("refreshToken");
@@ -27,7 +26,11 @@ function App() {
     setupResponseInterceptor(apiClient, onUnauthenticated);
   }, []);
 
-  return <AppRouter />;
+  return (
+    <LanguageProvider>
+      <AppRouter />
+    </LanguageProvider>
+  );
 }
 
 export default App;
