@@ -90,7 +90,7 @@ function ResetPassword() {
                     </span>
                     <input
                       type="email"
-                      className="form-control"
+                      className="form-control p-2"
                       placeholder={getTranslation("auth.email", currentLanguage)}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}

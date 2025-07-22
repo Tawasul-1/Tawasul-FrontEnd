@@ -21,7 +21,7 @@ function Footer() {
             <h1 className="mb-3">{getTranslation("nav.brand", currentLanguage)}</h1>
             <ul className="list-unstyled d-flex gap-3">
               <li>
-                <a href="#">
+                <a href="https://www.facebook.com/profile.php?id=61578241872776&mibextid=wwXIfr&rdid=hS9ODmGCH837f1dB#">
                   <i className="bi bi-facebook footer-social-icon"></i>
                 </a>
               </li>

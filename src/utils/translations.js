@@ -449,8 +449,8 @@ export const translations = {
   // Footer
   footer: {
     copyright: {
-      en: "© 2024 TAWASUL. All rights reserved.",
-      ar: "© 2024 تواصل. جميع الحقوق محفوظة.",
+      en: "© 2025 TAWASUL. All rights reserved.",
+      ar: "© 2025 تواصل. جميع الحقوق محفوظة.",
     },
     newsletter: { en: "News Letters", ar: "النشرة الإخبارية" },
     subscribe: { en: "Subscribe", ar: "اشتراك" },

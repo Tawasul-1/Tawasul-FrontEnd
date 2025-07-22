@@ -275,6 +275,7 @@ function Signup() {
                         <i className="bi bi-image"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="file"
                         accept="image/*"
                         name="profile_picture"
@@ -297,6 +298,7 @@ function Signup() {
                         <i className="bi bi-person-circle"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="text"
                         placeholder={getTranslation("auth.firstName", currentLanguage)}
                         name="firstName"
@@ -314,6 +316,7 @@ function Signup() {
                         <i className="bi bi-person-circle"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="text"
                         placeholder={getTranslation("auth.lastName", currentLanguage)}
                         name="lastName"
@@ -333,6 +336,7 @@ function Signup() {
                         <i className="bi bi-person-badge"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="text"
                         placeholder={getTranslation("auth.username", currentLanguage)}
                         name="username"
@@ -352,6 +356,7 @@ function Signup() {
                         <i className="bi bi-envelope-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="email"
                         placeholder={getTranslation("auth.email", currentLanguage)}
                         name="email"
@@ -371,6 +376,7 @@ function Signup() {
                         <i className="bi bi-calendar-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="date"
                         placeholder={getTranslation("auth.birthdate", currentLanguage)}
                         name="birthdate"
@@ -387,6 +393,7 @@ function Signup() {
                         <i className="bi bi-telephone-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="tel"
                         placeholder={getTranslation("auth.phone", currentLanguage)}
                         name="phone"
@@ -406,6 +413,7 @@ function Signup() {
                         <i className="bi bi-lock-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type={showPassword ? "text" : "password"}
                         placeholder={getTranslation("auth.password", currentLanguage)}
                         name="password"
@@ -429,6 +437,7 @@ function Signup() {
                         <i className="bi bi-lock-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder={getTranslation("auth.confirmPassword", currentLanguage)}
                         name="confirmPassword"

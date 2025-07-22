@@ -565,6 +565,7 @@ const Board = () => {
                 style={{
                   border: "1px solid #173067",
                   height: "40px",
+                  padding: "10px 30px",
                   textAlign: isRTLMode ? "right" : "left",
                 }}
                 value={password}

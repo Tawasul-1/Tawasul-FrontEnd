@@ -205,6 +205,7 @@ function Login() {
                         <i className="bi bi-envelope-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type="email"
                         placeholder={getTranslation("auth.email", currentLanguage)}
                         name="email"
@@ -231,6 +232,7 @@ function Login() {
                         <i className="bi bi-lock-fill"></i>
                       </InputGroup.Text>
                       <Form.Control
+                        className="p-2"
                         type={showPassword ? "text" : "password"}
                         placeholder={getTranslation("auth.password", currentLanguage)}
                         name="password"
