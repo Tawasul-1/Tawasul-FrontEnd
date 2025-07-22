@@ -168,6 +168,12 @@ function Signup() {
       formDataToSend.append("password", formData.password);
       formDataToSend.append("password2", formData.confirmPassword);
 
+      console.log(
+        "profile_picture value:",
+        formData.profile_picture,
+        "Is File:",
+        formData.profile_picture instanceof File
+      );
       if (formData.profile_picture) {
         formDataToSend.append(
           "profile_picture",
@@ -175,8 +181,8 @@ function Signup() {
           formData.profile_picture.name
         );
       }
-
       for (let [key, value] of formDataToSend.entries()) {
+        console.log("FormData entry:", key, value, value instanceof File);
       }
 
       await authService.register(formDataToSend);
@@ -260,7 +266,7 @@ function Signup() {
             </h2>
             {generalError && <div className="alert alert-danger text-center">{generalError}</div>}
 
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} encType="multipart/form-data">
               <Row className="mb-md-3">
                 <Col className="mb-3 mb-md-0">
                   <Form.Group controlId="formImageUpload">
