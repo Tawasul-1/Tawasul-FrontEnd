@@ -109,7 +109,8 @@ export const translations = {
       ar: "ارتق بتجربتك مع تواصل من خلال استكشاف خطط الاشتراك المرنة المصممة لتناسب احتياجاتك — سواء كنت أحد الوالدين أو معالج أو معلم.",
     },
     viewPlans: { en: "View Plans", ar: "عرض الخطط" },
-    testimonials: { en: "Testimonial", ar: "شهادات" },
+    testimonials: { en: "Testimonials", ar: "شهادات" },
+    testimonialsHeader: { en: "What Parents Say", ar: "ماذا يقول الأهالي" },
     testimonialDetails: {
       maha: {
         en: "TAWASUL gave my child a voice we thought we'd never hear. It's more than an app — it's a lifeline for communication.",
@@ -382,6 +383,7 @@ export const translations = {
   // About Page
   about: {
     title: { en: "About TAWASUL", ar: "حول تواصل" },
+    header: { en: "About Us", ar: "من نحن" },
     mission: { en: "Our Mission", ar: "مهمتنا" },
     missionText: {
       en: "To empower non-speaking individuals, especially children with autism, by providing innovative communication tools that bridge the gap between expression and understanding.",
@@ -413,6 +415,48 @@ export const translations = {
       en: "Our diverse team of experts includes speech therapists, software developers, educators, and parents who understand the challenges of non-verbal communication.",
       ar: "فريقنا المتنوع من الخبراء يشمل معالجي النطق ومطوري البرمجيات والمعلمين والآباء الذين يفهمون تحديات التواصل غير اللفظي.",
     },
+    brand: { en: "TawasuL", ar: "تواصل" },
+    intro1: {
+      en: "TawasuL is a visual communication platform designed to support non-speaking children, especially those with autism. It uses PECS-based tools to help them express needs, feelings, and thoughts with ease and confidence.",
+      ar: "تواصل هو منصة تواصل بصرية تدعم الأطفال غير الناطقين، خاصة المصابين بالتوحد، باستخدام أدوات PECS لمساعدتهم على التعبير عن احتياجاتهم ومشاعرهم وأفكارهم بسهولة وثقة.",
+    },
+    intro2: {
+      en: "Empowering every child to connect, communicate, and thrive.",
+      ar: "تمكين كل طفل من التواصل والتعبير والازدهار.",
+    },
+    intro3: {
+      en: "It’s simple, child-friendly, and designed with real therapeutic needs in mind.",
+      ar: "إنه بسيط، صديق للأطفال، ومصمم وفق احتياجات علاجية حقيقية.",
+    },
+    intro4: {
+      en: "Parents and educators can easily customize boards to fit each child’s journey.",
+      ar: "يمكن للآباء والمعلمين تخصيص اللوحات بسهولة لتناسب رحلة كل طفل.",
+    },
+    intro5: {
+      en: "With TawasuL, communication becomes a right—not a challenge.",
+      ar: "مع تواصل، يصبح التواصل حقاً وليس تحدياً.",
+    },
+    testimonialsHeader: { en: "What Parents Say", ar: "ماذا يقول الأهالي" },
+    testimonial1: {
+      name: { en: "Maha Ahmad", ar: "مها أحمد" },
+      text: {
+        en: "TAWASUL gave my child a voice we thought we’d never hear. It’s more than an app — it’s a lifeline for communication.",
+        ar: "تواصل أعطى طفلي صوتاً لم نكن نعتقد أننا سنسمعه أبداً. إنه أكثر من تطبيق — إنه شريان حياة للتواصل.",
+      },
+    },
+    testimonial2: {
+      name: { en: "Omar Khaled", ar: "عمر خالد" },
+      text: {
+        en: "Thanks to TAWASUL, my son can finally express his needs and feelings. It’s made a world of difference for our family.",
+        ar: "بفضل تواصل، أصبح ابني قادراً أخيراً على التعبير عن احتياجاته ومشاعره. لقد أحدث فرقاً كبيراً لعائلتنا.",
+      },
+    },
+    team1: { en: "Mohsen Thabet", ar: "محسن ثابت" },
+    team2: { en: "Mohamed Fawzy", ar: "محمد فوزي" },
+    team3: { en: "Mohamed ElKorany", ar: "محمد القرني" },
+    team4: { en: "Youssef Shaaban", ar: "يوسف شعبان" },
+    team5: { en: "Youmna Khalil", ar: "يمنى خليل" },
+    team6: { en: "Yousef Abdelati", ar: "يوسف عبد العاطي" },
   },
 
   // Contact Page
