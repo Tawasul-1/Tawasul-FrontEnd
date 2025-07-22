@@ -14,7 +14,7 @@ import EmailVerification from "../Pages/EmailVerification";
 import Contact from "../Pages/Contact";
 import About from "../Pages/About";
 import Success from "../Pages/Success";
-import Cat from "../Pages/Cat";
+import CategoriesTest from "../Pages/CategoriesTest";
 import Items from "../Pages/Items";
 import Item from "../Pages/Item";
 import Test from "../Pages/Test";
@@ -43,16 +43,29 @@ function AppRouter() {
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/verify-email/:token" element={<EmailVerification />} />
           <Route path="/success" element={<Success />} />
-          <Route path="/cat" element={<Cat />} />
           <Route path="/items" element={<Items />} />
           <Route path="/item/:itemName" element={<Item />} />
           <Route path="/test" element={<Test />} />
           <Route path="/test2" element={<Test2 />} />
           <Route path="/test3" element={<Test3 />} />
           <Route path="/howuse" element={<HowUse />} />
-          <Route path="/learn" element={<LearnDone />} />
-
           {/* Protected Routes - Require Authentication */}
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <CategoriesTest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/learn"
+            element={
+              <ProtectedRoute>
+                <LearnDone />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/board"
             element={
