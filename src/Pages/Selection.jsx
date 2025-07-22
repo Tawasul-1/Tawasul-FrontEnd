@@ -4,6 +4,7 @@ import "../Style-pages/Selection.css";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import CardService from "../api/services/CardService";
+import { getTranslation } from "../utils/translations";
 import CategoryService from "../api/services/CategoryService";
 
 const Selection = () => {
@@ -137,17 +138,19 @@ const Selection = () => {
           Welcome To <span style={{ color: "#1d2b59" }}>TAWASUL</span>
         </h1>
 
-        <div className="container mt-4" style={{ maxWidth: "520px" }}>
+        <div className="container mt-4" style={{ maxWidth: "520px" }} ir="ltr">
           <div className="d-flex" dir="ltr">
             <input
               type="text"
+              dir={getTranslation("direction")}
               className="form-control rounded-start-pill"
-              placeholder="Find Your Card"
+              placeholder={getTranslation("findYourCard")}
               style={{
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
                 height: "45px",
                 padding: "20px",
+                textAlign: getTranslation("direction") === "rtl" ? "right" : "left",
               }}
             />
             <button

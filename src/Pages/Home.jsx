@@ -83,10 +83,10 @@ function HomePage() {
         {/* Header Section */}
         <Header />
 
-        <div className="main-content">
+        <div className="main-content" >
           {/* Hero Section */}
           <main
-            className="home-main-section d-flex align-items-center"
+            className="home-main-section d-flex align-items-center" dir="ltr"
             style={{
               backgroundImage: `url('/src/assets/home.svg')`,
               backgroundSize: "cover",
@@ -397,7 +397,7 @@ function HomePage() {
           </section>
 
           {/* Who Benefits Section */}
-          <section className="home-forwhom-section py-5 bg-light text-center">
+          <section className="home-forwhom-section py-5 bg-white text-center">
             <Container>
               <h2 className="fw-bold mb-4" style={{ color: "#173067" }}>
                 {getTranslation("home.whoBenefits", currentLanguage)}

@@ -53,7 +53,10 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
             {/* Notification Box */}
             {showNotifications && (
               <div
-                className="position-absolute end-0 mt-2 bg-white border rounded shadow-sm"
+                className={`position-absolute mt-2 bg-white border rounded shadow-sm ${
+                  currentLanguage === "ar" ? "start-0" : "end-0"
+                }`}
+                dir={currentLanguage === "ar" ? "rtl" : "ltr"}
                 style={{ width: "250px", zIndex: 9999 }}
               >
                 <div className="p-2 fw-bold border-bottom" style={{ color: "#173067" }}>
@@ -105,7 +108,10 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
             {/* Profile Dropdown Menu */}
             {showProfileMenu && (
               <div
-                className="position-absolute end-0 mt-2 bg-white border rounded shadow-sm"
+                className={`position-absolute mt-2 bg-white border rounded shadow-sm ${
+                  currentLanguage === "ar" ? "start-0" : "end-0"
+                }`}
+                dir={currentLanguage === "ar" ? "rtl" : "ltr"}
                 style={{ width: "250px", zIndex: 9999 }}
               >
                 <div className="p-2 fw-bold border-bottom" style={{ color: "#173067" }}>
@@ -144,33 +150,33 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                         </span>
                         <div className="position-relative">
                           <div
-                            className="bg-light rounded-pill d-flex align-items-center p-1"
+                            className="bg-light rounded-pill d-flex align-items-center position-relative"
                             style={{
                               width: "80px",
                               height: "28px",
                               cursor: "pointer",
+                              padding: "0 5px",
                               transition: "all 0.3s ease",
                             }}
                             onClick={handleLanguageChange}
                           >
-                            <div
-                              className={`rounded-circle d-flex align-items-center justify-content-center ${
-                                currentLanguage === "en"
-                                  ? "bg-primary text-white"
-                                  : "bg-white text-muted"
-                              }`}
+                            <span
+                              className="position-absolute d-flex align-items-center justify-content-center rounded-circle"
                               style={{
                                 width: "20px",
                                 height: "20px",
                                 fontSize: "10px",
                                 fontWeight: "bold",
-                                transition: "all 0.3s ease",
-                                transform:
-                                  currentLanguage === "en" ? "translateX(0)" : "translateX(52px)",
+                                top: "4px",
+                                left: currentLanguage === "en" ? "5px" : "55px",
+                                backgroundColor: currentLanguage === "en" ? "#0d6efd" : "#0d6efd",
+                                color: currentLanguage === "en" ? "#fff" : "#fffff",
+                                transition:
+                                  "left 0.3s ease, background-color 0.3s ease, color 0.3s ease",
                               }}
                             >
                               {currentLanguage === "en" ? "EN" : "ع"}
-                            </div>
+                            </span>
                           </div>
                         </div>
                       </div>
