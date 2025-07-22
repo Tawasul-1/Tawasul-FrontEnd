@@ -19,7 +19,6 @@ const AddNewCard = () => {
     title_ar: "",
     category_id: "",
     image: null,
-    is_default: false,
   });
 
   // Load categories on component mount
@@ -102,7 +101,6 @@ const AddNewCard = () => {
       submitFormData.append("title_ar", formData.title_ar);
       submitFormData.append("category_id", formData.category_id);
       submitFormData.append("image", formData.image);
-      submitFormData.append("is_default", formData.is_default);
 
       await CardService.addNewCard(submitFormData);
 
@@ -207,18 +205,6 @@ const AddNewCard = () => {
                       required
                     />
                   </InputGroup>
-                </div>
-
-                {/* Default Card Checkbox */}
-                <div className="mb-4">
-                  <Form.Check
-                    type="checkbox"
-                    id="is_default"
-                    name="is_default"
-                    checked={formData.is_default}
-                    onChange={handleInputChange}
-                    label="Set as default card for all users"
-                  />
                 </div>
 
                 {/* Submit Button */}

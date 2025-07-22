@@ -330,21 +330,7 @@ function Signup() {
 
               <Row className="mb-md-3">
                 <Col className="mb-3 mb-md-0">
-                  <Form.Group controlId="formUsername">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-person-badge"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="text"
-                        placeholder={getTranslation("auth.username", currentLanguage)}
-                        name="username"
-                        onChange={handleChange}
-                      />
-                    </InputGroup>
-                    {errors.username && <div className="text-danger mt-1">{errors.username}</div>}
-                  </Form.Group>
+                  {/* Username field removed: username will be derived from email */}
                 </Col>
               </Row>
 
