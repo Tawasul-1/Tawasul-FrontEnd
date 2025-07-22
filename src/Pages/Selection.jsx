@@ -138,7 +138,7 @@ const Selection = () => {
         </h1>
 
         <div className="container mt-4" style={{ maxWidth: "520px" }}>
-          <div className="d-flex">
+          <div className="d-flex" dir="ltr">
             <input
               type="text"
               className="form-control rounded-start-pill"

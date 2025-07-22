@@ -408,7 +408,7 @@ const Board = () => {
                 })}
               </div>
             ) : (
-              <div className="text-muted">
+              <div className="text-muted mt-2">
                 {currentLanguage === "ar"
                   ? "اضغط على البطاقات لبناء جملة"
                   : "Click cards to build a sentence"}
