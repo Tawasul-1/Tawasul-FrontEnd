@@ -13,7 +13,7 @@ import AddNewCard from "../Pages/AddNewCard";
 import EmailVerification from "../Pages/EmailVerification";
 import Contact from "../Pages/Contact";
 import About from "../Pages/About";
-import Payment from "../Pages/PaymentSuccess";
+import Payment from "../Pages/Payment";
 import CategoriesTest from "../Pages/CategoriesTest";
 import Items from "../Pages/Items";
 import Item from "../Pages/Item";
@@ -33,7 +33,6 @@ function AppRouter() {
           {/* Public Routes */}
           <Route index element={<HomePage />} />
           <Route path="/contact" element={<Contact />} />
-
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />

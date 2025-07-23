@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { BsVolumeUp } from "react-icons/bs";
+import "../Style-pages/Board.css";
 
 const items = {
   apple: { emoji: "🍎", label: "Apple" },
@@ -28,6 +29,7 @@ const Item = () => {
   const navigate = useNavigate();
   const itemKey = itemName?.toLowerCase();
   const item = items[itemKey];
+  const [showLevels, setShowLevels] = useState(false);
 
   const speak = () => {
     if ("speechSynthesis" in window && item) {
@@ -39,6 +41,18 @@ const Item = () => {
   if (!item) {
     return <p className="text-center mt-5 text-danger fw-bold">Item not found</p>;
   }
+
+  const levelBtnStyle = {
+    backgroundColor: "#0073e6",
+    color: "#fff",
+    border: "none",
+    padding: "0.6rem 1.5rem",
+    borderRadius: "30px",
+    fontSize: "1rem",
+    fontWeight: "500",
+    cursor: "pointer",
+    boxShadow: "0 3px 8px rgba(0,0,0,0.1)",
+  };
 
   return (
     <div
@@ -95,8 +109,9 @@ const Item = () => {
 
       {/* الأزرار */}
       <div style={{ marginTop: "2rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-        <button className="text-white"
-          onClick={() => navigate("/test")}
+        <button
+          className="color1"
+          onClick={() => setShowLevels(true)}
           style={{
             backgroundColor: "#173067",
             color: "#fff",
@@ -132,6 +147,24 @@ const Item = () => {
           ← Back to Categories
         </button>
       </div>
+
+      {/* اختيار المستوى */}
+      {showLevels && (
+        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+          <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Choose Test Level:</p>
+          <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
+            <button className="color1" onClick={() => navigate("/test?level=beginner")} style={levelBtnStyle}>
+              Beginner
+            </button>
+            <button className="color1" onClick={() => navigate("/test2?level=intermediate")} style={levelBtnStyle}>
+              Intermediate
+            </button>
+            <button className="color1" onClick={() => navigate("/test3?level=advanced")} style={levelBtnStyle}>
+              Advanced
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
