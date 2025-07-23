@@ -13,7 +13,7 @@ const HowUse = () => {
         <div className="main-content">
           <div
             className="howuse-wrapper"
-            style={{ backgroundColor: "#f9fbff", marginBottom: "200px" }}
+            style={{ backgroundColor: "#f9fbff", marginBottom: "100px" }}
           >
             <div className=" text-center">
               <div className="howuse-header-section">
