@@ -13,7 +13,7 @@ import AddNewCard from "../Pages/AddNewCard";
 import EmailVerification from "../Pages/EmailVerification";
 import Contact from "../Pages/Contact";
 import About from "../Pages/About";
-import Success from "../Pages/Success";
+import Payment from "../Pages/PaymentSuccess";
 import CategoriesTest from "../Pages/CategoriesTest";
 import Items from "../Pages/Items";
 import Item from "../Pages/Item";
@@ -42,7 +42,7 @@ function AppRouter() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/verify-email/:token" element={<EmailVerification />} />
-          <Route path="/success" element={<Success />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/items" element={<Items />} />
           <Route path="/item/:itemName" element={<Item />} />
           <Route path="/test" element={<Test />} />
@@ -83,14 +83,6 @@ function AppRouter() {
             }
           />
 
-          <Route
-            path="/plan"
-            element={
-              <ProtectedRoute>
-                <Plan />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/selection"
             element={

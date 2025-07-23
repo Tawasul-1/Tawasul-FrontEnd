@@ -366,6 +366,8 @@ export const translations = {
     fullName: { en: "Full Name", ar: "الاسم الكامل" },
     email: { en: "Email", ar: "البريد الإلكتروني" },
     phone: { en: "Phone", ar: "الهاتف" },
+    age: { en: "Age", ar: "العمر" },
+    email: { en: "Email", ar: "البريد الإلكتروني" },
     address: { en: "Address", ar: "العنوان" },
     city: { en: "City", ar: "المدينة" },
     country: { en: "Country", ar: "البلد" },
@@ -378,6 +380,12 @@ export const translations = {
     changeAvatar: { en: "Change Avatar", ar: "تغيير الصورة الشخصية" },
     uploadAvatar: { en: "Upload Avatar", ar: "رفع صورة شخصية" },
     removeAvatar: { en: "Remove Avatar", ar: "إزالة الصورة الشخصية" },
+    // Subscription-related
+    subscribed: { en: "You are subscribed.", ar: "أنت مشترك." },
+    notSubscribed: { en: "You are not subscribed.", ar: "أنت غير مشترك." },
+    upgrade: { en: "Upgrade / Subscribe", ar: "ترقية / اشتراك" },
+    cancelSubscription: { en: "Cancel Subscription", ar: "إلغاء الاشتراك" },
+    cancelSuccess: { en: "Subscription cancelled successfully.", ar: "تم إلغاء الاشتراك بنجاح." },
   },
 
   // About Page
@@ -575,6 +583,43 @@ export const translations = {
     cardUpdated: { en: "Card updated successfully!", ar: "تم تحديث البطاقة بنجاح!" },
     cardDeleted: { en: "Card deleted successfully!", ar: "تم حذف البطاقة بنجاح!" },
     messageSent: { en: "Message sent successfully!", ar: "تم إرسال الرسالة بنجاح!" },
+  },
+
+  plans: {
+    feature: { en: "Feature", ar: "الميزة" },
+    free: { en: "Free Plan", ar: "الخطة المجانية (Free)" },
+    premium: { en: "Premium Plan", ar: "الخطة المميزة (Premium)" },
+    trial: { en: "Free trial on signup", ar: "تجربة مجانية عند التسجيل 🎁" },
+    trial_value: { en: "30 days Premium free on signup", ar: "30 يوم Premium مجانًا عند التسجيل" },
+    trial_premium_value: {
+      en: "First 30 days free, then monthly subscription",
+      ar: "أول 30 يوم مجانًا، بعدها باشتراك شهري",
+    },
+    access_all: { en: "Access to all educational cards", ar: "الوصول لكل البطاقات التعليمية" },
+    ai_assist: { en: "AI Assistance", ar: "المساعدة بالذكاء الاصطناعي (AI)" },
+    learning_tests: { en: "Learning confirmation tests", ar: "اختبارات للتأكد من التعلم" },
+    basic_set: { en: "Basic card set on board", ar: "مجموعة بطاقات أساسية في البورد" },
+    basic_set_value: {
+      en: "Gets only a basic set (cannot be modified)",
+      ar: "يحصل على مجموعة أساسية فقط (لا يمكن تعديلها)",
+    },
+    basic_set_premium_value: {
+      en: "Can add, remove, and customize as needed",
+      ar: "ويمكن إضافة وإزالة وتخصيص كما يجب",
+    },
+    add_cards: { en: "Add new cards to board", ar: "إضافة بطاقات جديدة للبورد" },
+    remove_cards: { en: "Remove cards from board", ar: "إزالة بطاقات من البورد" },
+    allowed: { en: "Allowed", ar: "مسموح" },
+    not_allowed: { en: "Not allowed", ar: "غير مسموح" },
+    available: { en: "Available", ar: "متاح" },
+    premium_summary: {
+      en: "All features unlocked, fully customizable board, AI, and more.",
+      ar: "جميع الميزات متاحة، تخصيص كامل للبورد، ذكاء اصطناعي والمزيد."
+    },
+    free_summary: {
+      en: "Basic features only, limited customization.",
+      ar: "ميزات أساسية فقط، تخصيص محدود."
+    },
   },
 };
 

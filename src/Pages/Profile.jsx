@@ -13,6 +13,10 @@ import { userService } from "../api/services/UserService";
 import { getCategoryName } from "../utils/languageUtils";
 import { useLanguage } from "../context/LanguageContext";
 import { getTranslation } from "../utils/translations";
+import SubscriptionService from "../api/services/SubscriptionService";
+import { FaCrown, FaLock, FaRegCalendarCheck } from "react-icons/fa";
+import { FiSettings } from "react-icons/fi";
+import PlanModal from "./Plan";
 
 const Profile = () => {
   const location = useLocation();
@@ -23,6 +27,13 @@ const Profile = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [userCards, setUserCards] = useState([]);
   const [loadingCards, setLoadingCards] = useState(false);
+  const [subscription, setSubscription] = useState(null);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+  const [subscriptionError, setSubscriptionError] = useState(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [cancelError, setCancelError] = useState(null);
+  const [cancelSuccess, setCancelSuccess] = useState(false);
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   const {
     data: userProfile,
@@ -46,7 +57,14 @@ const Profile = () => {
     fetchUserProfile();
     fetchCategories();
     fetchUserCards();
+    fetchSubscription();
   }, []);
+
+  useEffect(() => {
+    if (userProfile) {
+      console.log("user profile", userProfile);
+    }
+  }, [userProfile]);
 
   // Refresh data when navigating back to the profile page
   useEffect(() => {
@@ -112,6 +130,28 @@ const Profile = () => {
     }
   };
 
+  // Fetch subscription status
+  const fetchSubscription = async () => {
+    setSubscriptionLoading(true);
+    setSubscriptionError(null);
+    try {
+      const response = await SubscriptionService.getSubscription();
+      console.log("Full subscription response:", response);
+      setSubscription(response.data);
+    } catch (error) {
+      if (error.message === "Resource not found") {
+        // No subscription exists for this user, treat as not premium
+        setSubscription(null);
+        setSubscriptionError(null); // Don't show error
+      } else {
+        setSubscriptionError(error.message || "Error fetching subscription");
+        setSubscription(null);
+      }
+    } finally {
+      setSubscriptionLoading(false);
+    }
+  };
+
   // Get cards for a specific category
   const getCardsForCategory = (categoryId) => {
     if (!Array.isArray(userCards)) {
@@ -161,6 +201,23 @@ const Profile = () => {
   const handleProfileUpdate = () => {
     fetchUserProfile();
     fetchUserCards(); // Also refresh user cards after profile update
+  };
+
+  // Handle cancel subscription
+  const handleCancelSubscription = async () => {
+    setCancelLoading(true);
+    setCancelError(null);
+    setCancelSuccess(false);
+    try {
+      const response = await SubscriptionService.cancelSubscription();
+      console.log("Cancel subscription response:", response);
+      setCancelSuccess(true);
+      fetchSubscription();
+    } catch (error) {
+      setCancelError(error.message || "Error cancelling subscription");
+    } finally {
+      setCancelLoading(false);
+    }
   };
 
   if (loading || categoriesLoading) {
@@ -239,7 +296,15 @@ const Profile = () => {
         <div className="row g-4">
           {/* Sidebar */}
           <div className="col-12 col-md-4">
-            <div className="profile-card bg-white rounded-4 p-4 text-center shadow-sm">
+            <div className="profile-card bg-white rounded-4 p-4 text-center shadow-sm position-relative">
+              <button
+                className="btn btn-link position-absolute top-0 m-2 p-1"
+                style={{ zIndex: 2, left: "-120px" }}
+                onClick={() => setShowEditModal(true)}
+                aria-label="Edit Profile"
+              >
+                <FiSettings size={22} className="text-secondary" />
+              </button>
               <img
                 src={userProfile?.profile_picture || "/image-2.png"}
                 alt="User"
@@ -256,28 +321,120 @@ const Profile = () => {
                   userProfile?.last_name?.toUpperCase() ||
                   getTranslation("profile.user", currentLanguage)}
               </h5>
-              <p className="mb-1 text-muted">
-                {userProfile?.phone || getTranslation("profile.noPhone", currentLanguage)}
-              </p>
-              <p className="mb-1 text-muted">
-                {getTranslation("profile.age", currentLanguage)}:{" "}
-                {userProfile?.birth_date
-                  ? new Date().getFullYear() - new Date(userProfile.birth_date).getFullYear()
-                  : getTranslation("profile.notSpecified", currentLanguage)}
-              </p>
-              <a href={`mailto:${userProfile?.email}`} className="text-decoration-none text-muted">
-                {userProfile?.email || getTranslation("profile.noEmail", currentLanguage)}
-              </a>
-
-              <div className="mt-3">
-                <Button
-                  className="px-4 me-2"
-                  style={{ backgroundColor: "#173067", borderColor: "#173067" }}
-                  onClick={() => setShowEditModal(true)}
-                >
-                  {getTranslation("profile.editProfile", currentLanguage)}
-                </Button>
+              <hr className="my-2" style={{ borderTop: "1.5px solid #173067" }} />
+              <div className="d-flex justify-content-center mt-3">
+                <div className="mb-2 small w-100" style={{ maxWidth: 320 }}>
+                  <div className="row g-2">
+                    <div className="col-3 text-start fw-semibold">
+                      {getTranslation("profile.phone", currentLanguage)}:
+                    </div>
+                    <div className="col-9 text-start">
+                      {userProfile?.phone || getTranslation("profile.noPhone", currentLanguage)}
+                    </div>
+                    <div className="col-3 text-start fw-semibold">
+                      {getTranslation("profile.age", currentLanguage)}:
+                    </div>
+                    <div className="col-9 text-start">
+                      {userProfile?.birth_date
+                        ? new Date().getFullYear() - new Date(userProfile.birth_date).getFullYear()
+                        : getTranslation("profile.notSpecified", currentLanguage)}
+                    </div>
+                    <div className="col-3 text-start fw-semibold">
+                      {getTranslation("profile.email", currentLanguage)}:
+                    </div>
+                    <div className="col-9 text-start">
+                      <a
+                        href={`mailto:${userProfile?.email}`}
+                        className="text-decoration-none text-muted"
+                      >
+                        {userProfile?.email || getTranslation("profile.noEmail", currentLanguage)}
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+            {/* Subscription Section - now below the profile card */}
+            <div className="mt-3">
+              {subscriptionLoading ? (
+                <div className="alert alert-info d-flex align-items-center gap-2 py-2">
+                  <span className="spinner-border spinner-border-sm" />
+                  {getTranslation("actions.loading", currentLanguage)}
+                </div>
+              ) : subscriptionError ? (
+                <div className="alert alert-danger p-2 small">{subscriptionError}</div>
+              ) : userProfile?.is_premium ? (
+                <div className="card border-success mb-2 shadow-sm rounded-4">
+                  <div className="card-body p-3">
+                    <div className="d-flex mb-2">
+                      <FaCrown className="text-warning me-2" size={22} />
+                      <span className="fw-bold text-success">
+                        {getTranslation("profile.subscribed", currentLanguage)}
+                      </span>
+                    </div>
+                    {subscription && (
+                      <div className=" mb-3 small">
+                        <div className="row g-2">
+                          <div className="col-6 text-start fw-semibold">Account Type:</div>
+                          <div className="col-6 text-start">{subscription.account_type}</div>
+                          <div className="col-6 text-start fw-semibold">Status:</div>
+                          <div className="col-6 text-start">
+                            {subscription.is_subscription_cancelled ? "Cancelled" : "Active"}
+                          </div>
+                          <div className="col-6 text-start fw-semibold">Premium Start:</div>
+                          <div className="col-6 text-start">
+                            <FaRegCalendarCheck className="me-1" /> {subscription.premium_start}
+                          </div>
+                          <div className="col-6 text-start fw-semibold">Premium Expiry:</div>
+                          <div className="col-6 text-start">
+                            <FaRegCalendarCheck className="me-1" /> {subscription.premium_expiry}
+                          </div>
+                          <div className="col-6 text-start fw-semibold">Is Premium:</div>
+                          <div className="col-6 text-start">
+                            {subscription.is_premium ? "Yes" : "No"}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <Button
+                      variant="outline-danger"
+                      className="w-100"
+                      onClick={handleCancelSubscription}
+                      disabled={cancelLoading}
+                    >
+                      {cancelLoading
+                        ? getTranslation("actions.loading", currentLanguage)
+                        : getTranslation("profile.cancelSubscription", currentLanguage)}
+                    </Button>
+                    {cancelError && (
+                      <div className="alert alert-danger p-2 small mt-2">{cancelError}</div>
+                    )}
+                    {cancelSuccess && (
+                      <div className="alert alert-success p-2 small mt-2">
+                        {getTranslation("profile.cancelSuccess", currentLanguage)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="card border-warning mb-2 shadow-sm rounded-4">
+                  <div className="card-body p-3">
+                    <div className="d-flex align-items-center mb-2">
+                      <FaLock className="text-warning me-2" size={20} />
+                      <span className="fw-bold text-warning">
+                        {getTranslation("profile.notSubscribed", currentLanguage)}
+                      </span>
+                    </div>
+                    <Button
+                      variant="primary"
+                      className="w-100"
+                      onClick={() => setShowPlanModal(true)}
+                    >
+                      {getTranslation("profile.upgrade", currentLanguage)}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -406,6 +563,43 @@ const Profile = () => {
         onClose={() => setShowEditModal(false)}
         userProfile={userProfile}
         onProfileUpdate={handleProfileUpdate}
+      />
+      {/* Plan Modal */}
+      <PlanModal
+        isOpen={showPlanModal}
+        onClose={() => setShowPlanModal(false)}
+        onSelectPlan={async (planKey) => {
+          if (planKey === "premium") {
+            setSubscriptionLoading(true);
+            try {
+              // Initiate payment for premium plan
+              const response = await SubscriptionService.initiatePayment();
+              console.log("Payment response:", response.data);
+
+              if (response.data && response.data.payment_url) {
+                // Redirect to payment gateway
+                console.log("Redirecting to:", response.data.payment_url);
+                window.location.href = response.data.payment_url;
+              } else if (response.data && response.data.iframe_url) {
+                // Handle iframe URL if provided
+                console.log("Iframe URL:", response.data.iframe_url);
+                window.location.href = response.data.iframe_url;
+              } else {
+                // If no payment URL, just refresh subscription info
+                console.log("No payment URL found, refreshing subscription");
+                fetchSubscription();
+                setShowPlanModal(false);
+              }
+            } catch (error) {
+              console.error("Payment error:", error);
+              setSubscriptionError(error.message || "Error initiating payment");
+            } finally {
+              setSubscriptionLoading(false);
+            }
+          } else {
+            setShowPlanModal(false);
+          }
+        }}
       />
     </div>
   );
