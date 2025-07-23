@@ -191,21 +191,19 @@ function Signup() {
     } catch (error) {
       if (error.response?.data) {
         const serverErrors = error.response.data;
-
         if (typeof serverErrors === "object") {
-          if (serverErrors.detail) {
-            setGeneralError(serverErrors.detail);
-          } else {
-            const processedErrors = {};
-            Object.keys(serverErrors).forEach((key) => {
-              if (Array.isArray(serverErrors[key])) {
-                processedErrors[key] = serverErrors[key][0];
-              } else {
-                processedErrors[key] = serverErrors[key];
-              }
-            });
-            setErrors(processedErrors);
-          }
+          // Always show all field errors in the alert
+          setGeneralError(serverErrors);
+          // Also keep field errors for inline display
+          const processedErrors = {};
+          Object.keys(serverErrors).forEach((key) => {
+            if (Array.isArray(serverErrors[key])) {
+              processedErrors[key] = serverErrors[key];
+            } else {
+              processedErrors[key] = serverErrors[key];
+            }
+          });
+          setErrors(processedErrors);
         } else if (typeof serverErrors === "string") {
           setGeneralError(serverErrors);
         } else {
@@ -264,7 +262,19 @@ function Signup() {
             <h2 className="text-center mb-4 px-3">
               {getTranslation("auth.signupTitle", currentLanguage)}
             </h2>
-            {generalError && <div className="alert alert-danger text-center">{generalError}</div>}
+            {generalError && (
+              <div className="alert alert-danger text-center">
+                {Array.isArray(generalError)
+                  ? generalError.map((msg, idx) => <div key={idx}>{msg}</div>)
+                  : typeof generalError === 'object'
+                    ? Object.values(generalError).map((msg, idx) =>
+                        Array.isArray(msg)
+                          ? msg.map((m, i) => <div key={idx + '-' + i}>{m}</div>)
+                          : <div key={idx}>{msg}</div>
+                      )
+                    : generalError}
+              </div>
+            )}
 
             <Form onSubmit={handleSubmit} encType="multipart/form-data">
               <Row className="mb-md-3">
@@ -327,13 +337,6 @@ function Signup() {
                   </Form.Group>
                 </Col>
               </Row>
-
-              <Row className="mb-md-3">
-                <Col className="mb-3 mb-md-0">
-                  {/* Username field removed: username will be derived from email */}
-                </Col>
-              </Row>
-
               <Row className="mb-md-3">
                 <Col className="mb-3 mb-md-0">
                   <Form.Group controlId="formEmail">
@@ -412,7 +415,13 @@ function Signup() {
                         <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
                       </InputGroup.Text>
                     </InputGroup>
-                    {errors.password && <div className="text-danger mt-1">{errors.password}</div>}
+                    {errors.password && Array.isArray(errors.password) ? (
+                      errors.password.map((msg, idx) => (
+                        <div className="text-danger mt-1" key={idx}>{msg}</div>
+                      ))
+                    ) : errors.password ? (
+                      <div className="text-danger mt-1">{errors.password}</div>
+                    ) : null}
                   </Form.Group>
                 </Col>
 

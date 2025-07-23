@@ -124,7 +124,7 @@ function Login() {
             const processedErrors = {};
             Object.keys(serverErrors).forEach((key) => {
               if (Array.isArray(serverErrors[key])) {
-                processedErrors[key] = serverErrors[key][0]; // Take first error message
+                processedErrors[key] = serverErrors[key]; // keep the array
               } else {
                 processedErrors[key] = serverErrors[key];
               }
@@ -186,7 +186,9 @@ function Login() {
             </Row>
             {generalError && (
               <Alert variant="danger" className="text-center">
-                {generalError}
+                {typeof generalError === 'object'
+                  ? <pre style={{textAlign: 'left'}}>{JSON.stringify(generalError, null, 2)}</pre>
+                  : generalError}
               </Alert>
             )}
 
@@ -248,11 +250,17 @@ function Login() {
                         <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
                       </InputGroup.Text>
                     </InputGroup>
-                    {errors.password && (
+                    {errors.password && Array.isArray(errors.password) ? (
+                      errors.password.map((msg, idx) => (
+                        <Form.Control.Feedback type="invalid" className="d-block" key={idx}>
+                          {msg}
+                        </Form.Control.Feedback>
+                      ))
+                    ) : errors.password ? (
                       <Form.Control.Feedback type="invalid" className="d-block">
                         {errors.password}
                       </Form.Control.Feedback>
-                    )}
+                    ) : null}
                   </Form.Group>
                 </Col>
               </Row>
