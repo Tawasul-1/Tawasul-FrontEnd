@@ -158,7 +158,9 @@ const Profile = () => {
       console.warn("userCards is not an array:", userCards);
       return [];
     }
-    const filteredCards = userCards.filter((card) => card.category.id === categoryId);
+    const filteredCards = userCards.filter(
+      (card) => card.category && card.category.id === categoryId
+    );
     return filteredCards;
   };
 

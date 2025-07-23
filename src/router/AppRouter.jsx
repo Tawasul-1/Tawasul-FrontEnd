@@ -13,7 +13,7 @@ import AddNewCard from "../Pages/AddNewCard";
 import EmailVerification from "../Pages/EmailVerification";
 import Contact from "../Pages/Contact";
 import About from "../Pages/About";
-import Payment from "../Pages/PaymentSuccess";
+import Payment from "../Pages/Payment";
 import CategoriesTest from "../Pages/CategoriesTest";
 import Items from "../Pages/Items";
 import Item from "../Pages/Item";
