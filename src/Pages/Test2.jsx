@@ -16,7 +16,7 @@ const Test2 = () => {
     if (option.isCorrect) {
       setLampColor("green");
       setTimeout(() => {
-        navigate("/test3");
+        navigate("/learn");
       }, 2000);
     } else {
       setLampColor("red");

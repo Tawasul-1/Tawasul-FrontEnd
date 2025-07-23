@@ -11,7 +11,7 @@ const LearnDone = () => {
     }, 3000);
 
     const redirect = setTimeout(() => {
-      navigate("/board");
+      navigate("/items");
     }, 10000);
 
     return () => {
@@ -41,7 +41,7 @@ const LearnDone = () => {
       </p>
 
       {/* العداد */}
-      <p style={{ fontSize: "1.1rem", color: "#555" }}>Redirecting to Board in {count} seconds...</p>
+      <p style={{ fontSize: "1.1rem", color: "#555" }}>Redirecting to Items in {count} seconds...</p>
     </div>
   );
 };

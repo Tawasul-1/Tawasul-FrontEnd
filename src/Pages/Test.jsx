@@ -22,7 +22,7 @@ const Test = () => {
     if (isCorrect) {
       setLampColor("green");
       setTimeout(() => {
-        navigate("/test2");
+        navigate("/learn");
       }, 2000);
     } else {
       setLampColor("red");
