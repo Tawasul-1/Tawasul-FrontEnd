@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Style-pages/Contact.css";
 import Footer from "../Components/Footer";
-import Header from "../Components/Header";
+import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useLanguage } from "../context/LanguageContext";
@@ -85,10 +85,16 @@ const About = () => {
 
   return (
     <>
-      <div id="root">
+      <div id="root" className="profile-container bg-light min-vh-100">
         {/* Header Section */}
-        <Header />
-        {showSidebar && <Menu setShowSidebar={setShowSidebar} />}
+        <Navbar
+          onMenuClick={() => setShowSidebar(true)}
+          onEditProfile={() => setShowEditModal(true)}
+        />
+
+        {showSidebar && (
+          <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+        )}
 
         <div className="main-content">
           {/* About Title */}

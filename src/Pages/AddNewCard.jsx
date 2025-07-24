@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../Style-pages/AddNewCard.css";
 import Footer from "../Components/Footer";
-import Header from "../Components/Header";
+import Navbar from "../Components/Navbar";
+import Menu from "../Components/Menu";
 import CategoryService from "../api/services/CategoryService";
 import CardService from "../api/services/CardService";
 import { getCategoryName } from "../utils/languageUtils";
@@ -24,6 +25,9 @@ const AddNewCard = () => {
     category_id: "",
     image: null,
   });
+
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // Check premium status on component mount
   useEffect(() => {
@@ -136,9 +140,16 @@ const AddNewCard = () => {
   };
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-column" id="root">
-      {/* Navbar */}
-      <Header />
+    <div id="root" className="profile-container bg-light min-vh-100">
+      {/* Header Section */}
+      <Navbar
+        onMenuClick={() => setShowSidebar(true)}
+        onEditProfile={() => setShowEditModal(true)}
+      />
+
+      {showSidebar && (
+        <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+      )}
 
       {/* Main Content */}
       <Container

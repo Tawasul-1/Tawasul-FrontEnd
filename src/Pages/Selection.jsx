@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Style-pages/Selection.css";
-import Header from "../Components/Header";
+import Navbar from "../Components/Navbar";
+import Menu from "../Components/Menu";
 import Footer from "../Components/Footer";
 import CardService from "../api/services/CardService";
 import { getTranslation } from "../utils/translations";
@@ -14,6 +15,9 @@ const Selection = () => {
   const [boardCards, setBoardCards] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cardsByCategory, setCardsByCategory] = useState({});
+
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,7 +127,14 @@ const Selection = () => {
 
   return (
     <div className="bg-light min-vh-100" id="root">
-      <Header />
+      <Navbar
+        onMenuClick={() => setShowSidebar(true)}
+        onEditProfile={() => setShowEditModal(true)}
+      />
+
+      {showSidebar && (
+        <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+      )}
 
       {/* Hero */}
       <section
@@ -144,7 +155,7 @@ const Selection = () => {
               type="text"
               dir={getTranslation("direction")}
               className="form-control rounded-start-pill"
-              placeholder={getTranslation("findYourCard")}
+              placeholder={getTranslation("find Your Card")}
               style={{
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,

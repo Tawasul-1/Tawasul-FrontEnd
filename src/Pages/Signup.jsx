@@ -127,8 +127,16 @@ function Signup() {
     // Password validation
     if (!formData.password) {
       newErrors.password = getTranslation("validation.passwordRequired", currentLanguage);
-    } else if (formData.password.length < 6) {
+    } else if (formData.password.length < 8) {
       newErrors.password = getTranslation("validation.passwordTooShort", currentLanguage);
+    } else if (!/[A-Z]/.test(formData.password)) {
+      newErrors.password = getTranslation("validation.passwordUpperCase", currentLanguage); // Uppercase letter
+    } else if (!/[a-z]/.test(formData.password)) {
+      newErrors.password = getTranslation("validation.passwordLowerCase", currentLanguage); // Lowercase letter
+    } else if (!/[0-9]/.test(formData.password)) {
+      newErrors.password = getTranslation("validation.passwordNumber", currentLanguage); // Number
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      newErrors.password = getTranslation("validation.passwordSpecialChar", currentLanguage); // Special character
     }
 
     // Password confirmation validation
@@ -150,73 +158,17 @@ function Signup() {
     setGeneralError("");
     setLoading(true);
 
+    // Only validate the form
     if (!validateForm()) {
       setLoading(false);
       return;
     }
 
-    try {
-      const cleanPhone = formData.phone.replace(/\s|-/g, "");
+    // If validation passes, proceed (this is where you would continue with your logic)
+    console.log("Validation Passed!");
 
-      const formDataToSend = new FormData();
-      formDataToSend.append("first_name", formData.firstName.trim());
-      formDataToSend.append("last_name", formData.lastName.trim());
-      formDataToSend.append("username", formData.email.trim().split("@")[0].toLowerCase());
-      formDataToSend.append("email", formData.email.trim().toLowerCase());
-      formDataToSend.append("phone", cleanPhone);
-      formDataToSend.append("birth_date", formData.birthdate);
-      formDataToSend.append("password", formData.password);
-      formDataToSend.append("password2", formData.confirmPassword);
-
-      console.log(
-        "profile_picture value:",
-        formData.profile_picture,
-        "Is File:",
-        formData.profile_picture instanceof File
-      );
-      if (formData.profile_picture) {
-        formDataToSend.append(
-          "profile_picture",
-          formData.profile_picture,
-          formData.profile_picture.name
-        );
-      }
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log("FormData entry:", key, value, value instanceof File);
-      }
-
-      await authService.register(formDataToSend);
-
-      setTimeout(() => navigate("/login"), 2000);
-    } catch (error) {
-      if (error.response?.data) {
-        const serverErrors = error.response.data;
-        if (typeof serverErrors === "object") {
-          // Always show all field errors in the alert
-          setGeneralError(serverErrors);
-          // Also keep field errors for inline display
-          const processedErrors = {};
-          Object.keys(serverErrors).forEach((key) => {
-            if (Array.isArray(serverErrors[key])) {
-              processedErrors[key] = serverErrors[key];
-            } else {
-              processedErrors[key] = serverErrors[key];
-            }
-          });
-          setErrors(processedErrors);
-        } else if (typeof serverErrors === "string") {
-          setGeneralError(serverErrors);
-        } else {
-          setGeneralError(getTranslation("errors.signupFailed", currentLanguage));
-        }
-      } else if (error.message) {
-        setGeneralError(error.message);
-      } else {
-        setGeneralError(getTranslation("errors.signupFailed", currentLanguage));
-      }
-    } finally {
-      setLoading(false);
-    }
+    // This will prevent submitting the form for now and only logs the result
+    setLoading(false);
   };
 
   // Show loading spinner while checking authentication
@@ -258,7 +210,9 @@ function Signup() {
         </Col>
 
         <Col md={7} xl={4}>
-          <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
+          <Card
+            style={{ width: "100%", Width: "800px", borderRadius: "1.5rem", padding: "3rem" }}
+          >
             <h2 className="text-center mb-4 px-3">
               {getTranslation("auth.signupTitle", currentLanguage)}
             </h2>
@@ -266,211 +220,225 @@ function Signup() {
               <div className="alert alert-danger text-center">
                 {Array.isArray(generalError)
                   ? generalError.map((msg, idx) => <div key={idx}>{msg}</div>)
-                  : typeof generalError === 'object'
-                    ? Object.values(generalError).map((msg, idx) =>
-                        Array.isArray(msg)
-                          ? msg.map((m, i) => <div key={idx + '-' + i}>{m}</div>)
-                          : <div key={idx}>{msg}</div>
+                  : typeof generalError === "object"
+                  ? Object.values(generalError).map((msg, idx) =>
+                      Array.isArray(msg) ? (
+                        msg.map((m, i) => <div key={idx + "-" + i}>{m}</div>)
+                      ) : (
+                        <div key={idx}>{msg}</div>
                       )
-                    : generalError}
+                    )
+                  : generalError}
               </div>
             )}
+            <div className="mb-4">
+              <Row>
+                <Form onSubmit={handleSubmit} encType="multipart/form-data">
+                  <Row className="mb-md-3">
+                    <Col className="mb-3 mb-md-0">
+                      <Form.Group controlId="formImageUpload">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-image"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type="file"
+                            accept="image/*"
+                            name="profile_picture"
+                            onChange={handleChange}
+                            required
+                          />
+                        </InputGroup>
+                        {errors.profile_picture && (
+                          <div className="text-danger mt-1">{errors.profile_picture}</div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-            <Form onSubmit={handleSubmit} encType="multipart/form-data">
-              <Row className="mb-md-3">
-                <Col className="mb-3 mb-md-0">
-                  <Form.Group controlId="formImageUpload">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-image"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="file"
-                        accept="image/*"
-                        name="profile_picture"
-                        onChange={handleChange}
-                        required
-                      />
-                    </InputGroup>
-                    {errors.profile_picture && (
-                      <div className="text-danger mt-1">{errors.profile_picture}</div>
-                    )}
-                  </Form.Group>
-                </Col>
+                  <Row className="mb-md-3">
+                    <Col md={6} className="mb-3 mb-md-0">
+                      <Form.Group controlId="formFirstName">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-person-circle"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type="text"
+                            placeholder={getTranslation("auth.firstName", currentLanguage)}
+                            name="firstName"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                        {errors.firstName && (
+                          <div className="text-danger mt-1">{errors.firstName}</div>
+                        )}
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6} className="mb-3 mb-md-0">
+                      <Form.Group controlId="formLastName">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-person-circle"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type="text"
+                            placeholder={getTranslation("auth.lastName", currentLanguage)}
+                            name="lastName"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                        {errors.lastName && (
+                          <div className="text-danger mt-1">{errors.lastName}</div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row className="mb-md-3">
+                    <Col className="mb-3 mb-md-0">
+                      <Form.Group controlId="formEmail">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-envelope-fill"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type="email"
+                            placeholder={getTranslation("auth.email", currentLanguage)}
+                            name="email"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                        {errors.email && <div className="text-danger mt-1">{errors.email}</div>}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-md-3">
+                    <Col md={6} className="mb-3 mb-md-0">
+                      <Form.Group controlId="formBirthdate">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-calendar-fill"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type="date"
+                            placeholder={getTranslation("auth.birthdate", currentLanguage)}
+                            name="birthdate"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                        {errors.birthdate && (
+                          <div className="text-danger mt-1">{errors.birthdate}</div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col md={6} className="mb-3 mb-md-0">
+                      <Form.Group controlId="formPhone">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-telephone-fill"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type="tel"
+                            placeholder={getTranslation("auth.phone", currentLanguage)}
+                            name="phone"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                        {errors.phone && <div className="text-danger mt-1">{errors.phone}</div>}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-md-3">
+                    <Col md={6} className="mb-3 mb-md-0">
+                      <Form.Group controlId="formPassword">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-lock-fill"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type={showPassword ? "text" : "password"}
+                            placeholder={getTranslation("auth.password", currentLanguage)}
+                            name="password"
+                            onChange={handleChange}
+                          />
+                          <InputGroup.Text
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                          </InputGroup.Text>
+                        </InputGroup>
+                        {errors.password && Array.isArray(errors.password) ? (
+                          errors.password.map((msg, idx) => (
+                            <div className="text-danger mt-1" key={idx}>
+                              {msg}
+                            </div>
+                          ))
+                        ) : errors.password ? (
+                          <div className="text-danger mt-1">{errors.password}</div>
+                        ) : null}
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6} className="mb-3 mb-md-0">
+                      <Form.Group controlId="formConfirmPassword">
+                        <InputGroup>
+                          <InputGroup.Text>
+                            <i className="bi bi-lock-fill"></i>
+                          </InputGroup.Text>
+                          <Form.Control
+                            className="p-2"
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder={getTranslation("auth.confirmPassword", currentLanguage)}
+                            name="confirmPassword"
+                            onChange={handleChange}
+                          />
+                          <InputGroup.Text
+                            onClick={() => setShowConfirmPassword((prev) => !prev)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <i
+                              className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}
+                            ></i>
+                          </InputGroup.Text>
+                        </InputGroup>
+                        {errors.confirmPassword && (
+                          <div className="text-danger mt-1">{errors.confirmPassword}</div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-md-3">
+                    <Col className="text-center">
+                      <Button type="submit" className="w-75" disabled={loading}>
+                        {loading ? (
+                          <>
+                            <span
+                              className="spinner-border spinner-border-sm me-2"
+                              aria-hidden="true"
+                            ></span>
+                            {getTranslation("auth.signingUp", currentLanguage)}
+                          </>
+                        ) : (
+                          getTranslation("auth.signUp", currentLanguage)
+                        )}
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
               </Row>
-
-              <Row className="mb-md-3">
-                <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formFirstName">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-person-circle"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="text"
-                        placeholder={getTranslation("auth.firstName", currentLanguage)}
-                        name="firstName"
-                        onChange={handleChange}
-                      />
-                    </InputGroup>
-                    {errors.firstName && <div className="text-danger mt-1">{errors.firstName}</div>}
-                  </Form.Group>
-                </Col>
-
-                <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formLastName">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-person-circle"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="text"
-                        placeholder={getTranslation("auth.lastName", currentLanguage)}
-                        name="lastName"
-                        onChange={handleChange}
-                      />
-                    </InputGroup>
-                    {errors.lastName && <div className="text-danger mt-1">{errors.lastName}</div>}
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row className="mb-md-3">
-                <Col className="mb-3 mb-md-0">
-                  <Form.Group controlId="formEmail">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-envelope-fill"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="email"
-                        placeholder={getTranslation("auth.email", currentLanguage)}
-                        name="email"
-                        onChange={handleChange}
-                      />
-                    </InputGroup>
-                    {errors.email && <div className="text-danger mt-1">{errors.email}</div>}
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row className="mb-md-3">
-                <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formBirthdate">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-calendar-fill"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="date"
-                        placeholder={getTranslation("auth.birthdate", currentLanguage)}
-                        name="birthdate"
-                        onChange={handleChange}
-                      />
-                    </InputGroup>
-                    {errors.birthdate && <div className="text-danger mt-1">{errors.birthdate}</div>}
-                  </Form.Group>
-                </Col>
-                <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formPhone">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-telephone-fill"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type="tel"
-                        placeholder={getTranslation("auth.phone", currentLanguage)}
-                        name="phone"
-                        onChange={handleChange}
-                      />
-                    </InputGroup>
-                    {errors.phone && <div className="text-danger mt-1">{errors.phone}</div>}
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row className="mb-md-3">
-                <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formPassword">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-lock-fill"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type={showPassword ? "text" : "password"}
-                        placeholder={getTranslation("auth.password", currentLanguage)}
-                        name="password"
-                        onChange={handleChange}
-                      />
-                      <InputGroup.Text
-                        onClick={() => setShowPassword((prev) => !prev)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-                      </InputGroup.Text>
-                    </InputGroup>
-                    {errors.password && Array.isArray(errors.password) ? (
-                      errors.password.map((msg, idx) => (
-                        <div className="text-danger mt-1" key={idx}>{msg}</div>
-                      ))
-                    ) : errors.password ? (
-                      <div className="text-danger mt-1">{errors.password}</div>
-                    ) : null}
-                  </Form.Group>
-                </Col>
-
-                <Col md={6} className="mb-3 mb-md-0">
-                  <Form.Group controlId="formConfirmPassword">
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <i className="bi bi-lock-fill"></i>
-                      </InputGroup.Text>
-                      <Form.Control
-                        className="p-2"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder={getTranslation("auth.confirmPassword", currentLanguage)}
-                        name="confirmPassword"
-                        onChange={handleChange}
-                      />
-                      <InputGroup.Text
-                        onClick={() => setShowConfirmPassword((prev) => !prev)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-                      </InputGroup.Text>
-                    </InputGroup>
-                    {errors.confirmPassword && (
-                      <div className="text-danger mt-1">{errors.confirmPassword}</div>
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row className="mb-md-3">
-                <Col className="text-center">
-                  <Button type="submit" className="w-75" disabled={loading}>
-                    {loading ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          aria-hidden="true"
-                        ></span>
-                        {getTranslation("auth.signingUp", currentLanguage)}
-                      </>
-                    ) : (
-                      getTranslation("auth.signUp", currentLanguage)
-                    )}
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-
+            </div>
             <Row>
               <Col className="text-center">
                 <p>

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../Style-pages/Contact.css";
 import Footer from "../Components/Footer";
-import Header from "../Components/Header";
+import Navbar from "../Components/Navbar";
+import Menu from "../Components/Menu";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import { useLanguage } from "../context/LanguageContext";
@@ -9,12 +10,21 @@ import { getTranslation } from "../utils/translations";
 
 const Contact = () => {
   const { currentLanguage } = useLanguage();
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   return (
     <>
-      <div id="root">
+      <div id="root" className="profile-container bg-light min-vh-100">
         {/* Header Section */}
-        <Header />
+        <Navbar
+          onMenuClick={() => setShowSidebar(true)}
+          onEditProfile={() => setShowEditModal(true)}
+        />
+
+        {showSidebar && (
+          <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+        )}
 
         <div className="main-content">
           {/* Contact Title */}
