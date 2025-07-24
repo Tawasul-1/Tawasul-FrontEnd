@@ -58,14 +58,8 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
           <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
             👤 {getTranslation("nav.profile", currentLanguage)}
           </Link>
-          <div
-            style={{ color: "#173067", textDecoration: "none", cursor: "pointer" }}
-            onClick={handleEditProfile}
-          >
-            ✏️ {getTranslation("profile.editProfile", currentLanguage)}
-          </div>
-          <Link to="/about" style={{ color: "#173067", textDecoration: "none" }}>
-            ℹ️ {getTranslation("nav.about", currentLanguage)}
+          <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
+            ✅ {getTranslation("nav.selection", currentLanguage)}
           </Link>
           <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
             📞 {getTranslation("nav.contact", currentLanguage)}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Style-pages/Selection.css";
-import Header from "../Components/Header";
+import Navbar from "../Components/Navbar";
+import Menu from "../Components/Menu";
 import Footer from "../Components/Footer";
 import CardService from "../api/services/CardService";
 
@@ -31,49 +32,58 @@ const Selection = () => {
   const [dataReady, setDataReady] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-try {
-  const response = await CardService.getAllCards();
-  const cards = response?.data?.results || [];
+      try {
+        const response = await CardService.getAllCards();
+        const cards = response?.data?.results || [];
 
-  const lang = localStorage.getItem("lang") || "en";
+        const lang = localStorage.getItem("lang") || "en";
 
-  const cats = [...new Set(cards.map((card) => {
-    const category = card.category;
-    if (!category) return "Other";
-    return lang === "ar" ? category.name_ar : category.name_en;
-  }))].map((name, index) => ({ id: index, name }));
+        const cats = [
+          ...new Set(
+            cards.map((card) => {
+              const category = card.category;
+              if (!category) return "Other";
+              return lang === "ar" ? category.name_ar : category.name_en;
+            })
+          ),
+        ].map((name, index) => ({ id: index, name }));
 
-  setCategories(cats);
-  if (cats.length > 0) setSelectedCategory(cats[0].name);
+        setCategories(cats);
+        if (cats.length > 0) setSelectedCategory(cats[0].name);
 
-  const grouped = {};
-  cards.forEach((card) => {
-    const category = card.category;
-    const catName = category ? (lang === "ar" ? category.name_ar : category.name_en) : "Other";
-    if (!grouped[catName]) grouped[catName] = [];
-    grouped[catName].push(card);
-  });
+        const grouped = {};
+        cards.forEach((card) => {
+          const category = card.category;
+          const catName = category
+            ? lang === "ar"
+              ? category.name_ar
+              : category.name_en
+            : "Other";
+          if (!grouped[catName]) grouped[catName] = [];
+          grouped[catName].push(card);
+        });
 
-  setCardsByCategory(grouped);
-} catch (error) {
-  console.error(error);
-  setMessage("Failed to load categories or cards");
-}
-    }
+        setCardsByCategory(grouped);
+      } catch (error) {
+        console.error(error);
+        setMessage("Failed to load categories or cards");
+      }
+    };
 
-const fetchBoardCards = async () => {
-  try {
-    const response = await CardService.getBoardCards();
-    const cards = response?.data?.cards || []; 
-    setBoardCards(cards);
-  } catch {
-    setMessage("Failed to load board cards");
-  }
-};
-
+    const fetchBoardCards = async () => {
+      try {
+        const response = await CardService.getBoardCards();
+        const cards = response?.data?.cards || [];
+        setBoardCards(cards);
+      } catch {
+        setMessage("Failed to load board cards");
+      }
+    };
 
     const loadAll = async () => {
       await Promise.all([fetchData(), fetchBoardCards()]);
@@ -83,39 +93,45 @@ const fetchBoardCards = async () => {
     loadAll();
   }, []);
 
-const isCardOnBoard = (card) => {
-  if (!card?.id) return false;
-  return boardCards.some((boardCard) => String(boardCard?.id) === String(card.id));
-};
+  const isCardOnBoard = (card) => {
+    if (!card?.id) return false;
+    return boardCards.some((boardCard) => String(boardCard?.id) === String(card.id));
+  };
 
-const handleToggleCard = async (card) => {
+  const handleToggleCard = async (card) => {
+    const onBoard = isCardOnBoard(card);
+    const label = card.title_en || card.title_ar || "Card";
+    setLoading(true);
 
-  const onBoard = isCardOnBoard(card);
-  const label = card.title_en || card.title_ar || "Card";
-  setLoading(true);
-
-  try {
-    if (onBoard) {
-      await CardService.removeCardFromBoard(card.id);
-      setMessage(`Card '${label}' removed from board!`);
-      setBoardCards((prev) => prev.filter((c) => c.id !== card.id));
-    } else {
-      await CardService.addCardToBoard(card.id);
-      setMessage(`Card '${label}' added to board!`);
-      setBoardCards((prev) => [...prev, card]);
+    try {
+      if (onBoard) {
+        await CardService.removeCardFromBoard(card.id);
+        setMessage(`Card '${label}' removed from board!`);
+        setBoardCards((prev) => prev.filter((c) => c.id !== card.id));
+      } else {
+        await CardService.addCardToBoard(card.id);
+        setMessage(`Card '${label}' added to board!`);
+        setBoardCards((prev) => [...prev, card]);
+      }
+    } catch (error) {
+      setMessage(`Failed to ${onBoard ? "remove" : "add"} card: ${error?.message || error}`);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    setMessage(
-      `Failed to ${onBoard ? "remove" : "add"} card: ${error?.message || error}`
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="bg-light min-vh-100" id="root">
-      <Header />
+      <Navbar
+        onMenuClick={() => setShowSidebar(true)}
+        onEditProfile={() => setShowEditModal(true)}
+      />
+
+      {showSidebar && (
+        <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
+      )}
+
+      {/* Hero */}
       <section
         className="hero-section text-center text-white py-5"
         style={{
@@ -131,20 +147,20 @@ const handleToggleCard = async (card) => {
         <div className="container mt-4" style={{ maxWidth: "520px" }} ir="ltr">
           <div className="d-flex" dir="ltr">
             <input
-  type="text"
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  dir={getTranslation("direction")}
-  className="form-control rounded-start-pill"
-  placeholder={getTranslation("findYourCard")}
-  style={{
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    height: "45px",
-    padding: "20px",
-    textAlign: getTranslation("direction") === "rtl" ? "right" : "left",
-  }}
-/>
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              dir={getTranslation("direction")}
+              className="form-control rounded-start-pill"
+              placeholder={getTranslation("findYourCard")}
+              style={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+                height: "45px",
+                padding: "20px",
+                textAlign: getTranslation("direction") === "rtl" ? "right" : "left",
+              }}
+            />
 
             <button
               className="btn rounded-end-pill"
@@ -168,9 +184,7 @@ const handleToggleCard = async (card) => {
             <div className="col-auto px-2 mb-2" key={cat.id || idx}>
               <button
                 className={`btn px-4 py-2 fw-semibold rounded-pill shadow-sm ${
-                  selectedCategory === cat.name
-                    ? "btn btn2 text-white"
-                    : "btn-outline-bg"
+                  selectedCategory === cat.name ? "btn btn2 text-white" : "btn-outline-bg"
                 }`}
                 style={{ minWidth: "120px", border: "1px solid #173067" }}
                 onClick={() => setSelectedCategory(cat.name)}
@@ -196,79 +210,79 @@ const handleToggleCard = async (card) => {
         ) : (
           <div className="row g-4 justify-content-center">
             {(cardsByCategory[selectedCategory] || [])
-  .filter((item) => {
-    const title = (item.title_en || item.title_ar || "").toLowerCase();
-    return title.includes(searchTerm.toLowerCase());
-  })
-  .map((item, idx) => {
+              .filter((item) => {
+                const title = (item.title_en || item.title_ar || "").toLowerCase();
+                return title.includes(searchTerm.toLowerCase());
+              })
+              .map((item, idx) => {
+                const title = item.title_en || item.title_ar;
+                const image = item.image;
+                const isOnBoard = isCardOnBoard(item);
 
-              const title = item.title_en || item.title_ar;
-              const image =item.image
-              const isOnBoard = isCardOnBoard(item);
+                return (
+                  <div key={item.id || idx} className="col-6 col-md-3 col-lg-2 mb-4">
+                    <div
+                      className="card card-emoji text-center p-3 shadow-sm h-100 border-0 d-flex flex-column justify-content-between align-items-center"
+                      style={{
+                        backgroundColor: "#eaf1ff",
+                        borderRadius: "20px",
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      {/* صورة الكارت */}
+                      <div
+                        className="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-2"
+                        style={{
+                          width: "90px",
+                          height: "90px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {image ? (
+                          <img
+                            src={
+                              image.startsWith("http") ? image : `http://localhost:8000/${image}`
+                            }
+                            alt={title}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "contain",
+                            }}
+                            onError={(e) => {
+                              e.target.style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <span style={{ fontSize: "2.5rem" }}>📄</span>
+                        )}
+                      </div>
 
-              return (
-                <div key={item.id || idx} className="col-6 col-md-3 col-lg-2 mb-4">
-  <div
-    className="card card-emoji text-center p-3 shadow-sm h-100 border-0 d-flex flex-column justify-content-between align-items-center"
-    style={{
-      backgroundColor: "#eaf1ff",
-      borderRadius: "20px",
-      transition: "all 0.3s ease",
-    }}
-  >
-    {/* صورة الكارت */}
-    <div
-      className="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-2"
-      style={{
-        width: "90px",
-        height: "90px",
-        overflow: "hidden",
-      }}
-    >
-      {image ? (
-        <img
-          src={image.startsWith("http") ? image : `http://localhost:8000/${image}`}
-          alt={title}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-          onError={(e) => {
-            e.target.style.display = "none";
-          }}
-        />
-      ) : (
-        <span style={{ fontSize: "2.5rem" }}>📄</span>
-      )}
-    </div>
+                      {/* عنوان الكارت */}
+                      <p className="fw-semibold mb-2" style={{ fontSize: "0.95rem" }}>
+                        {title}
+                      </p>
 
-    {/* عنوان الكارت */}
-    <p className="fw-semibold mb-2" style={{ fontSize: "0.95rem" }}>
-      {title}
-    </p>
-
-    {/* زر الإضافة أو الحذف */}
-    <button
-      className={`btn btn-sm rounded-pill px-4 w-100 ${
-        isOnBoard ? "btn-danger" : "btn-success text-white"
-      }`}
-      onClick={() => handleToggleCard(item)}
-      disabled={loading}
-    >
-      {loading
-        ? isOnBoard
-          ? "Removing..."
-          : "Adding..."
-        : isOnBoard
-        ? "Remove"
-        : "Add"}
-    </button>
-  </div>
-</div>
-
-              );
-            })}
+                      {/* زر الإضافة أو الحذف */}
+                      <button
+                        className={`btn btn-sm rounded-pill px-4 w-100 ${
+                          isOnBoard ? "btn-danger" : "btn-success text-white"
+                        }`}
+                        onClick={() => handleToggleCard(item)}
+                        disabled={loading}
+                      >
+                        {loading
+                          ? isOnBoard
+                            ? "Removing..."
+                            : "Adding..."
+                          : isOnBoard
+                          ? "Remove"
+                          : "Add"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         )}
       </div>
