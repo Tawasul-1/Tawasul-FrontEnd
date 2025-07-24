@@ -46,6 +46,9 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
           <Link to="/" style={{ color: "#173067", textDecoration: "none" }}>
             🏠 {getTranslation("nav.home", currentLanguage)}
           </Link>
+          <Link to="/board" style={{ color: "#173067", textDecoration: "none" }}>
+            🎯 {getTranslation("nav.board", currentLanguage)}
+          </Link>
           <Link to="/addnewcard" style={{ color: "#173067", textDecoration: "none" }}>
             ➕ {getTranslation("cards.addNewCard", currentLanguage)}
           </Link>

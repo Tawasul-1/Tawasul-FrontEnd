@@ -36,6 +36,22 @@ function Header() {
             </Nav.Item>
             <Nav.Item>
               <Link
+                to="/board"
+                className={`nav-link ${location.pathname === "/board" ? "active" : ""}`}
+              >
+                {getTranslation("nav.board", currentLanguage)}
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link
+                to="/profile"
+                className={`nav-link ${location.pathname === "/profile" ? "active" : ""}`}
+              >
+                {getTranslation("nav.profile", currentLanguage)}
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link
                 to="/about"
                 className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}
               >
