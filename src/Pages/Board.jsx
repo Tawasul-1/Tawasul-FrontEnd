@@ -4,22 +4,23 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "../Style-pages/Board.css";
 import { Link } from "react-router-dom";
 import Menu from "../Components/Menu";
-import CategoryService from "../api/services/CategoryService";
-import CardService from "../api/services/CardService";
+import BoardService from "../api/services/BoardService";
 import { getCategoryName, getUserLanguage, isRTL } from "../utils/languageUtils";
 
 const Board = () => {
   const [sentenceWords, setSentenceWords] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [recentCards, setRecentCards] = useState([]);
   const [showPasswordCard, setShowPasswordCard] = useState(false);
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
 
   // API data states
-  const [categories, setCategories] = useState([]);
-  const [userCards, setUserCards] = useState([]);
+  const [boardData, setBoardData] = useState({
+    cards: [],
+    categories: [],
+    hour_used: 0,
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -29,84 +30,31 @@ const Board = () => {
   const currentLanguage = getUserLanguage();
   const isRTLMode = isRTL();
 
-  // Fetch categories and cards on component mount
+  // Fetch board data on component mount and when category changes
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError("");
 
-        // Fetch categories
-        const categoriesResponse = await CategoryService.getAllCategories();
-        let categoriesData = [];
-        if (categoriesResponse && categoriesResponse.data) {
-          if (Array.isArray(categoriesResponse.data)) {
-            categoriesData = categoriesResponse.data;
-          } else if (
-            categoriesResponse.data.results &&
-            Array.isArray(categoriesResponse.data.results)
-          ) {
-            categoriesData = categoriesResponse.data.results;
-          } else if (categoriesResponse.data.data && Array.isArray(categoriesResponse.data.data)) {
-            categoriesData = categoriesResponse.data.data;
-          }
-        }
-        setCategories(categoriesData);
-
-        // Fetch user cards
-        const cardsResponse = await CardService.getUserCards();
-        let cardsData = [];
-        if (cardsResponse && cardsResponse.data) {
-          if (Array.isArray(cardsResponse.data)) {
-            cardsData = cardsResponse.data;
-          } else if (cardsResponse.data.results && Array.isArray(cardsResponse.data.results)) {
-            cardsData = cardsResponse.data.results;
-          } else if (cardsResponse.data.data && Array.isArray(cardsResponse.data.data)) {
-            cardsData = cardsResponse.data.data;
-          }
-        }
-        setUserCards(cardsData);
-
+        console.log('ACTIVE', activeCategory?.id);
+        const data = await BoardService.getBoardWithCategories(activeCategory?.id);
+        console.log("Board", data);
+        setBoardData(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to load data. Please try again.");
+        console.error("Error fetching board data:", error);
+        setError("Failed to load board data. Please try again.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
-
-  // Get cards for a specific category
-  const getCardsForCategory = (categoryId) => {
-    if (!Array.isArray(userCards)) {
-      return [];
-    }
-    return userCards.filter((card) => card.category.id === categoryId);
-  };
+  }, [activeCategory]);
 
   // Get cards to display based on active category
   const getCardsToDisplay = () => {
-    if (activeCategory) {
-      return getCardsForCategory(activeCategory.id);
-    }
-
-    // Return recent cards or default cards
-    return recentCards.map((cardLabel) => {
-      // Find the card in userCards by label
-      const foundCard = userCards.find(
-        (card) => card.title_en === cardLabel || card.title_ar === cardLabel
-      );
-      return (
-        foundCard || {
-          id: Math.random(),
-          title_en: cardLabel,
-          title_ar: cardLabel,
-          image: null,
-        }
-      );
-    });
+    return boardData.cards || [];
   };
 
   // Get localized card title
@@ -114,15 +62,15 @@ const Board = () => {
     if (currentLanguage === "ar" && card.title_ar) {
       return card.title_ar;
     }
-    return card.title_en || card.title_ar || card.label || "Unknown";
+    return card.title_en || card.title_ar || "Unknown";
   };
 
   // Get audio URL for a card
   const getCardAudio = (card) => {
     if (currentLanguage === "ar" && card.audio_ar) {
-      return card.audio_ar;
+      return `http://localhost:8000${card.audio_ar}`;
     }
-    return card.audio_en || card.audio_ar;
+    return `http://localhost:8000${card.audio_en}`;
   };
 
   // Get the full generated statement for the sentence
@@ -132,7 +80,7 @@ const Board = () => {
 
     // Find the corresponding card for each word to get the full statement
     const statementWords = sentenceWords.map((word) => {
-      const card = userCards.find((card) => getCardTitle(card) === word);
+      const card = boardData.cards.find((card) => getCardTitle(card) === word);
       return card ? card.statement : word;
     });
 
@@ -144,7 +92,7 @@ const Board = () => {
     if (sentenceWords.length === 0) return [];
 
     return sentenceWords.map((word) => {
-      const card = userCards.find((card) => getCardTitle(card) === word);
+      const card = boardData.cards.find((card) => getCardTitle(card) === word);
       return {
         word: word,
         statement: card ? card.statement : word,
@@ -156,10 +104,6 @@ const Board = () => {
   const handleCardClick = (card) => {
     const cardLabel = getCardTitle(card);
     setSentenceWords((prev) => [...prev, cardLabel]);
-    setRecentCards((prev) => {
-      const updated = [cardLabel, ...prev.filter((item) => item !== cardLabel)];
-      return updated.slice(0, 12);
-    });
   };
 
   // Play the full generated statement audio
@@ -197,22 +141,16 @@ const Board = () => {
       }
 
       try {
-
         // Create new audio element for this item
         const audio = new Audio();
 
         // Set up audio event listeners
-        audio.onloadstart = () => {}
-          console.log(`Loading audio for: ${item.word}`);
-        ;
-
         audio.oncanplay = () => {
           audio.play();
         };
 
         audio.onended = () => {
           setCurrentAudio(null);
-
           // If this is the last item, stop playing
           if (i === statementArray.length - 1) {
             setIsPlayingAudio(false);
@@ -222,7 +160,6 @@ const Board = () => {
         audio.onerror = (error) => {
           console.error(`Error playing audio for ${item.word}:`, error);
           setCurrentAudio(null);
-
           // Continue with next item even if this one fails
           if (i === statementArray.length - 1) {
             setIsPlayingAudio(false);
@@ -236,7 +173,6 @@ const Board = () => {
         // Wait for this audio to finish before playing the next one
         await new Promise((resolve) => {
           audio.onended = () => {
-            console.log(`Finished playing audio for: ${item.word}`);
             setCurrentAudio(null);
             resolve();
           };
@@ -357,7 +293,7 @@ const Board = () => {
             {sentenceWords.length > 0 ? (
               <div className="d-flex flex-wrap gap-2 align-items-center">
                 {sentenceWords.map((word, index) => {
-                  const card = userCards.find((card) => getCardTitle(card) === word);
+                  const card = boardData.cards.find((card) => getCardTitle(card) === word);
                   return (
                     <div
                       key={index}
@@ -376,7 +312,7 @@ const Board = () => {
                       >
                         {card?.image ? (
                           <img
-                            src={card.image}
+                            src={`http://localhost:8000${card.image}`}
                             alt={word}
                             style={{
                               width: "24px",
@@ -451,7 +387,7 @@ const Board = () => {
                   <Card.Body className="d-flex flex-column align-items-center justify-content-center p-3">
                     {card.image ? (
                       <img
-                        src={card.image}
+                        src={`http://localhost:8000${card.image}`}
                         alt={getCardTitle(card)}
                         style={{
                           width: "40px",
@@ -498,36 +434,35 @@ const Board = () => {
               <span style={{ fontSize: "1.3rem" }}>🕘</span>
             </Button>
 
-            {Array.isArray(categories) &&
-              categories.map((category) => (
-                <Button
-                  key={category.id}
-                  variant={activeCategory?.id === category.id ? "primary" : "outline-primary"}
-                  onClick={() => setActiveCategory(category)}
-                  className="flex-shrink-0 text-center"
-                  style={{ width: "150px", borderRadius: "10px" }}
-                  title={getCategoryName(category)}
-                >
-                  <span style={{ fontSize: "1.3rem" }}>
-                    {category.image ? (
-                      <img
-                        src={category.image}
-                        alt={getCategoryName(category)}
-                        style={{
-                          width: "24px",
-                          height: "24px",
-                          objectFit: "contain",
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    ) : (
-                      "📁"
-                    )}
-                  </span>
-                </Button>
-              ))}
+            {boardData.categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={activeCategory?.id === category.id ? "primary" : "outline-primary"}
+                onClick={() => setActiveCategory(category)}
+                className="flex-shrink-0 text-center"
+                style={{ width: "150px", borderRadius: "10px" }}
+                title={getCategoryName(category)}
+              >
+                <span style={{ fontSize: "1.3rem" }}>
+                  {category.image ? (
+                    <img
+                      src={`http://localhost:8000/${category.image}`}
+                      alt={getCategoryName(category)}
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        objectFit: "contain",
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    "📁"
+                  )}
+                </span>
+              </Button>
+            ))}
           </div>
         </div>
       </div>
