@@ -24,7 +24,7 @@ export const translations = {
     noNotifications: { en: "No notifications", ar: "لا توجد إشعارات" },
     english: { en: "English", ar: "الإنجليزية" },
     arabic: { en: "Arabic", ar: "العربية" },
-    selection: { en: "Select New Cards", ar: "أختر كروت جديدة" },
+    selection: { en: "Manage Your Board", ar: "تحكم في لوحتك" },
   },
 
   // Home Page

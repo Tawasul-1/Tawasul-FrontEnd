@@ -49,11 +49,11 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
           <Link to="/board" style={{ color: "#173067", textDecoration: "none" }}>
             🎯 {getTranslation("nav.board", currentLanguage)}
           </Link>
+          <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
+            ✅ {getTranslation("nav.selection", currentLanguage)}
+          </Link>
           <Link to="/addnewcard" style={{ color: "#173067", textDecoration: "none" }}>
             ➕ {getTranslation("cards.addNewCard", currentLanguage)}
-          </Link>
-          <Link to="/about" style={{ color: "#173067", textDecoration: "none" }}>
-            ℹ️ {getTranslation("nav.about", currentLanguage)}
           </Link>
           <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
             👤 {getTranslation("nav.profile", currentLanguage)}
@@ -64,8 +64,8 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
           >
             ✏️ {getTranslation("profile.editProfile", currentLanguage)}
           </div>
-          <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
-            ✅ {getTranslation("nav.selection", currentLanguage)}
+          <Link to="/about" style={{ color: "#173067", textDecoration: "none" }}>
+            ℹ️ {getTranslation("nav.about", currentLanguage)}
           </Link>
           <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
             📞 {getTranslation("nav.contact", currentLanguage)}

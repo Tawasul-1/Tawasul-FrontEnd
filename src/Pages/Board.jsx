@@ -37,7 +37,7 @@ const Board = () => {
         setLoading(true);
         setError("");
 
-        console.log('ACTIVE', activeCategory?.id);
+        console.log("ACTIVE", activeCategory?.id);
         const data = await BoardService.getBoardWithCategories(activeCategory?.id);
         console.log("Board", data);
         setBoardData(data);
@@ -370,87 +370,62 @@ const Board = () => {
       </Container>
 
       {/* Cards Area */}
-      <div className="flex-grow-1 overflow-auto px-3 py-2">
-        <Container>
-          <Row className="g-2">
-            {getCardsToDisplay().map((card, idx) => (
-              <Col
-                key={card.id || idx}
-                className="text-center"
-                style={{ width: "10%", maxWidth: "10%" }}
-              >
-                <Card
-                  className="emoji-card shadow-sm mx-auto"
-                  onClick={() => handleCardClick(card)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <Card.Body className="d-flex flex-column align-items-center justify-content-center p-3">
-                    {card.image ? (
-                      <img
-                        src={`http://localhost:8000${card.image}`}
-                        alt={getCardTitle(card)}
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          objectFit: "contain",
-                          marginBottom: "8px",
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    ) : (
-                      <span style={{ fontSize: "2rem", marginBottom: "8px" }}>📄</span>
-                    )}
-                    <small
-                      className="text-muted text-center"
-                      style={{
-                        fontSize: "0.75rem",
-                        lineHeight: "1.2",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {getCardTitle(card)}
-                    </small>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </Container>
+      <div className="cards-wrapper px-3 py-3">
+        {getCardsToDisplay().map((card, idx) => (
+          <div key={card.id || idx} className="card-item" onClick={() => handleCardClick(card)}>
+            <div className="emoji-image-wrapper">
+              {card.image ? (
+                <img
+                  src={`http://localhost:8000/${card.image}`}
+                  alt={getCardTitle(card)}
+                  className="img-fluid"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
+              ) : (
+                <span className="fallback-icon">📄</span>
+              )}
+            </div>
+            <small className="emoji-title">{getCardTitle(card)}</small>
+          </div>
+        ))}
       </div>
 
       {/* Categories Bar */}
-      <div className="category-bar bg-white py-2 border-top shadow-sm">
+      <div
+        className="category-bar bg-white py-2 border-top shadow-sm fixed-bottom"
+        style={{ zIndex: 1050 }}
+      >
         <div className="container">
-          <div className="d-flex gap-2" style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
-            <Button
-              variant={activeCategory === null ? "primary" : "outline-primary"}
+          <div
+            className="d-flex gap-2 justify-content-center"
+            style={{ overflowX: "auto", whiteSpace: "nowrap" }}
+          >
+            <div
+              className={`category-btn ${activeCategory === null ? "active" : ""}`}
               onClick={() => setActiveCategory(null)}
-              className="flex-shrink-0 text-center"
-              style={{ width: "150px", borderRadius: "10px" }}
               title={currentLanguage === "ar" ? "الكل" : "All"}
             >
-              <span style={{ fontSize: "1.3rem" }}>🕘</span>
-            </Button>
+              <div className="category-img">📁</div>
+              <div style={{ fontSize: "0.85rem" }}>All</div>
+            </div>
 
             {boardData.categories.map((category) => (
-              <Button
+              <div
                 key={category.id}
-                variant={activeCategory?.id === category.id ? "primary" : "outline-primary"}
+                className={`category-btn ${activeCategory?.id === category.id ? "active" : ""}`}
                 onClick={() => setActiveCategory(category)}
-                className="flex-shrink-0 text-center"
-                style={{ width: "150px", borderRadius: "10px" }}
                 title={getCategoryName(category)}
               >
-                <span style={{ fontSize: "1.3rem" }}>
+                <div className="category-img">
                   {category.image ? (
                     <img
                       src={`http://localhost:8000/${category.image}`}
                       alt={getCategoryName(category)}
                       style={{
-                        width: "24px",
-                        height: "24px",
+                        width: "100%",
+                        height: "100%",
                         objectFit: "contain",
                       }}
                       onError={(e) => {
@@ -460,8 +435,11 @@ const Board = () => {
                   ) : (
                     "📁"
                   )}
-                </span>
-              </Button>
+                </div>
+                <div className="text-truncate" style={{ fontSize: "0.85rem", maxWidth: "80px" }}>
+                  {getCategoryName(category)}
+                </div>
+              </div>
             ))}
           </div>
         </div>
