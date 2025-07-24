@@ -8,18 +8,43 @@ import Header from "../Components/Header";
 import CategoryService from "../api/services/CategoryService";
 import CardService from "../api/services/CardService";
 import { getCategoryName } from "../utils/languageUtils";
+import { userService } from "../api/services/UserService";
+import { useAuth } from "../context/AuthContext";
 
 const AddNewCard = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isPremium, setIsPremium] = useState(false);
   const [formData, setFormData] = useState({
     title_en: "",
     title_ar: "",
     category_id: "",
     image: null,
   });
+
+  // Check premium status on component mount
+  useEffect(() => {
+    const checkPremiumStatus = async () => {
+      try {
+        console.log(user);
+        if (user?.is_premium) {
+          setIsPremium(true);
+          return;
+        }
+
+        const response = await userService.getProfile();
+        setIsPremium(response.data?.is_premium || false);
+      } catch (error) {
+        console.error("Error checking premium status:", error);
+        setIsPremium(false);
+      }
+    };
+
+    checkPremiumStatus();
+  }, [user]);
 
   // Load categories on component mount
   useEffect(() => {
@@ -31,20 +56,13 @@ const AddNewCard = () => {
 
         let categoriesData = [];
         if (response && response.data) {
-          // Check if response.data is an array
           if (Array.isArray(response.data)) {
             categoriesData = response.data;
-          }
-          // Check if response.data has a results property (common in paginated APIs)
-          else if (response.data.results && Array.isArray(response.data.results)) {
+          } else if (response.data.results && Array.isArray(response.data.results)) {
             categoriesData = response.data.results;
-          }
-          // Check if response.data has a data property
-          else if (response.data.data && Array.isArray(response.data.data)) {
+          } else if (response.data.data && Array.isArray(response.data.data)) {
             categoriesData = response.data.data;
-          }
-          // If none of the above, try to use response.data directly
-          else {
+          } else {
             console.warn("Unexpected categories response structure:", response.data);
             categoriesData = [];
           }
@@ -54,7 +72,7 @@ const AddNewCard = () => {
       } catch (error) {
         console.error("Error loading categories:", error);
         setError("Failed to load categories. Please try again.");
-        setCategories([]); // Ensure categories is always an array
+        setCategories([]);
       } finally {
         setLoading(false);
       }
@@ -87,6 +105,11 @@ const AddNewCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!isPremium) {
+      setError("Premium subscription required to add cards");
+      return;
+    }
+
     if (!formData.title_en || !formData.title_ar || !formData.category_id || !formData.image) {
       setError("Please fill in all required fields");
       return;
@@ -103,7 +126,6 @@ const AddNewCard = () => {
       submitFormData.append("image", formData.image);
 
       await CardService.addNewCard(submitFormData);
-
       navigate("/profile");
     } catch (error) {
       console.error("Error adding card:", error);
@@ -131,6 +153,12 @@ const AddNewCard = () => {
                 <h4 className="fw-bold mt-2" style={{ color: "#23305e" }}>
                   Add New Card
                 </h4>
+                {!isPremium && (
+                  <Alert variant="warning" className="mt-2">
+                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                    Premium feature - upgrade to add cards
+                  </Alert>
+                )}
               </div>
 
               {error && (
@@ -151,6 +179,7 @@ const AddNewCard = () => {
                     value={formData.title_en}
                     onChange={handleInputChange}
                     required
+                    disabled={!isPremium}
                   />
                 </InputGroup>
 
@@ -165,6 +194,7 @@ const AddNewCard = () => {
                     value={formData.title_ar}
                     onChange={handleInputChange}
                     required
+                    disabled={!isPremium}
                   />
                 </InputGroup>
 
@@ -178,7 +208,7 @@ const AddNewCard = () => {
                     value={formData.category_id}
                     onChange={handleInputChange}
                     required
-                    disabled={loading}
+                    disabled={loading || !isPremium}
                   >
                     <option value="">Select Category</option>
                     {Array.isArray(categories) &&
@@ -202,6 +232,7 @@ const AddNewCard = () => {
                       onChange={handleInputChange}
                       accept="image/*"
                       required
+                      disabled={!isPremium}
                     />
                   </InputGroup>
                 </div>
@@ -209,14 +240,26 @@ const AddNewCard = () => {
                 {/* Submit Button */}
                 <div className="d-grid">
                   <Button
-                    variant="primary"
+                    variant={"primary"}
                     type="submit"
-                    className="rounded-pill w-100"
-                    disabled={loading}
+                    className="rounded-pill w-100 py-2"
+                    disabled={loading || !isPremium}
                   >
-                    {loading ? "Adding..." : "Add Card"}
+                    {loading ? "Adding..." : isPremium ? "Add Card" : "Premium Required"}
                   </Button>
                 </div>
+
+                {!isPremium && (
+                  <div className="d-grid mt-3">
+                    <Button
+                      variant={"primary"}
+                      className="rounded-pill w-100 py-2"
+                      onClick={() => navigate("/profile")}
+                    >
+                      Upgrade to Premium
+                    </Button>
+                  </div>
+                )}
               </Form>
             </Card>
           </Col>

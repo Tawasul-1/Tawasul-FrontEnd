@@ -160,7 +160,7 @@ const HowUse = () => {
                   <p className="mb-3 fw-bold" style={{ color: "#173067", fontSize: "1.2rem" }}>
                     Ready to get started?
                   </p>
-                  <a href="/cat" className="btn btn-primary start-learning-btn">
+                  <a href="/categories" className="btn btn-primary start-learning-btn">
                     Start Learning
                   </a>
                 </div>

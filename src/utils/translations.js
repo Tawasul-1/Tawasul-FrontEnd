@@ -180,6 +180,7 @@ export const translations = {
       en: "Password must be at least 6 characters",
       ar: "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
     },
+    passwordInvalid: {en: "Password must be at least 8 characters, and include an uppercase letter, a lowercase letter, a number, and a special character.", ar: "كلمة المرور يجب أن تحتوي على 8 حروف على الأقل، حرف كبير، حرف صغير، رقم، ورمز خاص"},  
     nameRequired: { en: "Name is required", ar: "الاسم مطلوب" },
     phoneRequired: { en: "Phone number is required", ar: "رقم الهاتف مطلوب" },
     invalidPhone: { en: "Invalid phone number format", ar: "صيغة رقم الهاتف غير صحيحة" },
