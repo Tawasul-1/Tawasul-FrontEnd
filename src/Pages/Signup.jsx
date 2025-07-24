@@ -200,7 +200,7 @@ function Signup() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={5} xl={4} className="d-flex justify-content-center align-items-center">
+        <Col md={5} className="d-flex justify-content-center align-items-center">
           <img
             src={signupImage}
             alt="Burger"
@@ -209,7 +209,7 @@ function Signup() {
           />
         </Col>
 
-        <Col md={7} xl={4}>
+        <Col md={7} >
           <Card
             style={{ width: "100%", Width: "800px", borderRadius: "1.5rem", padding: "3rem" }}
           >
