@@ -104,8 +104,7 @@ const AddNewCard = () => {
 
       await CardService.addNewCard(submitFormData);
 
-      // Navigate to success page
-      navigate("/success");
+      navigate("/profile");
     } catch (error) {
       console.error("Error adding card:", error);
       setError("Failed to add card. Please try again.");

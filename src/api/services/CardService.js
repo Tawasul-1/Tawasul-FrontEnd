@@ -28,7 +28,7 @@ const CardService = {
 
   async getUserCards() {
     try {
-      const response = await apiClient.get("/cards/cards/");
+      const response = await apiClient.get("/cards/cards/?limit=100");
       return response;
     } catch (error) {
       console.error("Error fetching user cards:", error);
