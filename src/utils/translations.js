@@ -10,7 +10,7 @@ export const translations = {
   nav: {
     brand: { en: "Tawasul", ar: "تواصل" },
     home: { en: "Home", ar: "الرئيسية" },
-    about: { en: "About", ar: "حول" },
+    about: { en: "About Us", ar: "حول" },
     contact: { en: "Contact", ar: "اتصل بنا" },
     login: { en: "Login", ar: "تسجيل الدخول" },
     signup: { en: "Sign Up", ar: "إنشاء حساب" },
@@ -24,6 +24,7 @@ export const translations = {
     noNotifications: { en: "No notifications", ar: "لا توجد إشعارات" },
     english: { en: "English", ar: "الإنجليزية" },
     arabic: { en: "Arabic", ar: "العربية" },
+    selection: { en: "Select New Cards", ar: "أختر كروت جديدة" },
   },
 
   // Home Page

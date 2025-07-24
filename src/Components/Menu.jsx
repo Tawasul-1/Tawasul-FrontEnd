@@ -65,7 +65,7 @@ const Menu = ({ setShowSidebar, onEditProfile }) => {
             ✏️ {getTranslation("profile.editProfile", currentLanguage)}
           </div>
           <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
-            🗂️ {getTranslation("nav.categories", currentLanguage)}
+            ✅ {getTranslation("nav.selection", currentLanguage)}
           </Link>
           <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
             📞 {getTranslation("nav.contact", currentLanguage)}
