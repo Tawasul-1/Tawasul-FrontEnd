@@ -6,6 +6,9 @@ import useApi from "../api/hooks/useApi";
 
 function EditProfileModal({ isOpen, onClose, userProfile, onProfileUpdate }) {
   const [profileImage, setProfileImage] = useState("/image-2.png");
+  // --- CHANGE 1: Add state to store the actual image file ---
+  const [imageFile, setImageFile] = useState(null); 
+  
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -31,13 +34,18 @@ function EditProfileModal({ isOpen, onClose, userProfile, onProfileUpdate }) {
         birth_date: userProfile.birth_date ? userProfile.birth_date.split("T")[0] : "",
       });
       setProfileImage(userProfile.profile_picture || "/image-2.png");
+      // Reset image file on modal open
+      setImageFile(null);
     }
-  }, [userProfile]);
+  }, [userProfile, isOpen]); // Rerun effect when isOpen changes
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Create a temporary URL for preview
       setProfileImage(URL.createObjectURL(file));
+      // --- CHANGE 2: Store the file object itself for submission ---
+      setImageFile(file);
     }
   };
 
@@ -49,10 +57,27 @@ function EditProfileModal({ isOpen, onClose, userProfile, onProfileUpdate }) {
     }));
   };
 
+  // --- CHANGE 3: Modify handleSubmit to send multipart/form-data ---
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const submissionData = new FormData();
+
+    // Append text data
+    submissionData.append('first_name', formData.first_name);
+    submissionData.append('last_name', formData.last_name);
+    submissionData.append('email', formData.email);
+    submissionData.append('phone', formData.phone);
+    submissionData.append('birth_date', formData.birth_date);
+
+    // Append the new image file only if one was selected
+    if (imageFile) {
+      submissionData.append('profile_picture', imageFile);
+    }
+
     try {
-      await updateProfile(formData);
+      // The updateProfile service must be able to handle FormData
+      await updateProfile(submissionData);
       if (onProfileUpdate) {
         onProfileUpdate();
       }
@@ -149,6 +174,7 @@ function EditProfileModal({ isOpen, onClose, userProfile, onProfileUpdate }) {
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
+          {/* ... your form inputs remain the same ... */}
           <div className="mb-3 input-group">
             <span className="input-group-text">
               <img className="icon" src="/Profile.png" alt="" />
@@ -258,4 +284,3 @@ function EditProfileModal({ isOpen, onClose, userProfile, onProfileUpdate }) {
 }
 
 export default EditProfileModal;
-
