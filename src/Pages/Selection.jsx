@@ -100,16 +100,16 @@ const Selection = () => {
 
   const handleToggleCard = async (card) => {
     const onBoard = isCardOnBoard(card);
-    const label = card.title_en || card.title_ar || "Card";
+    const label = card.id || card.id || "Card";
     setLoading(true);
 
     try {
       if (onBoard) {
-        await CardService.removeCardFromBoard(card.title_en);
+        await CardService.removeCardFromBoard(card.id);
         setMessage(`Card '${label}' removed from board!`);
         setBoardCards((prev) => prev.filter((c) => c.id !== card.id));
       } else {
-        await CardService.addCardToBoard(card.title_en);
+        await CardService.addCardToBoard(card.id);
         setMessage(`Card '${label}' added to board!`);
         setBoardCards((prev) => [...prev, card]);
       }
