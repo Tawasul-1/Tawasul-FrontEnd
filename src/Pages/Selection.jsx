@@ -105,11 +105,11 @@ const Selection = () => {
 
     try {
       if (onBoard) {
-        await CardService.removeCardFromBoard(card.id);
+        await CardService.removeCardFromBoard(card.title_en);
         setMessage(`Card '${label}' removed from board!`);
         setBoardCards((prev) => prev.filter((c) => c.id !== card.id));
       } else {
-        await CardService.addCardToBoard(card.id);
+        await CardService.addCardToBoard(card.title_en);
         setMessage(`Card '${label}' added to board!`);
         setBoardCards((prev) => [...prev, card]);
       }
@@ -231,10 +231,10 @@ const Selection = () => {
                     >
                       {/* صورة الكارت */}
                       <div
-                        className="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-2"
+                        className="d-flex align-items-center justify-content-center bg-white rounded-3 shadow-sm mb-2"
                         style={{
-                          width: "90px",
-                          height: "90px",
+                          width: "120px",
+                          height: "100px",
                           overflow: "hidden",
                         }}
                       >
