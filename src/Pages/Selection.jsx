@@ -216,6 +216,7 @@ const Selection = () => {
               })
               .map((item, idx) => {
                 const title = item.title_en || item.title_ar;
+                const title1 = item.title_ar;
                 const image = item.image;
                 const isOnBoard = isCardOnBoard(item);
 
