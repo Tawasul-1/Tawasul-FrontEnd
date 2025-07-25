@@ -23,7 +23,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { currentLanguage } = useLanguage();
   const { user, updateUser } = useAuth();
-  
+
   const [activeCategory, setActiveCategory] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -87,7 +87,6 @@ const Profile = () => {
     }
   };
 
-
   const fetchSubscription = async () => {
     setSubscriptionLoading(true);
     setSubscriptionError(null);
@@ -95,18 +94,18 @@ const Profile = () => {
       const response = await SubscriptionService.getSubscription();
       const subscriptionData = response.data;
       setSubscription(subscriptionData);
-      
+
       if (subscriptionData?.is_premium !== undefined) {
         updateUser({
           ...user,
-          is_premium: subscriptionData.is_premium
+          is_premium: subscriptionData.is_premium,
         });
       }
     } catch (error) {
       if (error.message === "Resource not found") {
         updateUser({
           ...user,
-          is_premium: false
+          is_premium: false,
         });
         setSubscription(null);
         setSubscriptionError(null);
@@ -207,7 +206,10 @@ const Profile = () => {
           onEditProfile={() => setShowEditModal(true)}
         />
         <div className="main-content container py-4">
-          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: "400px" }}
+          >
             <div className="text-center">
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -266,7 +268,9 @@ const Profile = () => {
                 <FiSettings size={22} className="text-secondary" />
               </button>
               <img
-                src={user?.profile_picture ? `${user.profile_picture}?${Date.now()}` : "/image-2.png"}
+                src={
+                  user?.profile_picture ? `${user.profile_picture}?${Date.now()}` : "/image-2.png"
+                }
                 alt="User"
                 className="profile-img mb-3 rounded-circle border"
                 width="100"
@@ -300,10 +304,7 @@ const Profile = () => {
                       {getTranslation("profile.email", currentLanguage)}:
                     </div>
                     <div className="col-9 text-start">
-                      <a
-                        href={`mailto:${user?.email}`}
-                        className="text-decoration-none text-muted"
-                      >
+                      <a href={`mailto:${user?.email}`} className="text-decoration-none text-muted">
                         {user?.email || getTranslation("profile.noEmail", currentLanguage)}
                       </a>
                     </div>
@@ -330,19 +331,30 @@ const Profile = () => {
                       </span>
                     </div>
                     {subscription && (
-                      <div className="mb-3 small">
+                      <div className=" mb-3 small">
                         <div className="row g-2">
+                          <div className="col-6 text-start fw-semibold">Account Type:</div>
+                          <div className="col-6 text-start">{subscription.account_type}</div>
                           <div className="col-6 text-start fw-semibold">Status:</div>
                           <div className="col-6 text-start">
                             {subscription.is_subscription_cancelled ? "Cancelled" : "Active"}
+                          </div>
+                          <div className="col-6 text-start fw-semibold">Premium Start:</div>
+                          <div className="col-6 text-start">
+                            <FaRegCalendarCheck className="me-1" /> {subscription.premium_start}
                           </div>
                           <div className="col-6 text-start fw-semibold">Premium Expiry:</div>
                           <div className="col-6 text-start">
                             <FaRegCalendarCheck className="me-1" /> {subscription.premium_expiry}
                           </div>
+                          <div className="col-6 text-start fw-semibold">Is Premium:</div>
+                          <div className="col-6 text-start">
+                            {subscription.is_premium ? "Yes" : "No"}
+                          </div>
                         </div>
                       </div>
                     )}
+
                     <Button
                       variant="outline-danger"
                       className="w-100"
@@ -397,14 +409,18 @@ const Profile = () => {
               {categories?.results?.map((cat) => (
                 <div className="col-4" key={cat.id}>
                   <div
-                    className={`category-box ${cat.bg || "bg-light"} shadow-sm p-3 rounded text-center ${activeCategory?.id === cat.id ? "border-primary" : ""}`}
+                    className={`category-box ${
+                      cat.bg || "bg-light"
+                    } shadow-sm p-3 rounded text-center ${
+                      activeCategory?.id === cat.id ? "border-primary" : ""
+                    }`}
                     onClick={() => handleCategorySelect(cat)}
                   >
                     <img
                       src={cat.image}
                       alt={getCategoryName(cat)}
                       className="mb-2"
-                      style={{ width: "40px", height: "40px", objectFit: "contain" }}
+                      style={{ width: "150px", height: "150px", objectFit: "contain" }}
                       onError={(e) => {
                         e.target.src = "/Categorize.png";
                       }}
@@ -413,7 +429,8 @@ const Profile = () => {
                       {getCategoryName(cat)}
                     </p>
                     <small className="text-muted">
-                      {getCardsForCategory(cat.id).length} {getTranslation("profile.cards", currentLanguage)}
+                      {getCardsForCategory(cat.id).length}{" "}
+                      {getTranslation("profile.cards", currentLanguage)}
                     </small>
                   </div>
                 </div>
@@ -426,8 +443,8 @@ const Profile = () => {
                   <img
                     src={activeCategory.image}
                     alt={getCategoryName(activeCategory)}
-                    width="24"
-                    height="24"
+                    width="50"
+                    height="50"
                     onError={(e) => {
                       e.target.src = "/Categorize.png";
                     }}
@@ -451,7 +468,7 @@ const Profile = () => {
                               src={card.image}
                               alt={card.title_en || card.title_ar}
                               className="mb-2"
-                              style={{ width: "60px", height: "60px", objectFit: "contain" }}
+                              style={{ width: "150px", height: "150px", objectFit: "contain" }}
                               onError={(e) => {
                                 e.target.style.display = "none";
                               }}
@@ -460,7 +477,9 @@ const Profile = () => {
                             <div style={{ fontSize: "2rem" }}>📄</div>
                           )}
                           <p className="m-0 fw-medium" style={{ color: "#173067" }}>
-                            {currentLanguage === "ar" && card.title_ar ? card.title_ar : card.title_en}
+                            {currentLanguage === "ar" && card.title_ar
+                              ? card.title_ar
+                              : card.title_en}
                           </p>
                         </div>
                       </div>

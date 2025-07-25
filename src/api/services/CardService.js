@@ -36,9 +36,9 @@ const CardService = {
     }
   },
 
-    async addCardToBoard(cardId) {
+    async addCardToBoard(card) {
   try {
-    const response = await apiClient.post("/cards/board/add/", { id: cardId });
+    const response = await apiClient.post("/cards/board/add/", { title: card });
     return response;
   } catch (error) {
     console.error("Error adding card to board:", error);
@@ -46,10 +46,10 @@ const CardService = {
   }
 },
 
-async removeCardFromBoard(cardId) {
+async removeCardFromBoard(card) {
   try {
     const response = await apiClient.delete("/cards/board/remove/", {
-      data: { id: cardId },
+      data: { title: card },
     });
     return response;
   } catch (error) {
