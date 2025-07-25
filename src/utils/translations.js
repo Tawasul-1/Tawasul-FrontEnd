@@ -6,6 +6,7 @@
 import { getUserLanguage } from "./languageUtils";
 
 export const translations = {
+
   // Navigation
   nav: {
     brand: { en: "Tawasul", ar: "تواصل" },
@@ -182,7 +183,10 @@ export const translations = {
       en: "Password must be at least 6 characters",
       ar: "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
     },
-    passwordInvalid: {en: "Password must be at least 8 characters, and include an uppercase letter, a lowercase letter, a number, and a special character.", ar: "كلمة المرور يجب أن تحتوي على 8 حروف على الأقل، حرف كبير، حرف صغير، رقم، ورمز خاص"},  
+    passwordInvalid: {
+      en: "Password must be at least 8 characters, and include an uppercase letter, a lowercase letter, a number, and a special character.",
+      ar: "كلمة المرور يجب أن تحتوي على 8 حروف على الأقل، حرف كبير، حرف صغير، رقم، ورمز خاص",
+    },
     nameRequired: { en: "Name is required", ar: "الاسم مطلوب" },
     phoneRequired: { en: "Phone number is required", ar: "رقم الهاتف مطلوب" },
     invalidPhone: { en: "Invalid phone number format", ar: "صيغة رقم الهاتف غير صحيحة" },
@@ -618,14 +622,43 @@ export const translations = {
     available: { en: "Available", ar: "متاح" },
     premium_summary: {
       en: "All features unlocked, fully customizable board, AI, and more.",
-      ar: "جميع الميزات متاحة، تخصيص كامل للبورد، ذكاء اصطناعي والمزيد."
+      ar: "جميع الميزات متاحة، تخصيص كامل للبورد، ذكاء اصطناعي والمزيد.",
     },
     free_summary: {
       en: "Basic features only, limited customization.",
-      ar: "ميزات أساسية فقط، تخصيص محدود."
+      ar: "ميزات أساسية فقط، تخصيص محدود.",
     },
   },
+     welcomeTo: {
+    en: "Welcome to Tawasul",
+    ar: "مرحبًا بك في تواصل",
+  },
+  direction: {
+    en: "Direction",
+    ar: "الاتجاه",
+  },
+  findYourCard: {
+    en: "Find your card",
+    ar: "ابحث عن بطاقتك",
+  },
+  add: {
+    en: "Add",
+    ar: "أضف",
+  },
+  remove: {
+    en: "Remove",
+    ar: "إزالة",
+  },
+  adding: {
+    en: "Adding...",
+    ar: "جارٍ الإضافة...",
+  },
+  removing: {
+    en: "Removing...",
+    ar: "جارٍ الإزالة...",
+  },
 };
+
 
 /**
  * Get translated text based on current language
