@@ -147,7 +147,10 @@ const TestCards = () => {
                           <div className="w-75 overflow-hidden">
                             {<img className="w-100" src={card.image} alt={card.title_en} /> || "🃏"}
                           </div>
-                          <div className="item-label">{card.title_en || "Card"}</div>
+                          <div className="item-label">
+                            <div className="text-white">{card.title_en || "Card"}</div>
+                            <div className="text-white">{card.title_ar || "Card"}</div>
+                          </div>
                         </div>
                       </Link>
                     </Col>

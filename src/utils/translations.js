@@ -132,7 +132,7 @@ export const translations = {
 
   // Authentication
   auth: {
-    loginTitle: { en: "Login to your account", ar: "تسجيل الدخول إلى حسابك" },
+    loginTitle: { en: "Login To TAWASUL ", ar: "تسجيل الدخول إلى تواصل" },
     email: { en: "Email", ar: "البريد الإلكتروني" },
     password: { en: "Password", ar: "كلمة المرور" },
     login: { en: "Log In", ar: "تسجيل الدخول" },

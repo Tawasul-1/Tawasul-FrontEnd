@@ -113,8 +113,9 @@ const TestCard = () => {
         onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        <span style={{ fontSize: "2rem", fontWeight: "bold", marginRight: "15px" }}>
+        <span className="text-center" style={{ fontSize: "2rem", fontWeight: "bold", marginRight: "15px" }}>
           {item.title_en}
+          <div>{item.title_ar}</div>
         </span>
         <BsVolumeUp size={32} color="#0073e6" />
       </div>
