@@ -20,7 +20,7 @@ const HowUse = () => {
                   Teaching a Child to Use the PECS System on a Screen
                 </h2>
 
-                <div className="howuse-section text-start mb-4">
+                <div className="howuse-section text-center mb-4">
                   <p>
                     PECS (Picture Exchange Communication System) is a visual tool to help children
                     express their needs using pictures. In the electronic version, pictures are

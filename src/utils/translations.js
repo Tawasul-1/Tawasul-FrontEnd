@@ -26,6 +26,7 @@ export const translations = {
     arabic: { en: "Arabic", ar: "العربية" },
     selection: { en: "Manage Your Board", ar: "تحكم في لوحتك" },
     learn: { en: "Learn New Card", ar: "تعلم كارت جديد" },
+    howuse: { en: "How to Use", ar: "كيفية الاستخدام" },
   },
 
   // Home Page

@@ -20,6 +20,7 @@ const Menu = ({ setShowSidebar }) => {
     { to: "/board", text: getTranslation("nav.board", currentLanguage), icon: "🎯" },
     { to: "/selection", text: getTranslation("nav.selection", currentLanguage), icon: "🧩" },
     { to: "/addnewcard", text: getTranslation("cards.addNewCard", currentLanguage), icon: "➕" },
+    { to: "/how-to-use", text: getTranslation("nav.howuse", currentLanguage), icon: "🛠️ " },
     { to: "/how-to-use/categories", text: getTranslation("nav.learn", currentLanguage), icon: "🎲" },
     { to: "/about", text: getTranslation("nav.about", currentLanguage), icon: "ℹ️" },
     { to: "/contact", text: getTranslation("nav.contact", currentLanguage), icon: "📞" },
