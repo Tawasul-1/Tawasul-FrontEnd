@@ -1,9 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 const LearnDone = () => {
   const [count, setCount] = useState(5);
   const navigate = useNavigate();
+  const { currentLanguage, isRTL } = useLanguage();
+
+  // Translations object
+  const translations = {
+    en: {
+      title: "🎉 Excellent Job!",
+      message: "Now you learned this item, you can use it in the board.",
+      redirect: "Redirecting to Items in"
+    },
+    ar: {
+      title: "🎉 عمل رائع!",
+      message: "الآن بعد أن تعلمت هذا العنصر، يمكنك استخدامه في اللوحة.",
+      redirect: "سيتم التوجيه إلى العناصر خلال"
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -31,17 +47,20 @@ const LearnDone = () => {
         alignItems: "center",
         textAlign: "center",
         padding: "2rem",
+        direction: isRTL ? "rtl" : "ltr"
       }}
     >
       <h1 style={{ color: "#173067", fontSize: "2.5rem", marginBottom: "1rem" }}>
-        🎉 Excellent Job!
+        {translations[currentLanguage].title}
       </h1>
       <p style={{ fontSize: "1.25rem", color: "#333" }}>
-        Now you learned this item, you can use it in the board.
+        {translations[currentLanguage].message}
       </p>
 
-      {/* العداد */}
-      <p style={{ fontSize: "1.1rem", color: "#555" }}>Redirecting to Items in {count} seconds...</p>
+      {/* Countdown timer */}
+      <p style={{ fontSize: "1.1rem", color: "#555" }}>
+        {translations[currentLanguage].redirect} {count} {currentLanguage === 'ar' ? 'ثواني' : 'seconds'}...
+      </p>
     </div>
   );
 };

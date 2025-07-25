@@ -7,16 +7,10 @@ import { useLanguage } from "../context/LanguageContext";
 import { getTranslation } from "../utils/translations";
 
 const Navbar = ({ onMenuClick, onEditProfile }) => {
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const { logout, isAuthenticated, user } = useAuth();
   const { currentLanguage, changeLanguage } = useLanguage();
 
-  const notifications = [
-    getTranslation("notifications.newMessage", currentLanguage),
-    getTranslation("notifications.newCardAdded", currentLanguage),
-    getTranslation("notifications.profileUpdated", currentLanguage),
-  ];
 
   const handleLogout = () => {
     logout();
@@ -41,44 +35,6 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
 
       {/* Right Side Icons */}
       <div className="d-flex align-items-center gap-3 position-relative">
-        {/* Notification Icon */}
-        {isAuthenticated && (
-          <div className="position-relative">
-            <BsBellFill
-              size={20}
-              style={{ color: "#173067", cursor: "pointer" }}
-              onClick={() => setShowNotifications((prev) => !prev)}
-            />
-
-            {/* Notification Box */}
-            {showNotifications && (
-              <div
-                className={`position-absolute mt-2 bg-white border rounded shadow-sm ${
-                  currentLanguage === "ar" ? "start-0" : "end-0"
-                }`}
-                dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-                style={{ width: "250px", zIndex: 9999 }}
-              >
-                <div className="p-2 fw-bold border-bottom" style={{ color: "#173067" }}>
-                  {getTranslation("nav.notifications", currentLanguage)}
-                </div>
-                <ul className="list-unstyled m-0">
-                  {notifications.length > 0 ? (
-                    notifications.map((note, i) => (
-                      <li key={i} className="px-3 py-2 border-bottom text-muted small">
-                        {note}
-                      </li>
-                    ))
-                  ) : (
-                    <li className="px-3 py-2 text-muted small">
-                      {getTranslation("nav.noNotifications", currentLanguage)}
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Auth Links/Profile Dropdown */}
         {!isAuthenticated ? (

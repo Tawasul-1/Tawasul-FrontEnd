@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Style-pages/Contact.css";
 import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
-import Menu from "../Components/Menu";
+import Header from "../Components/Header";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import { useLanguage } from "../context/LanguageContext";
@@ -17,15 +16,7 @@ const Contact = () => {
     <>
       <div id="root" className="profile-container bg-light min-vh-100">
         {/* Header Section */}
-        <Navbar
-          onMenuClick={() => setShowSidebar(true)}
-          onEditProfile={() => setShowEditModal(true)}
-        />
-
-        {showSidebar && (
-          <Menu setShowSidebar={setShowSidebar} onEditProfile={() => setShowEditModal(true)} />
-        )}
-
+        <Header />
         <div className="main-content">
           {/* Contact Title */}
           <div className="contact-hero d-flex justify-content-center align-items-center">
