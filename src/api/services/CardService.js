@@ -68,24 +68,20 @@ async removeCardFromBoard(cardId) {
     }
   },
 
-  async getBoardWithCategories(categoryId = null) {
-    try {
-      const url = categoryId
-        ? `/cards/board/with-categories/?category_id=${categoryId}`
-        : "/cards/board/with-categories/";
-      const response = await apiClient.get(url);
-      return response;
-    } catch (error) {
-      console.error("Error fetching board with categories:", error);
-      throw handleApiError(error);
-    }
-  },
+async getBoardCards() {
+  try {
+    const response = await apiClient.get("/cards/board/");
+    return response;
+  } catch (error) {
+    console.error("Error fetching board cards:", error);
+    throw handleApiError(error);
+  }
+},
 
 async getAllCards(categoryId = null, search = "") {
   try {
     let url = "/cards/cards/";
 
-    // بناء باراميترز للفلترة
     const params = new URLSearchParams();
 
     if (categoryId) params.append("category_id", categoryId);
@@ -117,6 +113,19 @@ async getAllCards(categoryId = null, search = "") {
     }
   },
 
-};
+
+async verifyPin(pin) {
+    try {
+      const response = await apiClient.post("/cards/verify-pin/", {
+        pin: pin,
+      });
+      return response.data; 
+    } catch (error) {
+      console.error("Error verifying PIN:", error);
+      throw handleApiError(error);
+    }
+  },
+  };
+
 
 export default CardService;

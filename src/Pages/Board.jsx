@@ -37,9 +37,7 @@ const Board = () => {
         setLoading(true);
         setError("");
 
-        console.log("ACTIVE", activeCategory?.id);
-        const data = await BoardService.getBoardWithCategories(activeCategory?.id);
-        console.log("Board", data);
+        const data = await BoardService.getBoardWithCategories(); // بدون فلترة
         setBoardData(data);
       } catch (error) {
         console.error("Error fetching board data:", error);
@@ -50,11 +48,17 @@ const Board = () => {
     };
 
     fetchData();
-  }, [activeCategory]);
+  }, []);
 
   // Get cards to display based on active category
   const getCardsToDisplay = () => {
-    return boardData.cards || [];
+    if (!activeCategory || activeCategory === "all") {
+      return boardData.cards;
+    }
+
+    return boardData.cards.filter(
+      (card) => card.category === activeCategory.id || card.category?.id === activeCategory.id
+    );
   };
 
   // Get localized card title
@@ -274,8 +278,8 @@ const Board = () => {
       dir={isRTLMode ? "rtl" : "ltr"}
     >
       {/* Sentence Box */}
-      <Container className="d-flex align-items-center gap-3 mb-4 mt-3">
-        <div className="d-flex align-items-center gap-2 flex-grow-1 p-3 rounded-3 shadow-sm bg-white border-dashed">
+      <Container className="d-flex align-items-center gap-3 mb-2 mt-3">
+        <div className="d-flex align-items-center gap-2 flex-grow-1 p-1 rounded-3 shadow-sm bg-white border-dashed">
           <i
             className="bi bi-x-circle text-danger fs-5"
             onClick={clearSentence}
@@ -285,7 +289,7 @@ const Board = () => {
           <div
             className="flex-grow-1"
             style={{
-              minHeight: "44px",
+              minHeight: "60px",
               textAlign: isRTLMode ? "right" : "left",
               direction: isRTLMode ? "rtl" : "ltr",
             }}
@@ -303,8 +307,8 @@ const Board = () => {
                       <div
                         className="bg-light rounded-2 p-2 d-flex align-items-center justify-content-center"
                         style={{
-                          width: "32px",
-                          height: "32px",
+                          width: "40px",
+                          height: "40px",
                           cursor: "pointer",
                         }}
                         onClick={() => removeWordFromSentence(index)}
@@ -315,9 +319,11 @@ const Board = () => {
                             src={`http://localhost:8000${card.image}`}
                             alt={word}
                             style={{
-                              width: "24px",
-                              height: "24px",
-                              objectFit: "contain",
+                              width: "32px",
+                              height: "32px",
+                              objectFit: "cover",
+                              borderRadius: "50%",
+                              border: "1px solid #ccc",
                             }}
                             onError={(e) => {
                               e.target.style.display = "none";
@@ -344,7 +350,7 @@ const Board = () => {
                 })}
               </div>
             ) : (
-              <div className="text-muted mt-2">
+              <div className="text-muted mt-3">
                 {currentLanguage === "ar"
                   ? "اضغط على البطاقات لبناء جملة"
                   : "Click cards to build a sentence"}
@@ -506,7 +512,7 @@ const Board = () => {
                 }
               }}
             >
-              🔓 {currentLanguage === "ar" ? "فتح" : "Un_lock"}
+              🔓 {currentLanguage === "ar" ? "فتح" : "Unlock"}
             </Button>
 
             <Button
