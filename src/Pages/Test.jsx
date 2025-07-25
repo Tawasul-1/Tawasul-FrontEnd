@@ -175,7 +175,7 @@ const Test = () => {
           >
             {card.image ? (
               <img 
-                src={card.image} 
+                src={`http://localhost:8000${card.image}`}
                 alt={card.title_en}
                 style={{ 
                   width: "80px",
