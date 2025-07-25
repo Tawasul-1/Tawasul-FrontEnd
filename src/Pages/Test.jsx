@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { BsVolumeUp } from "react-icons/bs";
 import TestService from "../api/services/TestService";
+import { useLanguage } from "../context/LanguageContext";
 
 const Test = () => {
   const [searchParams] = useSearchParams();
@@ -15,19 +16,46 @@ const Test = () => {
   const [lampColor, setLampColor] = useState("#ccc");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { currentLanguage, isRTL } = useLanguage();
+
+  // Translations object
+  const translations = {
+    en: {
+      loading: "Loading test...",
+      error: "Failed to load test. Please try again.",
+      retry: "Retry",
+      defaultQuestion: (title) => `Where is the ${title}?`,
+      correct: "Correct!",
+      incorrect: "Try again!"
+    },
+    ar: {
+      loading: "جارٍ تحميل الاختبار...",
+      error: "فشل تحميل الاختبار. يرجى المحاولة مرة أخرى.",
+      retry: "إعادة المحاولة",
+      defaultQuestion: (title) => `أين ${title}؟`,
+      correct: "صحيح!",
+      incorrect: "حاول مرة أخرى!"
+    }
+  };
 
   useEffect(() => {
     const fetchTestData = async () => {
       try {
         setLoading(true);
         const testData = await TestService.getTest(cardId, level);
-        console.log("test", testData);
         
         setOptions(testData.cards || []);
         setCorrectCardId(testData.correct_card_id || cardId);
-        setQuestion(testData.question || `Where is the ${testData.cards?.find(c => c.id == cardId)?.title_en}?`);
+        
+        const correctCard = testData.cards?.find(c => c.id == cardId);
+        const defaultTitle = currentLanguage === 'ar' ? correctCard?.title_ar : correctCard?.title_en;
+        
+        setQuestion(
+          testData.question || 
+          translations[currentLanguage].defaultQuestion(defaultTitle || "")
+        );
       } catch (err) {
-        setError("Failed to load test. Please try again.");
+        setError(translations[currentLanguage].error);
         console.error(err);
       } finally {
         setLoading(false);
@@ -35,11 +63,12 @@ const Test = () => {
     };
 
     fetchTestData();
-  }, [cardId, level]);
+  }, [cardId, level, currentLanguage]);
 
   const speak = (text) => {
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = currentLanguage === 'ar' ? 'ar-SA' : 'en-US';
       speechSynthesis.speak(utterance);
     }
   };
@@ -48,6 +77,7 @@ const Test = () => {
     const isCorrect = selectedCardId == correctCardId;
     
     setLampColor(isCorrect ? "green" : "red");
+    speak(isCorrect ? translations[currentLanguage].correct : translations[currentLanguage].incorrect);
     
     if (isCorrect) {
       setTimeout(() => navigate("/learn"), 1500);
@@ -64,7 +94,8 @@ const Test = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        direction: isRTL ? "rtl" : "ltr"
       }}>
         <div style={{
           width: "50px",
@@ -74,7 +105,7 @@ const Test = () => {
           borderRadius: "50%",
           animation: "spin 1s linear infinite"
         }}></div>
-        <p style={{ marginTop: "1rem" }}>Loading test...</p>
+        <p style={{ marginTop: "1rem" }}>{translations[currentLanguage].loading}</p>
       </div>
     );
   }
@@ -87,7 +118,8 @@ const Test = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        direction: isRTL ? "rtl" : "ltr"
       }}>
         <p style={{ color: "#d9534f", fontWeight: "bold" }}>{error}</p>
         <button 
@@ -102,7 +134,7 @@ const Test = () => {
             cursor: "pointer"
           }}
         >
-          Retry
+          {translations[currentLanguage].retry}
         </button>
       </div>
     );
@@ -116,7 +148,8 @@ const Test = () => {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      padding: "1rem"
+      padding: "1rem",
+      direction: isRTL ? "rtl" : "ltr"
     }}>
       <div 
         style={{
@@ -129,12 +162,17 @@ const Test = () => {
           marginBottom: "2rem",
           cursor: "pointer",
           transition: "transform 0.3s ease",
+          flexDirection: isRTL ? "row-reverse" : "row"
         }}
         onClick={() => speak(question)}
         onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.03)"}
         onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
       >
-        <span style={{ fontSize: "1.7rem", fontWeight: "bold", marginRight: "10px" }}>
+        <span style={{ 
+          fontSize: "1.7rem", 
+          fontWeight: "bold", 
+          margin: isRTL ? "0 0 0 10px" : "0 10px 0 0" 
+        }}>
           {question}
         </span>
         <BsVolumeUp size={24} color="#0073e6" />
@@ -176,7 +214,7 @@ const Test = () => {
             {card.image ? (
               <img 
                 src={`http://localhost:8000${card.image}`}
-                alt={card.title_en}
+                alt={currentLanguage === 'ar' ? card.title_ar : card.title_en}
                 style={{ 
                   width: "80px",
                   height: "80px",
@@ -187,7 +225,7 @@ const Test = () => {
               <span style={{ fontSize: "4rem" }}>🃏</span>
             )}
             <span style={{ fontSize: "1.2rem", fontWeight: "bold", marginTop: "0.5rem" }}>
-              {card.title_en}
+              {currentLanguage === 'ar' ? card.title_ar : card.title_en}
             </span>
           </div>
         ))}

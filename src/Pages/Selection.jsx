@@ -5,25 +5,11 @@ import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
 import Footer from "../Components/Footer";
 import CardService from "../api/services/CardService";
-
-export const getTranslation = (key) => {
-  const translations = {
-    findYourCard: {
-      en: "Find your card",
-      ar: "ابحث عن بطاقتك",
-    },
-    direction: {
-      en: "ltr",
-      ar: "rtl",
-    },
-  };
-
-  const lang = localStorage.getItem("lang") || "en";
-  return translations[key]?.[lang] || key;
-};
+import { getTranslation } from "../utils/translations";
+import { getUserLanguage } from "../utils/languageUtils";
 
 const Selection = () => {
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [boardCards, setBoardCards] = useState([]);
@@ -35,6 +21,20 @@ const Selection = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
+  const [currentLanguage, setCurrentLanguage] = useState(getUserLanguage());
+
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      setCurrentLanguage(getUserLanguage());
+    };
+
+    window.addEventListener("languageChanged", handleLanguageChange);
+
+    return () => {
+      window.removeEventListener("languageChanged", handleLanguageChange);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,29 +43,29 @@ const Selection = () => {
 
         const lang = localStorage.getItem("lang") || "en";
 
-        const cats = [
-          ...new Set(
-            cards.map((card) => {
-              const category = card.category;
-              if (!category) return "Other";
-              return lang === "ar" ? category.name_ar : category.name_en;
-            })
-          ),
-        ].map((name, index) => ({ id: index, name }));
+        const categoryMap = {};
+        cards.forEach((card) => {
+          const category = card.category;
+          if (category && category.id) {
+            categoryMap[category.id] = category;
+          } else {
+            categoryMap["other"] = { id: "other", name_en: "Other", name_ar: "أخرى" };
+          }
+        });
+
+        const cats = Object.values(categoryMap);
+        setCategories(cats);
+
+        if (cats.length > 0) setSelectedCategory(cats[0].id);
 
         setCategories(cats);
-        if (cats.length > 0) setSelectedCategory(cats[0].name);
+        if (cats.length > 0) setSelectedCategory(cats[0].id);
 
         const grouped = {};
         cards.forEach((card) => {
-          const category = card.category;
-          const catName = category
-            ? lang === "ar"
-              ? category.name_ar
-              : category.name_en
-            : "Other";
-          if (!grouped[catName]) grouped[catName] = [];
-          grouped[catName].push(card);
+          const categoryId = card.category?.id || "other";
+          if (!grouped[categoryId]) grouped[categoryId] = [];
+          grouped[categoryId].push(card);
         });
 
         setCardsByCategory(grouped);
@@ -141,7 +141,7 @@ const Selection = () => {
         }}
       >
         <h1 className="fw-bold display-4" style={{ color: "#1d2b59" }}>
-          Welcome To <span style={{ color: "#1d2b59" }}>TAWASUL</span>
+          {getTranslation("welcomeTo")}
         </h1>
 
         <div className="container mt-4" style={{ maxWidth: "520px" }} ir="ltr">
@@ -150,15 +150,15 @@ const Selection = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              dir={getTranslation("direction")}
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="form-control rounded-start-pill"
               placeholder={getTranslation("findYourCard")}
               style={{
+                textAlign: currentLanguage === "ar" ? "right" : "left",
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
                 height: "45px",
                 padding: "20px",
-                textAlign: getTranslation("direction") === "rtl" ? "right" : "left",
               }}
             />
 
@@ -184,12 +184,12 @@ const Selection = () => {
             <div className="col-auto px-2 mb-2" key={cat.id || idx}>
               <button
                 className={`btn px-4 py-2 fw-semibold rounded-pill shadow-sm ${
-                  selectedCategory === cat.name ? "btn btn2 text-white" : "btn-outline-bg"
+                  selectedCategory === cat.id ? "btn btn2 text-white" : "btn-outline-bg"
                 }`}
                 style={{ minWidth: "120px", border: "1px solid #173067" }}
-                onClick={() => setSelectedCategory(cat.name)}
+                onClick={() => setSelectedCategory(cat.id)}
               >
-                {cat.name}
+                {currentLanguage === "ar" ? cat.name_ar : cat.name_en}
               </button>
             </div>
           ))}
@@ -211,11 +211,18 @@ const Selection = () => {
           <div className="row g-4 justify-content-center">
             {(cardsByCategory[selectedCategory] || [])
               .filter((item) => {
-                const title = (item.title_en || item.title_ar || "").toLowerCase();
-                return title.includes(searchTerm.toLowerCase());
+                const title =
+                  currentLanguage === "ar"
+                    ? item.title_ar || item.title_en
+                    : item.title_en || item.title_ar;
+                return title.toLowerCase().includes(searchTerm.toLowerCase());
               })
               .map((item, idx) => {
-                const title = item.title_en || item.title_ar;
+                const title =
+                  currentLanguage === "ar"
+                    ? item.title_ar || item.title_en
+                    : item.title_en || item.title_ar;
+
                 const image = item.image;
                 const isOnBoard = isCardOnBoard(item);
 
@@ -229,7 +236,6 @@ const Selection = () => {
                         transition: "all 0.3s ease",
                       }}
                     >
-                      {/* صورة الكارت */}
                       <div
                         className="d-flex align-items-center justify-content-center bg-white rounded-3 shadow-sm mb-2"
                         style={{
@@ -258,12 +264,10 @@ const Selection = () => {
                         )}
                       </div>
 
-                      {/* عنوان الكارت */}
                       <p className="fw-semibold mb-2" style={{ fontSize: "0.95rem" }}>
                         {title}
                       </p>
 
-                      {/* زر الإضافة أو الحذف */}
                       <button
                         className={`btn btn-sm rounded-pill px-4 w-100 ${
                           isOnBoard ? "btn-danger" : "btn-success text-white"
@@ -273,11 +277,11 @@ const Selection = () => {
                       >
                         {loading
                           ? isOnBoard
-                            ? "Removing..."
-                            : "Adding..."
+                            ? getTranslation("removing")
+                            : getTranslation("adding")
                           : isOnBoard
-                          ? "Remove"
-                          : "Add"}
+                          ? getTranslation("remove")
+                          : getTranslation("add")}
                       </button>
                     </div>
                   </div>
