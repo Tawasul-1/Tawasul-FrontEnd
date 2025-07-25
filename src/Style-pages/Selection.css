@@ -22,6 +22,10 @@
   margin-bottom: 8px;
 }
 
+.bg1{
+  background-color: #ffefbc !important;
+}
+
 /* Category button spacing */
 .btn-group .btn {
   min-width: 100px;

@@ -163,7 +163,7 @@ const AddNewCard = () => {
                 <i className="bi bi-puzzle" style={{ fontSize: "2rem", color: "#23305e" }}></i>
                 <h4 className="fw-bold mt-2" style={{ color: "#23305e" }}>
                   Add New Card
-                </h4>
+                </h4> 
                 {!isPremium && (
                   <Alert variant="warning" className="mt-2">
                     <i className="bi bi-exclamation-triangle-fill me-2"></i>

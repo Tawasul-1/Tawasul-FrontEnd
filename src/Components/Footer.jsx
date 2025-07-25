@@ -67,10 +67,10 @@ function Footer() {
               </li>
               <li className="mb-2">
                 <Link
-                  to="/edit-profile"
+                  to="/how-to-use"
                   className="text-decoration-none text-dark"
                 >
-                  <i className="bi bi-pencil-square me-2"></i>{getTranslation("profile.editProfile", currentLanguage)}
+                  <i className="bi bi-pencil-square me-2"></i>{getTranslation("nav.howuse", currentLanguage)}
                 </Link>
               </li>
               <li className="mb-2">

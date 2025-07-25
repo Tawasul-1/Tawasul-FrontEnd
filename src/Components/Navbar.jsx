@@ -83,19 +83,6 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                       {getTranslation("nav.viewProfile", currentLanguage)}
                     </Link>
                   </li>
-                  <li>
-                    <button
-                      className="px-3 py-2 d-block w-100 text-start border-0 bg-transparent text-muted"
-                      onClick={() => {
-                        setShowProfileMenu(false);
-                        if (onEditProfile) {
-                          onEditProfile();
-                        }
-                      }}
-                    >
-                      {getTranslation("profile.editProfile", currentLanguage)}
-                    </button>
-                  </li>
 
                   {/* Language Preferences */}
                   <li className="border-top">
