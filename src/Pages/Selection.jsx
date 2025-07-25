@@ -150,15 +150,15 @@ const Selection = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              dir={getTranslation("direction")}
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="form-control rounded-start-pill"
               placeholder={getTranslation("findYourCard")}
               style={{
+                textAlign: currentLanguage === "ar" ? "right" : "left",
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
                 height: "45px",
                 padding: "20px",
-                textAlign: getTranslation("direction") === "rtl" ? "right" : "left",
               }}
             />
 
