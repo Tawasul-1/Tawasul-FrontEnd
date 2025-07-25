@@ -27,8 +27,8 @@ const LearnDone = () => {
     }, 1000);
 
     const redirect = setTimeout(() => {
-      navigate("/how-to-use/categories");
-    }, 5000);
+      navigate("/how-to-use/cards");
+    }, 3000);
 
     return () => {
       clearInterval(timer);
