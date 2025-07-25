@@ -1,6 +1,5 @@
 import apiClient from "../config/apiClient";
 import { handleApiError } from "../utils/handleApiErrors";
-import { useAuth } from "../../context/AuthContext";
 
 const getAuthToken = () => {
   return localStorage.getItem("authToken"); // Match your token storage key
@@ -58,7 +57,7 @@ const CardService = {
 
   async getUserCards() {
     try {
-      const response = await apiClient.get("/cards/cards/");
+      const response = await apiClient.get("/cards/cards/?limit=10000");
       return response;
     } catch (error) {
       console.error("Error fetching user cards:", error);
@@ -100,7 +99,7 @@ const CardService = {
 
   async getBoardCards() {
     try {
-      const response = await apiClient.get("/cards/board/");
+      const response = await apiClient.get("/cards/board/?limit=10000");
       return response;
     } catch (error) {
       console.error("Error fetching board cards:", error);
@@ -112,7 +111,7 @@ const CardService = {
       const token = getAuthToken();
       if (!token) throw new Error("No authentication token found");
 
-      let url = "/cards/cards/";
+      let url = "/cards/cards/?limit=10000";
       const params = new URLSearchParams();
 
       if (categoryId) params.append("category_id", categoryId);
@@ -133,10 +132,10 @@ const CardService = {
       throw handleApiError(error);
     }
   },
-  
+
   async getBoardCards(categoryId = null) {
     try {
-      const url = categoryId ? `/cards/board/?category_id=${categoryId}` : "/cards/board/";
+      const url = categoryId ? `/cards/board/?category_id=${categoryId}&limit=10000` : "/cards/board/";
       const response = await apiClient.get(url);
       return response;
     } catch (error) {
