@@ -164,11 +164,68 @@ function Signup() {
       return;
     }
 
-    // If validation passes, proceed (this is where you would continue with your logic)
-    console.log("Validation Passed!");
+    try {
+      const cleanPhone = formData.phone.replace(/\s|-/g, "");
 
-    // This will prevent submitting the form for now and only logs the result
-    setLoading(false);
+      const formDataToSend = new FormData();
+      formDataToSend.append("first_name", formData.firstName.trim());
+      formDataToSend.append("last_name", formData.lastName.trim());
+      formDataToSend.append("username", formData.email.trim().split("@")[0].toLowerCase());
+      formDataToSend.append("email", formData.email.trim().toLowerCase());
+      formDataToSend.append("phone", cleanPhone);
+      formDataToSend.append("birth_date", formData.birthdate);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("password2", formData.confirmPassword);
+
+      console.log(
+        "profile_picture value:",
+        formData.profile_picture,
+        "Is File:",
+        formData.profile_picture instanceof File
+      );
+      if (formData.profile_picture) {
+        formDataToSend.append(
+          "profile_picture",
+          formData.profile_picture,
+          formData.profile_picture.name
+        );
+      }
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log("FormData entry:", key, value, value instanceof File);
+      }
+
+      await authService.register(formDataToSend);
+
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (error) {
+      if (error.response?.data) {
+        const serverErrors = error.response.data;
+        if (typeof serverErrors === "object") {
+          // Always show all field errors in the alert
+          setGeneralError(serverErrors);
+          // Also keep field errors for inline display
+          const processedErrors = {};
+          Object.keys(serverErrors).forEach((key) => {
+            if (Array.isArray(serverErrors[key])) {
+              processedErrors[key] = serverErrors[key];
+            } else {
+              processedErrors[key] = serverErrors[key];
+            }
+          });
+          setErrors(processedErrors);
+        } else if (typeof serverErrors === "string") {
+          setGeneralError(serverErrors);
+        } else {
+          setGeneralError(getTranslation("errors.signupFailed", currentLanguage));
+        }
+      } else if (error.message) {
+        setGeneralError(error.message);
+      } else {
+        setGeneralError(getTranslation("errors.signupFailed", currentLanguage));
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Show loading spinner while checking authentication
@@ -210,9 +267,7 @@ function Signup() {
         </Col>
 
         <Col md={8} xs={12} xl={7} className="d-flex justify-content-center">
-          <Card
-            style={{ maxWidth: "100%", borderRadius: "1.5rem", padding: "3rem" }}
-          >
+          <Card style={{ maxWidth: "100%", borderRadius: "1.5rem", padding: "3rem" }}>
             <h2 className="text-center mb-4 px-3">
               {getTranslation("auth.signupTitle", currentLanguage)}
             </h2>
