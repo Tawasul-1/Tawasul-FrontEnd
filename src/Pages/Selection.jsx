@@ -106,11 +106,11 @@ const Selection = () => {
     try {
       if (onBoard) {
         await CardService.removeCardFromBoard(card.id);
-        setMessage(`Card '${label}' removed from board!`);
+        setMessage(`Card removed from board!`);
         setBoardCards((prev) => prev.filter((c) => c.id !== card.id));
       } else {
         await CardService.addCardToBoard(card.id);
-        setMessage(`Card '${label}' added to board!`);
+        setMessage(`Card added to board!`);
         setBoardCards((prev) => [...prev, card]);
       }
     } catch (error) {
