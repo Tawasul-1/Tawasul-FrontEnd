@@ -52,6 +52,14 @@ function Header() {
             </Nav.Item>
             <Nav.Item>
               <Link
+                to="/how-to-use"
+                className={`nav-link ${location.pathname === "/how-to-use" ? "active" : ""}`}
+              >
+                {getTranslation("nav.howuse", currentLanguage)}
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link
                 to="/about"
                 className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}
               >

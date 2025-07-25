@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { BsVolumeUp } from "react-icons/bs";
 import CardService from "../api/services/CardService";
 import "../Style-pages/Board.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const TestCard = () => {
   const { itemName } = useParams();
@@ -13,6 +14,33 @@ const TestCard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const categoryId = searchParams.get("category");
+  const { currentLanguage, isRTL } = useLanguage();
+
+  // Translations object
+  const translations = {
+    en: {
+      loading: "Loading item...",
+      notFound: "Item not found",
+      error: "Failed to load cards. Please try again later.",
+      goToTest: "Go to Test",
+      backToCards: "← Back to Cards",
+      chooseLevel: "Choose Test Level:",
+      beginner: "Beginner",
+      intermediate: "Intermediate",
+      advanced: "Advanced"
+    },
+    ar: {
+      loading: "جارٍ تحميل العنصر...",
+      notFound: "العنصر غير موجود",
+      error: "فشل تحميل البطاقات. يرجى المحاولة مرة أخرى لاحقًا.",
+      goToTest: "الذهاب إلى الاختبار",
+      backToCards: "← العودة إلى البطاقات",
+      chooseLevel: "اختر مستوى الاختبار:",
+      beginner: "مبتدئ",
+      intermediate: "متوسط",
+      advanced: "متقدم"
+    }
+  };
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -26,50 +54,61 @@ const TestCard = () => {
           const foundItem = response.data.results.find(
             card => card.title_en.toLowerCase() === itemName.toLowerCase()
           );
-          console.log("Response data:", response.data);
-          console.log("Found item:", foundItem);
           
           if (foundItem) {
             setItem(foundItem);
           } else {
-            setError("Item not found");
+            setError(translations[currentLanguage].notFound);
           }
         }
       } catch (err) {
         console.error("Error fetching cards:", err);
-        setError("Failed to load cards. Please try again later.");
+        setError(translations[currentLanguage].error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCards();
-  }, [itemName, categoryId]);
+  }, [itemName, categoryId, currentLanguage]);
 
   const speak = () => {
-    if ("speechSynthesis" in window && item) {
-      const utterance = new SpeechSynthesisUtterance(item.title_en);
-      speechSynthesis.speak(utterance);
+    if (item.audio_ar && currentLanguage === 'ar') {
+      // Play Arabic audio if available
+      const audio = new Audio(item.audio_ar);
+      audio.play().catch(e => console.error("Error playing audio:", e));
+    } else if (item.audio_en) {
+      // Fallback to English audio
+      const audio = new Audio(item.audio_en);
+      audio.play().catch(e => console.error("Error playing audio:", e));
     }
   };
 
   if (loading) {
     return (
-      <div className="text-center mt-5">
+      <div className="text-center mt-5" dir={isRTL ? "rtl" : "ltr"}>
         <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">{translations[currentLanguage].loading}</span>
         </div>
-        <p>Loading item...</p>
+        <p>{translations[currentLanguage].loading}</p>
       </div>
     );
   }
 
   if (error) {
-    return <p className="text-center mt-5 text-danger fw-bold">{error}</p>;
+    return (
+      <p className="text-center mt-5 text-danger fw-bold" dir={isRTL ? "rtl" : "ltr"}>
+        {error}
+      </p>
+    );
   }
 
   if (!item) {
-    return <p className="text-center mt-5 text-danger fw-bold">Item not found</p>;
+    return (
+      <p className="text-center mt-5 text-danger fw-bold" dir={isRTL ? "rtl" : "ltr"}>
+        {translations[currentLanguage].notFound}
+      </p>
+    );
   }
 
   const levelBtnStyle = {
@@ -95,6 +134,7 @@ const TestCard = () => {
         alignItems: "center",
         padding: "1rem",
       }}
+      dir={isRTL ? "rtl" : "ltr"}
     >
       {/* Word and sound */}
       <div
@@ -108,14 +148,19 @@ const TestCard = () => {
           marginBottom: "2rem",
           cursor: "pointer",
           transition: "transform 0.3s ease",
+          flexDirection: isRTL ? "row-reverse" : "row"
         }}
         onClick={speak}
         onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        <span className="text-center" style={{ fontSize: "2rem", fontWeight: "bold", marginRight: "15px" }}>
-          {item.title_en}
-          <div>{item.title_ar}</div>
+        <span className="text-center" style={{ 
+          fontSize: "2rem", 
+          fontWeight: "bold", 
+          margin: isRTL ? "0 0 0 15px" : "0 15px 0 0" 
+        }}>
+          {currentLanguage === 'ar' ? item.title_ar : item.title_en}
+          <div>{currentLanguage === 'ar' ? item.title_en : item.title_ar}</div>
         </span>
         <BsVolumeUp size={32} color="#0073e6" />
       </div>
@@ -138,7 +183,7 @@ const TestCard = () => {
         {item.image ? (
           <img 
             src={item.image} 
-            alt={item.title_en}
+            alt={currentLanguage === 'ar' ? item.title_ar : item.title_en}
             style={{ 
               width: "80%",
               height: "80%",
@@ -152,7 +197,13 @@ const TestCard = () => {
       </div>
 
       {/* Buttons */}
-      <div style={{ marginTop: "2rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <div style={{ 
+        marginTop: "2rem", 
+        display: "flex", 
+        gap: "1rem", 
+        flexWrap: "wrap",
+        flexDirection: isRTL ? "row-reverse" : "row"
+      }}>
         <button
           className="color1"
           onClick={() => setShowLevels(true)}
@@ -171,7 +222,7 @@ const TestCard = () => {
           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#005bb5")}
           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0073e6")}
         >
-          Go to Test
+          {translations[currentLanguage].goToTest}
         </button>
 
         <button
@@ -188,32 +239,44 @@ const TestCard = () => {
             boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
           }}
         >
-          ← Back to Cards
+          {translations[currentLanguage].backToCards}
         </button>
       </div>
 
       {/* Level selection */}
       {showLevels && (
-        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
-          <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Choose Test Level:</p>
-          <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
+        <div style={{ 
+          marginTop: "1.5rem", 
+          textAlign: "center",
+          direction: isRTL ? "rtl" : "ltr"
+        }}>
+          <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
+            {translations[currentLanguage].chooseLevel}
+          </p>
+          <div style={{ 
+            display: "flex", 
+            justifyContent: "center", 
+            gap: "1rem", 
+            flexWrap: "wrap",
+            flexDirection: isRTL ? "row-reverse" : "row"
+          }}>
             <button 
               onClick={() => navigate(`/how-to-use/card/test?level=1&card=${item.id}`)}
               style={levelBtnStyle}
             >
-              Beginner
+              {translations[currentLanguage].beginner}
             </button>
             <button 
               onClick={() => navigate(`/how-to-use/card/test?level=2&card=${item.id}`)}
               style={levelBtnStyle}
             >
-              Intermediate
+              {translations[currentLanguage].intermediate}
             </button>
             <button 
               onClick={() => navigate(`/how-to-use/card/test?level=3&card=${item.id}`)}
               style={levelBtnStyle}
             >
-              Advanced
+              {translations[currentLanguage].advanced}
             </button>
           </div>
         </div>
