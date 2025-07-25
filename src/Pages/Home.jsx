@@ -467,7 +467,7 @@ function HomePage() {
                 {getTranslation("home.readyToUnlockDesc", currentLanguage)}
               </p>
               <Link
-                to="/plan"
+                to="/Profile"
                 className="btn btn-primary px-4 py-2 rounded-pill shadow"
                 style={{ backgroundColor: "#173067", border: "none", width: "250px" }}
               >

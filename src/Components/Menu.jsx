@@ -18,10 +18,10 @@ const Menu = ({ setShowSidebar }) => {
   const menuLinks = [
     { to: "/", text: getTranslation("nav.home", currentLanguage), icon: "🏠" },
     { to: "/board", text: getTranslation("nav.board", currentLanguage), icon: "🎯" },
-    { to: "/addnewcard", text: getTranslation("cards.addNewCard", currentLanguage), icon: "➕" },
-    { to: "/about", text: getTranslation("nav.about", currentLanguage), icon: "ℹ️" },
-    { to: "/profile", text: getTranslation("nav.profile", currentLanguage), icon: "👤" },
     { to: "/selection", text: getTranslation("nav.selection", currentLanguage), icon: "🧩" },
+    { to: "/addnewcard", text: getTranslation("cards.addNewCard", currentLanguage), icon: "➕" },
+    { to: "/profile", text: getTranslation("nav.profile", currentLanguage), icon: "👤" },
+    { to: "/about", text: getTranslation("nav.about", currentLanguage), icon: "ℹ️" },
     { to: "/contact", text: getTranslation("nav.contact", currentLanguage), icon: "📞" },
   ];
 
@@ -34,29 +34,8 @@ const Menu = ({ setShowSidebar }) => {
         <div className="menu-header">
           <Link to="/" className="menu-brand" onClick={() => setShowSidebar(false)}>
             {getTranslation("nav.brand", currentLanguage)}
-          </h4>
-        </div>
-
-        <div className="px-4 py-3 d-flex flex-column gap-3">
-          <Link to="/" style={{ color: "#173067", textDecoration: "none" }}>
-            🏠 {getTranslation("nav.home", currentLanguage)}
           </Link>
-          <Link to="/board" style={{ color: "#173067", textDecoration: "none" }}>
-            🎯 {getTranslation("nav.board", currentLanguage)}
-          </Link>
-          <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
-            ✅ {getTranslation("nav.selection", currentLanguage)}
-          </Link>
-          <Link to="/addnewcard" style={{ color: "#173067", textDecoration: "none" }}>
-            ➕ {getTranslation("cards.addNewCard", currentLanguage)}
-          </Link>
-          <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
-            👤 {getTranslation("nav.profile", currentLanguage)}
-          </Link>
-          <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
-            📞 {getTranslation("nav.contact", currentLanguage)}
-          </Link>
-        </div>
+        </div>      
 
         {/* Navigation Links */}
         <nav className="menu-nav">

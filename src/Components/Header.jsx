@@ -77,7 +77,7 @@ function Header() {
                   onClick={handleSignout}
                   title={getTranslation("nav.logout", currentLanguage)}
                 >
-                  <i className="bi bi-box-arrow-right" style={{ fontSize: "1.5rem" }}></i>
+                  <i className="bi bi-door-open-fill" style={{ fontSize: "1.5rem" }}></i>
                 </span>
               </Nav.Item>
             ) : (
