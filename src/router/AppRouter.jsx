@@ -14,9 +14,9 @@ import EmailVerification from "../Pages/EmailVerification";
 import Contact from "../Pages/Contact";
 import About from "../Pages/About";
 import Payment from "../Pages/Payment";
-import CategoriesTest from "../Pages/CategoriesTest";
-import Items from "../Pages/Items";
-import Item from "../Pages/Item";
+import TestCategories from "../Pages/TestCategories";
+import TestCards from "../Pages/TestCards";
+import TestCard from "../Pages/TestCard";
 import Test from "../Pages/Test";
 import Test2 from "../Pages/Test2";
 import Test3 from "../Pages/Test3";
@@ -42,18 +42,18 @@ function AppRouter() {
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/verify-email/:token" element={<EmailVerification />} />
           <Route path="/payment" element={<Payment />} />
-          <Route path="/items" element={<Items />} />
-          <Route path="/item/:itemName" element={<Item />} />
+          <Route path="/how-to-use/cards" element={<TestCards />} />
+          <Route path="/how-to-use/card/:itemName" element={<TestCard />} />
           <Route path="/test" element={<Test />} />
           <Route path="/test2" element={<Test2 />} />
           <Route path="/test3" element={<Test3 />} />
-          <Route path="/howuse" element={<HowUse />} />
+          <Route path="/how-to-use" element={<HowUse />} />
           {/* Protected Routes - Require Authentication */}
           <Route
-            path="/categories"
+            path="/how-to-use/categories"
             element={
               <ProtectedRoute>
-                <CategoriesTest />
+                <TestCategories />
               </ProtectedRoute>
             }
           />

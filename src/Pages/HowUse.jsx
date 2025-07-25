@@ -7,7 +7,6 @@ const HowUse = () => {
   return (
     <>
       <div id="root">
-        {/* Header Section */}
         <Header />
 
         <div className="main-content">
@@ -160,7 +159,7 @@ const HowUse = () => {
                   <p className="mb-3 fw-bold" style={{ color: "#173067", fontSize: "1.2rem" }}>
                     Ready to get started?
                   </p>
-                  <a href="/categories" className="btn btn-primary start-learning-btn">
+                  <a href="/how-to-use/categories" className="btn btn-primary start-learning-btn">
                     Start Learning
                   </a>
                 </div>
