@@ -59,7 +59,9 @@ const Board = () => {
       }
     } catch (error) {
       console.error("PIN verification error:", error);
-      alert(currentLanguage === "ar" ? "حدث خطأ أثناء التحقق من الرمز السري" : "Error verifying PIN");
+      alert(
+        currentLanguage === "ar" ? "حدث خطأ أثناء التحقق من الرمز السري" : "Error verifying PIN"
+      );
     }
   };
 
@@ -108,9 +110,44 @@ const Board = () => {
     });
   };
 
-  const handleCardClick = (card) => {
+  const handleCardClick = async (card) => {
     const cardLabel = getCardTitle(card);
     setSentenceWords((prev) => [...prev, cardLabel]);
+
+    try {
+      await BoardService.logCardInteraction(card.id, 1);
+    } catch (error) {
+      console.error("Failed to log card interaction:", error);
+    }
+
+    // Get the appropriate audio URL based on current language
+    const audioUrl = currentLanguage === "ar" ? card.audio_ar : card.audio_en;
+
+    if (audioUrl) {
+      try {
+        const fullAudioUrl = `http://localhost:8000${audioUrl}`;
+        const audio = new Audio(fullAudioUrl);
+
+        // Handle audio playback
+        audio.oncanplay = () => {
+          audio.play().catch((error) => {
+            console.error("Audio play failed:", error);
+            fallbackToSpeechSynthesis(cardLabel);
+          });
+        };
+
+        audio.onerror = () => {
+          console.error("Error loading audio file");
+          fallbackToSpeechSynthesis(cardLabel);
+        };
+      } catch (error) {
+        console.error("Error setting up audio:", error);
+        fallbackToSpeechSynthesis(cardLabel);
+      }
+    } else {
+      // Fallback to speech synthesis if no audio file
+      fallbackToSpeechSynthesis(cardLabel);
+    }
   };
 
   const playStatementAudio = async () => {
@@ -176,23 +213,33 @@ const Board = () => {
       utterance.lang = currentLanguage === "ar" ? "ar-SA" : "en-US";
       window.speechSynthesis.speak(utterance);
     } else {
-      alert(currentLanguage === "ar" ? "عذراً، متصفحك لا يدعم النطق" : "Sorry, your browser doesn't support speech synthesis.");
+      alert(
+        currentLanguage === "ar"
+          ? "عذراً، متصفحك لا يدعم النطق"
+          : "Sorry, your browser doesn't support speech synthesis."
+      );
     }
   };
 
   const speakText = () => playStatementAudio();
   const clearSentence = () => setSentenceWords([]);
-  const removeWordFromSentence = (index) => setSentenceWords((prev) => prev.filter((_, i) => i !== index));
+  const removeWordFromSentence = (index) =>
+    setSentenceWords((prev) => prev.filter((_, i) => i !== index));
 
   if (loading) {
     return (
       <div className="board-page d-flex flex-column min-vh-100 position-relative">
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "400px" }}
+        >
           <div className="text-center">
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
-            <p className="mt-3 text-muted">{currentLanguage === "ar" ? "جاري التحميل..." : "Loading board..."}</p>
+            <p className="mt-3 text-muted">
+              {currentLanguage === "ar" ? "جاري التحميل..." : "Loading board..."}
+            </p>
           </div>
         </div>
       </div>
@@ -202,7 +249,10 @@ const Board = () => {
   if (error) {
     return (
       <div className="board-page d-flex flex-column min-vh-100 position-relative">
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "400px" }}
+        >
           <div className="text-center">
             <div className="alert alert-danger" role="alert">
               <h5>{currentLanguage === "ar" ? "خطأ في تحميل اللوحة" : "Error Loading Board"}</h5>
@@ -218,7 +268,10 @@ const Board = () => {
   }
 
   return (
-    <div className="board-page d-flex flex-column min-vh-100 position-relative" dir={isRTLMode ? "rtl" : "ltr"}>
+    <div
+      className="board-page d-flex flex-column min-vh-100 position-relative"
+      dir={isRTLMode ? "rtl" : "ltr"}
+    >
       <Container className="d-flex align-items-center gap-3 mb-2 mt-3">
         <div className="d-flex align-items-center gap-2 flex-grow-1 p-1 rounded-3 shadow-sm bg-white border-dashed">
           <i
@@ -255,8 +308,16 @@ const Board = () => {
                           <img
                             src={`http://localhost:8000${card.image}`}
                             alt={word}
-                            style={{ width: "32px", height: "32px", objectFit: "cover", borderRadius: "50%", border: "1px solid #ccc" }}
-                            onError={(e) => { e.target.style.display = "none"; }}
+                            style={{
+                              width: "32px",
+                              height: "32px",
+                              objectFit: "cover",
+                              borderRadius: "50%",
+                              border: "1px solid #ccc",
+                            }}
+                            onError={(e) => {
+                              e.target.style.display = "none";
+                            }}
                           />
                         ) : (
                           <span style={{ fontSize: "1.2rem" }}>📄</span>
@@ -264,7 +325,13 @@ const Board = () => {
                       </div>
                       <div
                         className="text-center mt-1"
-                        style={{ fontSize: "0.6rem", lineHeight: "1.1", wordBreak: "break-word", color: "#6c757d", maxWidth: "100%" }}
+                        style={{
+                          fontSize: "0.6rem",
+                          lineHeight: "1.1",
+                          wordBreak: "break-word",
+                          color: "#6c757d",
+                          maxWidth: "100%",
+                        }}
                       >
                         {word}
                       </div>
@@ -274,12 +341,16 @@ const Board = () => {
               </div>
             ) : (
               <div className="text-muted mt-3">
-                {currentLanguage === "ar" ? "اضغط على البطاقات لبناء جملة" : "Click cards to build a sentence"}
+                {currentLanguage === "ar"
+                  ? "اضغط على البطاقات لبناء جملة"
+                  : "Click cards to build a sentence"}
               </div>
             )}
           </div>
           <i
-            className={`bi ${isPlayingAudio ? "bi-volume-mute" : "bi-volume-up-fill"} text-primary fs-5`}
+            className={`bi ${
+              isPlayingAudio ? "bi-volume-mute" : "bi-volume-up-fill"
+            } text-primary fs-5`}
             onClick={speakText}
             style={{ cursor: isPlayingAudio ? "not-allowed" : "pointer" }}
             title={currentLanguage === "ar" ? "نطق الجملة" : "Speak sentence"}
@@ -302,7 +373,9 @@ const Board = () => {
                   src={`http://localhost:8000/${card.image}`}
                   alt={getCardTitle(card)}
                   className="img-fluid"
-                  onError={(e) => { e.target.style.display = "none"; }}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
                 />
               ) : (
                 <span className="fallback-icon">📄</span>
@@ -313,9 +386,15 @@ const Board = () => {
         ))}
       </div>
 
-      <div className="category-bar bg-white py-2 border-top shadow-sm fixed-bottom" style={{ zIndex: 1050 }}>
+      <div
+        className="category-bar bg-white py-2 border-top shadow-sm fixed-bottom"
+        style={{ zIndex: 1050 }}
+      >
         <div className="container">
-          <div className="d-flex gap-2 justify-content-center" style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
+          <div
+            className="d-flex gap-2 justify-content-center"
+            style={{ overflowX: "auto", whiteSpace: "nowrap" }}
+          >
             <div
               className={`category-btn ${activeCategory === null ? "active" : ""}`}
               onClick={() => setActiveCategory(null)}
@@ -338,7 +417,9 @@ const Board = () => {
                       src={`http://localhost:8000/${category.image}`}
                       alt={getCategoryName(category)}
                       style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                      onError={(e) => { e.target.style.display = "none"; }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
                     />
                   ) : (
                     "📁"
@@ -354,14 +435,30 @@ const Board = () => {
       </div>
 
       {showPasswordCard && (
-        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center" style={{ zIndex: 9999 }}>
-          <Card className="p-4" style={{ width: "350px", borderRadius: "20px" }} dir={isRTLMode ? "rtl" : "ltr"}>
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center"
+          style={{ zIndex: 9999 }}
+        >
+          <Card
+            className="p-4"
+            style={{ width: "350px", borderRadius: "20px" }}
+            dir={isRTLMode ? "rtl" : "ltr"}
+          >
             <div className="text-center mb-3">
-              <img src="/image-2.png" alt="Profile" className="rounded-circle" width="80" height="80" />
+              <img
+                src="/image-2.png"
+                alt="Profile"
+                className="rounded-circle"
+                width="80"
+                height="80"
+              />
             </div>
 
             <div className="mb-3 position-relative">
-              <i className="bi bi-lock-fill position-absolute top-50 start-0 translate-middle-y color" style={{ marginLeft: "10px" }}></i>
+              <i
+                className="bi bi-lock-fill position-absolute top-50 start-0 translate-middle-y color"
+                style={{ marginLeft: "10px" }}
+              ></i>
               <input
                 type={showPass ? "text" : "password"}
                 className="form-control ps-5 rounded-pill"
@@ -376,7 +473,9 @@ const Board = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <i
-                className={`bi ${showPass ? "bi-eye-slash" : "bi-eye"} position-absolute top-50 end-0 translate-middle-y color`}
+                className={`bi ${
+                  showPass ? "bi-eye-slash" : "bi-eye"
+                } position-absolute top-50 end-0 translate-middle-y color`}
                 style={{ marginRight: "10px", cursor: "pointer" }}
                 onClick={() => setShowPass((prev) => !prev)}
               ></i>
@@ -397,7 +496,7 @@ const Board = () => {
             >
               {currentLanguage === "ar" ? "إلغاء" : "Cancel"}
             </Button>
-         </Card>
+          </Card>
         </div>
       )}
 

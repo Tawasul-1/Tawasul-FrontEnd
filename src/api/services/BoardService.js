@@ -2,6 +2,21 @@ import apiClient from "../config/apiClient";
 import { handleApiError } from "../utils/handleApiErrors";
 
 const BoardService = {
+  async logCardInteraction(cardId, clickCount = 1) {
+    try {
+      const payload = {
+        card: cardId,
+        click_count: clickCount,
+      };
+      const response = await apiClient.post("/cards/interactions/", payload);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error logging card interaction:", error);
+      throw handleApiError(error);
+    }
+  },
+
   async getBoardWithCategories(categoryId = null) {
     try {
       console.log(categoryId);
@@ -17,7 +32,7 @@ const BoardService = {
   },
   verifyPin: async (pin) => {
     const formData = new FormData();
-    console.log("Form pin", pin)
+    console.log("Form pin", pin);
     formData.append("pin", pin);
 
     const response = await apiClient.post("/cards/verify-pin/", formData, {
