@@ -6,7 +6,7 @@ const getAuthToken = () => {
 };
 
 const CardService = {
-  async getAllCardsWithPagination({ limit = null, offset = null, category = null } = {}) {
+  async getAllCardsWithPagination({ limit = 10000, offset = null, category = null } = {}) {
     try {
       const token = getAuthToken();
       if (!token) throw new Error("No authentication token found");
