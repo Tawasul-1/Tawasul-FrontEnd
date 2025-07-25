@@ -1,42 +1,70 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { BsVolumeUp } from "react-icons/bs";
+import CardService from "../api/services/CardService";
 import "../Style-pages/Board.css";
 
-const items = {
-  apple: { emoji: "🍎", label: "Apple" },
-  banana: { emoji: "🍌", label: "Banana" },
-  grapes: { emoji: "🍇", label: "Grapes" },
-  strawberry: { emoji: "🍓", label: "Strawberry" },
-  pineapple: { emoji: "🍍", label: "Pineapple" },
-  mango: { emoji: "🥭", label: "Mango" },
-  watermelon: { emoji: "🍉", label: "Watermelon" },
-  cherry: { emoji: "🍒", label: "Cherry" },
-  kiwi: { emoji: "🥝", label: "Kiwi" },
-  peach: { emoji: "🍑", label: "Peach" },
-  lemon: { emoji: "🍋", label: "Lemon" },
-  orange: { emoji: "🍊", label: "Orange" },
-  coconut: { emoji: "🥥", label: "Coconut" },
-  blueberry: { emoji: "🫐", label: "Blueberry" },
-  pear: { emoji: "🍐", label: "Pear" },
-  corn: { emoji: "🌽", label: "Corn" },
-  carrot: { emoji: "🥕", label: "Carrot" },
-  tomato: { emoji: "🍅", label: "Tomato" },
-};
-
-const Item = () => {
+const TestCard = () => {
   const { itemName } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const itemKey = itemName?.toLowerCase();
-  const item = items[itemKey];
+  const [item, setItem] = useState(null);
   const [showLevels, setShowLevels] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const categoryId = searchParams.get("category");
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await CardService.getAllCards(categoryId, "");
+        
+        if (response.data && response.data.results) {
+          const foundItem = response.data.results.find(
+            card => card.title_en.toLowerCase() === itemName.toLowerCase()
+          );
+          
+          if (foundItem) {
+            setItem(foundItem);
+          } else {
+            setError("Item not found");
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching cards:", err);
+        setError("Failed to load cards. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCards();
+  }, [itemName, categoryId]);
 
   const speak = () => {
     if ("speechSynthesis" in window && item) {
-      const utterance = new SpeechSynthesisUtterance(item.label);
+      const utterance = new SpeechSynthesisUtterance(item.title_en);
       speechSynthesis.speak(utterance);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="text-center mt-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading item...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p className="text-center mt-5 text-danger fw-bold">{error}</p>;
+  }
 
   if (!item) {
     return <p className="text-center mt-5 text-danger fw-bold">Item not found</p>;
@@ -66,7 +94,7 @@ const Item = () => {
         padding: "1rem",
       }}
     >
-      {/* زر الكلمة والصوت */}
+      {/* Word and sound */}
       <div
         style={{
           backgroundColor: "#ffffff",
@@ -84,12 +112,12 @@ const Item = () => {
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
         <span style={{ fontSize: "2rem", fontWeight: "bold", marginRight: "15px" }}>
-          {item.label}
+          {item.title_en}
         </span>
         <BsVolumeUp size={32} color="#0073e6" />
       </div>
 
-      {/* دائرة الإيموجي */}
+      {/* Emoji/image circle */}
       <div
         style={{
           width: "300px",
@@ -104,10 +132,23 @@ const Item = () => {
           marginBottom: "2rem",
         }}
       >
-        <span style={{ fontSize: "6rem" }}>{item.emoji}</span>
+        {item.image ? (
+          <img 
+            src={item.image} 
+            alt={item.title_en}
+            style={{ 
+              width: "80%",
+              height: "80%",
+              objectFit: "contain",
+              borderRadius: "50%"
+            }}
+          />
+        ) : (
+          <span style={{ fontSize: "6rem" }}>{item.emoji || "🃏"}</span>
+        )}
       </div>
 
-      {/* الأزرار */}
+      {/* Buttons */}
       <div style={{ marginTop: "2rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <button
           className="color1"
@@ -131,7 +172,7 @@ const Item = () => {
         </button>
 
         <button
-          onClick={() => navigate("/cat")}
+          onClick={() => navigate(`/how-to-use/cards/?category=${categoryId || ''}`)}
           style={{
             backgroundColor: "#A1A8B0",
             color: "#fff",
@@ -144,22 +185,31 @@ const Item = () => {
             boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
           }}
         >
-          ← Back to Categories
+          ← Back to Cards
         </button>
       </div>
 
-      {/* اختيار المستوى */}
+      {/* Level selection */}
       {showLevels && (
         <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
           <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Choose Test Level:</p>
           <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
-            <button className="color1" onClick={() => navigate("/test?level=beginner")} style={levelBtnStyle}>
+            <button 
+              onClick={() => navigate(`/how-to-use/card/test?level=1&card=${item.id}`)}
+              style={levelBtnStyle}
+            >
               Beginner
             </button>
-            <button className="color1" onClick={() => navigate("/test2?level=intermediate")} style={levelBtnStyle}>
+            <button 
+              onClick={() => navigate(`/how-to-use/card/test?level=2&card=${item.id}`)}
+              style={levelBtnStyle}
+            >
               Intermediate
             </button>
-            <button className="color1" onClick={() => navigate("/test3?level=advanced")} style={levelBtnStyle}>
+            <button 
+              onClick={() => navigate(`/how-to-use/card/test?level=3&card=${item.id}`)}
+              style={levelBtnStyle}
+            >
               Advanced
             </button>
           </div>
@@ -169,4 +219,4 @@ const Item = () => {
   );
 };
 
-export default Item;
+export default TestCard;

@@ -6,7 +6,7 @@ import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
 import CategoryService from "../api/services/CategoryService";
 
-const TestCategories = () => {
+const CategoriesTest = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ const TestCategories = () => {
                 <div className="row justify-content-center mt-5 g-4">
                   {categories.map((cat) => (
                     <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={cat.id}>
-                      <Link to={`/how-to-use/category/cards/?category=${cat.id}`} style={{ textDecoration: "none" }}>
+                      <Link to={`/how-to-use/cards/?category=${cat.id}`} style={{ textDecoration: "none" }}>
                         <div className="category-box bg-light shadow-sm p-3 rounded text-center">
                           <img
                             src={cat.image}
@@ -97,4 +97,4 @@ const TestCategories = () => {
   );
 };
 
-export default TestCategories;
+export default CategoriesTest;
