@@ -24,7 +24,7 @@ export const translations = {
     noNotifications: { en: "No notifications", ar: "لا توجد إشعارات" },
     english: { en: "English", ar: "الإنجليزية" },
     arabic: { en: "Arabic", ar: "العربية" },
-    selection: { en: "Select New Cards", ar: "أختر كروت جديدة" },
+    selection: { en: "Cards", ar: "الكروت" },
   },
 
   // Home Page
@@ -144,7 +144,7 @@ export const translations = {
     haveAccount: { en: "Already have an account?", ar: "لديك حساب بالفعل؟" },
     signIn: { en: "Sign In", ar: "تسجيل الدخول" },
     forgotPassword: { en: "Forgot Password?", ar: "نسيت كلمة المرور؟" },
-    resetPassword: { en: "Reset Password", ar: "إعادة تعيين كلمة المرور" },
+    resetPassword: { en: "Save New Password", ar: "حفظ كلمة المرور الجديدة" },
     newPassword: { en: "New Password", ar: "كلمة مرور جديدة" },
     confirmNewPassword: { en: "Confirm New Password", ar: "تأكيد كلمة المرور الجديدة" },
     changePassword: { en: "Change Password", ar: "تغيير كلمة المرور" },

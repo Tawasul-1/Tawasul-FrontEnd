@@ -13,25 +13,26 @@ function LanguageSwitcher() {
   return (
     <button
       onClick={handleLanguageChange}
-      className="btn btn-outline-primary btn-sm"
+      className="btn btn-outline-primary btn-sm text-white"
       style={{
         minWidth: "60px",
         fontSize: "0.875rem",
         padding: "0.375rem 0.75rem",
         borderRadius: "0.375rem",
-        border: "1px solid #0d6efd",
+        border: "1px solid #173067",
+        color: "#fff",
         backgroundColor: "transparent",
-        color: "#0d6efd",
+        color: "#fff",
         transition: "all 0.2s ease-in-out",
         cursor: "pointer",
       }}
       onMouseEnter={(e) => {
-        e.target.style.backgroundColor = "#0d6efd";
-        e.target.style.color = "white";
+        e.target.style.backgroundColor = "#173067";
+        e.target.style.color = "#fff";
       }}
       onMouseLeave={(e) => {
         e.target.style.backgroundColor = "transparent";
-        e.target.style.color = "#0d6efd";
+        e.target.style.color = "#fff";
       }}
     >
       {currentLanguage === "en" ? "العربية" : "English"}

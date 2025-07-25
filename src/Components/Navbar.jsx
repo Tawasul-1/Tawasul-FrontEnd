@@ -169,7 +169,7 @@ const Navbar = ({ onMenuClick, onEditProfile }) => {
                                 fontWeight: "bold",
                                 top: "4px",
                                 left: currentLanguage === "en" ? "5px" : "55px",
-                                backgroundColor: currentLanguage === "en" ? "#0d6efd" : "#0d6efd",
+                                backgroundColor: currentLanguage === "en" ? "#173067" : "#173067",
                                 color: currentLanguage === "en" ? "#fff" : "#fffff",
                                 transition:
                                   "left 0.3s ease, background-color 0.3s ease, color 0.3s ease",

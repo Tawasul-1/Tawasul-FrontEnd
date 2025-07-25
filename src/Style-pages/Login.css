@@ -121,3 +121,8 @@
     font-size: 28px;
   }
 }
+
+#bg{
+  background: #173067 !important;
+  color: #fff !important;
+}

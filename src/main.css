@@ -17,18 +17,18 @@ h2 {
 .form-control[type="file"] {
   margin: auto 0 !important;
   background-color: transparent;
-  color: #304871;
+  color: #173067;
   box-shadow: none;
 }
 
 .form-control[type="file"]::file-selector-button {
   background-color: transparent;
-  color: #304871;
+  color: #173067;
   cursor: pointer;
 }
 
 .form-control[type="file"]::file-selector-button:hover {
-  color: #1f2e4f;
+  color: #173067;
 }
 
 .input-group:focus-within {
@@ -37,19 +37,19 @@ h2 {
 
 .form-control:focus {
   box-shadow: none;
-  border-color: #304871;
+  border-color: #173067;
 }
 
 .input-group {
   padding-right: 1rem;
-  border: 0.5px solid #304871;
+  border: 0.5px solid #173067;
   border-radius: 1rem;
   box-shadow: none;
   overflow: hidden;
 }
 
 .input-group:focus-within {
-  box-shadow: 0 0 0 0.2rem rgba(212, 226, 246, 0.9); /* Light version of #304871 */
+  box-shadow: 0 0 0 0.2rem rgba(212, 226, 246, 0.9); /* Light version of #173067 */
 }
 
 .input-group-text {
@@ -114,7 +114,7 @@ home-puzzle-image
 
 .home-text-content {
   max-width: 540px;
-  color: #23305e;
+  color: #173067;
 }
 .home-title {
   font-size: 3rem;
@@ -186,7 +186,7 @@ home-puzzle-image
 .home-stat-value {
   font-size: 2.1rem;
   font-weight: 700;
-  color: #23305e;
+  color: #173067;
   margin-bottom: 0.2rem;
 }
 .home-stat-yellow .home-stat-value {
@@ -195,7 +195,7 @@ home-puzzle-image
 
 .home-stat-label {
   font-size: 1.1rem;
-  color: #23305e;
+  color: #173067;
   font-weight: 500;
 }
 
@@ -238,7 +238,7 @@ home-puzzle-image
   justify-content: center;
   font-size: 2rem;
   font-weight: 700;
-  color: #23305e;
+  color: #173067;
   gap: 0.5rem;
 }
 .home-categories-grid {
@@ -271,7 +271,7 @@ home-puzzle-image
 .home-category-label {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #23305e;
+  color: #173067;
 }
 .home-category-pink {
   background: #ffeaea;
@@ -305,7 +305,7 @@ home-puzzle-image
   justify-content: center;
   font-size: 2rem;
   font-weight: 700;
-  color: #23305e;
+  color: #173067;
   gap: 0.5rem;
   margin-bottom: 2.5rem;
 }
@@ -318,7 +318,7 @@ home-puzzle-image
 .home-testimonials-arrow {
   background: none;
   border: none;
-  color: #23305e;
+  color: #173067;
   font-size: 2.5rem;
   cursor: pointer;
   transition: color 0.2s;
@@ -332,7 +332,7 @@ home-puzzle-image
 
 .home-testimonial-card {
   background: #d4e2f6;
-  border: 2px solid #23305e;
+  border: 2px solid #173067;
   border-radius: 8px;
   box-shadow: 2px 4px 6px rgba(48, 72, 113, 0.08);
   min-width: 420px;
@@ -393,7 +393,7 @@ home-puzzle-image
 }
 
 .home-testimonial-quote-icon {
-  color: #23305e;
+  color: #173067;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
@@ -420,11 +420,11 @@ home-puzzle-image
 }
 .home-testimonial-name {
   font-weight: 700;
-  color: #23305e;
+  color: #173067;
   font-size: 1.1rem;
 }
 .home-testimonial-text {
-  color: #304871;
+  color: #173067;
   font-size: 1rem;
   font-weight: 400;
   margin-top: 0.2rem;
@@ -437,7 +437,7 @@ home-puzzle-image
   bottom: 0;
   height: 80px;
   width: 100%;
-  background: #23305e;
+  background: #173067;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   z-index: 1;
@@ -450,13 +450,13 @@ home-puzzle-image
 }
 .home-testimonial-card .home-testimonial-name,
 .home-testimonial-card .home-testimonial-text {
-  color: #23305e;
+  color: #173067;
 }
 .home-testimonial-card .home-testimonial-text {
-  color: #304871;
+  color: #173067;
 }
 .btn-primary {
-  background-color: #173067;
+  background-color: #173067 !important;
   border: none;
 }
 .btn-primary:hover {
@@ -1674,3 +1674,15 @@ home-puzzle-image
   }
 }
 
+
+.custom-button {
+  background-color: #173067; /* Your desired background color */
+  color: #ffffff;           /* White text color */
+  border: none;             /* Remove border */
+  border-radius: 1.5rem;    /* Rounded corners for smoothness */
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.custom-button:hover {
+  background-color: #140259; /* Slightly darker shade for hover effect */
+}

@@ -24,9 +24,11 @@ function ResetPassword() {
     try {
       await authService.requestPasswordReset(email.trim().toLowerCase());
       setSuccess(getTranslation("success.passwordResetSuccess", currentLanguage));
+
+      // Navigate to new password page after 5 seconds
       setTimeout(() => {
-        navigate("/login");
-      }, 3000);
+        navigate("/new-password"); // Redirect to the new password page
+      }, 5000); // 5 seconds delay
     } catch (error) {
       if (error.response?.data) {
         const serverErrors = error.response.data;

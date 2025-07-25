@@ -23,7 +23,7 @@ function Login() {
   });
 
   // Get the intended destination from location state
-  const from = location.state?.from?.pathname || "/board";
+  const from = location.state?.from?.pathname || "/";
 
   // Redirect if user is already authenticated
   useEffect(() => {
@@ -175,7 +175,7 @@ function Login() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={7} xl={4}>
+        <Col md={7} className="d-flex justify-content-center align-items-center">
           <Card style={{ width: "100%", maxWidth: "550px", borderRadius: "2rem", padding: "2rem" }}>
             <Row className="mb-4">
               <Col>
@@ -307,12 +307,12 @@ function Login() {
             </Row>
           </Card>
         </Col>
-        <Col md={5} xl={3} className="d-flex justify-content-center">
+        <Col md={5} className="d-flex justify-content-center align-items-center">
           <img
             src="/image-1.png"
-            alt="Login Illustration"
-            className="img-fluid ms-auto mb-4 d-none d-md-block"
-            style={{ width: "100%", maxWidth: "600px", height: "auto" }}
+           alt="Burger"
+            className="img-fluid burger-image d-none d-md-block"
+            style={{ maxWidth: "80%", height: "auto", borderRadius: "1rem" }}
           />
         </Col>
       </Row>
