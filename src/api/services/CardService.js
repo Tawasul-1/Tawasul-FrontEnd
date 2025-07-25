@@ -114,7 +114,7 @@ const CardService = {
       let url = "/cards/cards/?limit=10000";
       const params = new URLSearchParams();
 
-      if (categoryId) params.append("category_id", categoryId);
+      if (categoryId) params.append("category", categoryId);
       if (search) params.append("search", search);
 
       if ([...params].length > 0) {

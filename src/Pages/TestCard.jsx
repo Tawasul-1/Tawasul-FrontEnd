@@ -20,12 +20,14 @@ const TestCard = () => {
         setLoading(true);
         setError(null);
         
-        const response = await CardService.getAllCards(categoryId, "");
+        const response = await CardService.getAllCards();
         
         if (response.data && response.data.results) {
           const foundItem = response.data.results.find(
             card => card.title_en.toLowerCase() === itemName.toLowerCase()
           );
+          console.log("Response data:", response.data);
+          console.log("Found item:", foundItem);
           
           if (foundItem) {
             setItem(foundItem);
