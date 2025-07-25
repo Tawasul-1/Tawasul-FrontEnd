@@ -364,26 +364,30 @@ const Board = () => {
         />
       </Container>
 
-      <div className="cards-wrapper px-3 py-3">
-        {getCardsToDisplay().map((card, idx) => (
-          <div key={card.id || idx} className="card-item" onClick={() => handleCardClick(card)}>
-            <div className="emoji-image-wrapper">
-              {card.image ? (
-                <img
-                  src={`http://localhost:8000/${card.image}`}
-                  alt={getCardTitle(card)}
-                  className="img-fluid"
-                  onError={(e) => {
-                    e.target.style.display = "none";
-                  }}
-                />
-              ) : (
-                <span className="fallback-icon">📄</span>
-              )}
+      <div className="cards-section">
+        <div className="cards-wrapper">
+          {getCardsToDisplay().map((card, idx) => (
+            <div key={card.id || idx} className="card-item" onClick={() => handleCardClick(card)}>
+              <div className="emoji-image-wrapper">
+                {card.image ? (
+                  <img
+                    src={`http://localhost:8000/${card.image}`}
+                    alt={getCardTitle(card)}
+                    className="img-fluid"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
+                  />
+                ) : (
+                  <span className="fallback-icon">📄</span>
+                )}
+              </div>
+              <small className="emoji-title">{getCardTitle(card)}</small>
             </div>
-            <small className="emoji-title">{getCardTitle(card)}</small>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div style={{ height: "20px" }}></div>
       </div>
 
       <div
