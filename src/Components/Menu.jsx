@@ -34,6 +34,27 @@ const Menu = ({ setShowSidebar }) => {
         <div className="menu-header">
           <Link to="/" className="menu-brand" onClick={() => setShowSidebar(false)}>
             {getTranslation("nav.brand", currentLanguage)}
+          </h4>
+        </div>
+
+        <div className="px-4 py-3 d-flex flex-column gap-3">
+          <Link to="/" style={{ color: "#173067", textDecoration: "none" }}>
+            🏠 {getTranslation("nav.home", currentLanguage)}
+          </Link>
+          <Link to="/board" style={{ color: "#173067", textDecoration: "none" }}>
+            🎯 {getTranslation("nav.board", currentLanguage)}
+          </Link>
+          <Link to="/selection" style={{ color: "#173067", textDecoration: "none" }}>
+            ✅ {getTranslation("nav.selection", currentLanguage)}
+          </Link>
+          <Link to="/addnewcard" style={{ color: "#173067", textDecoration: "none" }}>
+            ➕ {getTranslation("cards.addNewCard", currentLanguage)}
+          </Link>
+          <Link to="/profile" style={{ color: "#173067", textDecoration: "none" }}>
+            👤 {getTranslation("nav.profile", currentLanguage)}
+          </Link>
+          <Link to="/contact" style={{ color: "#173067", textDecoration: "none" }}>
+            📞 {getTranslation("nav.contact", currentLanguage)}
           </Link>
         </div>
 

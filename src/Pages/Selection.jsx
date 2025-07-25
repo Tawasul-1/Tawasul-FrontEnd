@@ -5,8 +5,22 @@ import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
 import Footer from "../Components/Footer";
 import CardService from "../api/services/CardService";
-import { getTranslation } from "../utils/translations";
-import CategoryService from "../api/services/CategoryService";
+
+export const getTranslation = (key) => {
+  const translations = {
+    findYourCard: {
+      en: "Find your card",
+      ar: "ابحث عن بطاقتك",
+    },
+    direction: {
+      en: "ltr",
+      ar: "rtl",
+    },
+  };
+
+  const lang = localStorage.getItem("lang") || "en";
+  return translations[key]?.[lang] || key;
+};
 
 const Selection = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -15,6 +29,8 @@ const Selection = () => {
   const [boardCards, setBoardCards] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cardsByCategory, setCardsByCategory] = useState({});
+  const [dataReady, setDataReady] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -22,104 +38,83 @@ const Selection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch board with categories in a single call
-        const response = await CardService.getBoardWithCategories();
-        console.log("response", response);
-        let data = {};
-        if (response && response.data) {
-          if (Array.isArray(response.data)) {
-            data = response.data;
-          } else if (response.data.results && Array.isArray(response.data.results)) {
-            data = response.data.results;
-          } else if (response.data.data && Array.isArray(response.data.data)) {
-            data = response.data.data;
-          } else {
-            data = response.data;
-          }
-        }
+        const response = await CardService.getAllCards();
+        const cards = response?.data?.results || [];
 
-        // Extract categories and cards from the response
-        const cats = data.categories || data.cats || [];
-        const cards = data.cards || [];
+        const lang = localStorage.getItem("lang") || "en";
+
+        const cats = [
+          ...new Set(
+            cards.map((card) => {
+              const category = card.category;
+              if (!category) return "Other";
+              return lang === "ar" ? category.name_ar : category.name_en;
+            })
+          ),
+        ].map((name, index) => ({ id: index, name }));
 
         setCategories(cats);
-        // Set default selected category
-        if (cats.length > 0)
-          setSelectedCategory(cats[0].name || cats[0].title || cats[0].label || cats[0].id);
+        if (cats.length > 0) setSelectedCategory(cats[0].name);
 
-        // Group cards by category name
         const grouped = {};
         cards.forEach((card) => {
-          const catName =
-            card.category?.name ||
-            card.category?.title ||
-            card.category?.label ||
-            card.category?.id ||
-            "Other";
+          const category = card.category;
+          const catName = category
+            ? lang === "ar"
+              ? category.name_ar
+              : category.name_en
+            : "Other";
           if (!grouped[catName]) grouped[catName] = [];
           grouped[catName].push(card);
         });
+
         setCardsByCategory(grouped);
-      } catch {
+      } catch (error) {
+        console.error(error);
         setMessage("Failed to load categories or cards");
       }
     };
-    fetchData();
 
     const fetchBoardCards = async () => {
       try {
         const response = await CardService.getBoardCards();
-        let cards = [];
-        if (response && response.data) {
-          if (Array.isArray(response.data)) {
-            cards = response.data;
-          } else if (response.data.results && Array.isArray(response.data.results)) {
-            cards = response.data.results;
-          } else if (response.data.data && Array.isArray(response.data.data)) {
-            cards = response.data.data;
-          }
-        }
+        const cards = response?.data?.cards || [];
         setBoardCards(cards);
       } catch {
         setMessage("Failed to load board cards");
       }
     };
-    fetchBoardCards();
+
+    const loadAll = async () => {
+      await Promise.all([fetchData(), fetchBoardCards()]);
+      setDataReady(true);
+    };
+
+    loadAll();
   }, []);
 
-  const isCardOnBoard = (label) => {
-    return boardCards.some(
-      (card) => card.title === label || card.title_en === label || card.title_ar === label
-    );
+  const isCardOnBoard = (card) => {
+    if (!card?.id) return false;
+    return boardCards.some((boardCard) => String(boardCard?.id) === String(card.id));
   };
 
-  const handleAddCard = async (title) => {
+  const handleToggleCard = async (card) => {
+    const onBoard = isCardOnBoard(card);
+    const label = card.title_en || card.title_ar || "Card";
     setLoading(true);
-    setMessage("");
-    try {
-      await CardService.addCardToBoard(title);
-      setMessage(`Card '${title}' added to board!`);
-      setBoardCards((prev) => [...prev, { title }]);
-    } catch (error) {
-      setMessage(`Failed to add card: ${error?.message || error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleRemoveCard = async (title) => {
-    setLoading(true);
-    setMessage("");
     try {
-      await CardService.removeCardFromBoard(title);
-      setMessage(`Card '${title}' removed from board!`);
-      setBoardCards((prev) =>
-        prev.filter(
-          (card) => card.title !== title && card.title_en !== title && card.title_ar !== title
-        )
-      );
+      if (onBoard) {
+        await CardService.removeCardFromBoard(card.id);
+        setMessage(`Card '${label}' removed from board!`);
+        setBoardCards((prev) => prev.filter((c) => c.id !== card.id));
+      } else {
+        await CardService.addCardToBoard(card.id);
+        setMessage(`Card '${label}' added to board!`);
+        setBoardCards((prev) => [...prev, card]);
+      }
     } catch (error) {
-      setMessage(`Failed to remove card: ${error?.message || error}`);
+      setMessage(`Failed to ${onBoard ? "remove" : "add"} card: ${error?.message || error}`);
     } finally {
       setLoading(false);
     }
@@ -153,9 +148,11 @@ const Selection = () => {
           <div className="d-flex" dir="ltr">
             <input
               type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               dir={getTranslation("direction")}
               className="form-control rounded-start-pill"
-              placeholder={getTranslation("find Your Card")}
+              placeholder={getTranslation("findYourCard")}
               style={{
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
@@ -164,8 +161,9 @@ const Selection = () => {
                 textAlign: getTranslation("direction") === "rtl" ? "right" : "left",
               }}
             />
+
             <button
-              className="btn  rounded-end-pill"
+              className="btn rounded-end-pill"
               style={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
@@ -180,79 +178,114 @@ const Selection = () => {
         </div>
       </section>
 
-      {/* Category Buttons */}
       <div className="container text-center my-4">
         <div className="row justify-content-center">
           {categories.map((cat, idx) => (
-            <div className="col-auto px-2 mb-2" key={cat.id || cat.name || cat.title || idx}>
+            <div className="col-auto px-2 mb-2" key={cat.id || idx}>
               <button
                 className={`btn px-4 py-2 fw-semibold rounded-pill shadow-sm ${
-                  selectedCategory === (cat.name || cat.title || cat.label || cat.id)
-                    ? "btn btn2 text-white"
-                    : "btn-outline-bg"
+                  selectedCategory === cat.name ? "btn btn2 text-white" : "btn-outline-bg"
                 }`}
                 style={{ minWidth: "120px", border: "1px solid #173067" }}
-                onClick={() => setSelectedCategory(cat.name || cat.title || cat.label || cat.id)}
+                onClick={() => setSelectedCategory(cat.name)}
               >
-                {cat.name || cat.title || cat.label}
+                {cat.name}
               </button>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Cards */}
       <div className="container marg pb-5">
-        {/* Show message if exists */}
         {message && (
           <div className="alert alert-info text-center" role="alert">
             {message}
           </div>
         )}
-        <div className="row g-4 justify-content-center">
-          {(cardsByCategory[selectedCategory] || []).map((item, idx) => (
-            <div key={item.id || idx} className="col-6 col-md-3 col-lg-2">
-              <div
-                className="card card-emoji text-center p-3 shadow-sm h-100 border-0 d-flex flex-column justify-content-center align-items-center"
-                style={{
-                  backgroundColor: "#eaf1ff",
-                  borderRadius: "20px",
-                  transition: "all 0.3s ease",
-                }}
-              >
-                <div className="emoji" style={{ fontSize: "2.5rem", marginBottom: "8px" }}>
-                  {item.emoji || "🃏"}
-                </div>
-                <h5 className="fw-semibold">
-                  {item.title || item.label || item.title_en || item.title_ar}
-                </h5>
-                {isCardOnBoard(item.title || item.label || item.title_en || item.title_ar) ? (
-                  <button
-                    className="btn btn-danger btn-sm rounded-pill mt-2 px-4"
-                    onClick={() =>
-                      handleRemoveCard(item.title || item.label || item.title_en || item.title_ar)
-                    }
-                    disabled={loading}
-                  >
-                    {loading ? "Removing..." : "Remove"}
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-success text-white btn-sm rounded-pill mt-2 px-4"
-                    onClick={() =>
-                      handleAddCard(item.title || item.label || item.title_en || item.title_ar)
-                    }
-                    disabled={loading}
-                  >
-                    {loading ? "Adding..." : "Add"}
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
+        {!dataReady ? (
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status"></div>
+          </div>
+        ) : (
+          <div className="row g-4 justify-content-center">
+            {(cardsByCategory[selectedCategory] || [])
+              .filter((item) => {
+                const title = (item.title_en || item.title_ar || "").toLowerCase();
+                return title.includes(searchTerm.toLowerCase());
+              })
+              .map((item, idx) => {
+                const title = item.title_en || item.title_ar;
+                const image = item.image;
+                const isOnBoard = isCardOnBoard(item);
+
+                return (
+                  <div key={item.id || idx} className="col-6 col-md-3 col-lg-2 mb-4">
+                    <div
+                      className="card card-emoji text-center p-3 shadow-sm h-100 border-0 d-flex flex-column justify-content-between align-items-center"
+                      style={{
+                        backgroundColor: "#eaf1ff",
+                        borderRadius: "20px",
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      {/* صورة الكارت */}
+                      <div
+                        className="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-2"
+                        style={{
+                          width: "90px",
+                          height: "90px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {image ? (
+                          <img
+                            src={
+                              image.startsWith("http") ? image : `http://localhost:8000/${image}`
+                            }
+                            alt={title}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "contain",
+                            }}
+                            onError={(e) => {
+                              e.target.style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <span style={{ fontSize: "2.5rem" }}>📄</span>
+                        )}
+                      </div>
+
+                      {/* عنوان الكارت */}
+                      <p className="fw-semibold mb-2" style={{ fontSize: "0.95rem" }}>
+                        {title}
+                      </p>
+
+                      {/* زر الإضافة أو الحذف */}
+                      <button
+                        className={`btn btn-sm rounded-pill px-4 w-100 ${
+                          isOnBoard ? "btn-danger" : "btn-success text-white"
+                        }`}
+                        onClick={() => handleToggleCard(item)}
+                        disabled={loading}
+                      >
+                        {loading
+                          ? isOnBoard
+                            ? "Removing..."
+                            : "Adding..."
+                          : isOnBoard
+                          ? "Remove"
+                          : "Add"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </div>
       <Footer />
     </div>
   );

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import "../Style-pages/Profile.css";
-import { BsBellFill, BsList } from "react-icons/bs";
 import Navbar from "../Components/Navbar";
 import Menu from "../Components/Menu";
 import EditProfileModal from "../Pages/EditProfile";
@@ -72,17 +71,11 @@ const Profile = () => {
   const fetchUserCards = async () => {
     try {
       setLoadingCards(true);
-      const response = await CardService.getUserCards();
+      const response = await CardService.getBoardCards();
       let cardsData = [];
-      
-      if (response?.data) {
-        if (Array.isArray(response.data)) {
-          cardsData = response.data;
-        } else if (response.data.results) {
-          cardsData = response.data.results;
-        } else if (response.data.data) {
-          cardsData = response.data.data;
-        }
+
+      if (response?.data?.cards) {
+        cardsData = response.data.cards;
       }
 
       setUserCards(cardsData);
@@ -93,6 +86,7 @@ const Profile = () => {
       setLoadingCards(false);
     }
   };
+
 
   const fetchSubscription = async () => {
     setSubscriptionLoading(true);
@@ -148,23 +142,6 @@ const Profile = () => {
   const getCardsForCategory = (categoryId) => {
     if (!Array.isArray(userCards)) return [];
     return userCards.filter((card) => card.category?.id === categoryId);
-  };
-
-  const handleDeleteCard = async (cardId) => {
-    try {
-      await CardService.deleteCard(cardId);
-      setUserCards((prev) => prev.filter((card) => card.id !== cardId));
-      
-      if (activeCategory) {
-        const updatedCards = getCardsForCategory(activeCategory.id);
-        setActiveCategory({
-          ...activeCategory,
-          cards: updatedCards,
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting card:", error);
-    }
   };
 
   const handleCategorySelect = (category) => {
@@ -485,12 +462,6 @@ const Profile = () => {
                           <p className="m-0 fw-medium" style={{ color: "#173067" }}>
                             {currentLanguage === "ar" && card.title_ar ? card.title_ar : card.title_en}
                           </p>
-                          <button
-                            className="btn btn-outline-danger btn-sm mt-2 rounded-pill"
-                            onClick={() => handleDeleteCard(card.id)}
-                          >
-                            {getTranslation("actions.delete", currentLanguage)}
-                          </button>
                         </div>
                       </div>
                     ))}
