@@ -364,7 +364,7 @@ const Board = () => {
         />
       </Container>
 
-      <div className="cards-wrapper px-3 py-3">
+      <div className="cards-wrapper p-3 marg">
         {getCardsToDisplay().map((card, idx) => (
           <div key={card.id || idx} className="card-item" onClick={() => handleCardClick(card)}>
             <div className="emoji-image-wrapper">
