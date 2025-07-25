@@ -130,7 +130,7 @@ const AddNewCard = () => {
       submitFormData.append("image", formData.image);
 
       await CardService.addNewCard(submitFormData);
-      navigate("/profile");
+      navigate("/selection");
     } catch (error) {
       console.error("Error adding card:", error);
       setError("Failed to add card. Please try again.");
