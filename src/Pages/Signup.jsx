@@ -200,7 +200,7 @@ function Signup() {
       style={{ height: "100vh", background: "#D4E2F6" }}
     >
       <Row className="w-100 justify-content-center align-items-center">
-        <Col md={5} className="d-flex justify-content-center align-items-center">
+        <Col md={4} xs={12} className="d-flex justify-content-center align-items-center ">
           <img
             src={signupImage}
             alt="Burger"
@@ -209,9 +209,9 @@ function Signup() {
           />
         </Col>
 
-        <Col md={7} >
+        <Col md={8} xs={12} xl={7} className="d-flex justify-content-center">
           <Card
-            style={{ width: "100%", Width: "800px", borderRadius: "1.5rem", padding: "3rem" }}
+            style={{ maxWidth: "100%", borderRadius: "1.5rem", padding: "3rem" }}
           >
             <h2 className="text-center mb-4 px-3">
               {getTranslation("auth.signupTitle", currentLanguage)}
