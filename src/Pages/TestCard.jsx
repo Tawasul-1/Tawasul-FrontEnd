@@ -195,19 +195,19 @@ const TestCard = () => {
           <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Choose Test Level:</p>
           <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
             <button 
-              onClick={() => navigate(`/test?level=beginner&category=${categoryId}`)}
+              onClick={() => navigate(`/how-to-use/card/test?level=1&card=${item.id}`)}
               style={levelBtnStyle}
             >
               Beginner
             </button>
             <button 
-              onClick={() => navigate(`/test?level=intermediate&category=${categoryId}`)}
+              onClick={() => navigate(`/how-to-use/card/test?level=2&card=${item.id}`)}
               style={levelBtnStyle}
             >
               Intermediate
             </button>
             <button 
-              onClick={() => navigate(`/test?level=advanced&category=${categoryId}`)}
+              onClick={() => navigate(`/how-to-use/card/test?level=3&card=${item.id}`)}
               style={levelBtnStyle}
             >
               Advanced

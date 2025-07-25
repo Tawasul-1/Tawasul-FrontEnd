@@ -18,8 +18,6 @@ import TestCategories from "../Pages/TestCategories";
 import TestCards from "../Pages/TestCards";
 import TestCard from "../Pages/TestCard";
 import Test from "../Pages/Test";
-import Test2 from "../Pages/Test2";
-import Test3 from "../Pages/Test3";
 import HowUse from "../Pages/HowUse";
 import LearnDone from "../Pages/LearnDone";
 import ProtectedRoute from "../Components/ProtectedRoute";
@@ -44,11 +42,16 @@ function AppRouter() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/how-to-use/cards" element={<TestCards />} />
           <Route path="/how-to-use/card/:itemName" element={<TestCard />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/test2" element={<Test2 />} />
-          <Route path="/test3" element={<Test3 />} />
           <Route path="/how-to-use" element={<HowUse />} />
           {/* Protected Routes - Require Authentication */}
+          <Route
+            path="/how-to-use/card/test"
+            element={
+              <ProtectedRoute>
+                <Test />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/how-to-use/categories"
             element={

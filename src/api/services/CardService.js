@@ -109,8 +109,10 @@ const CardService = {
   },
   async getAllCards(categoryId = null, search = "") {
     try {
-      let url = "/cards/cards/";
+      const token = getAuthToken();
+      if (!token) throw new Error("No authentication token found");
 
+      let url = "/cards/cards/";
       const params = new URLSearchParams();
 
       if (categoryId) params.append("category_id", categoryId);
@@ -120,13 +122,18 @@ const CardService = {
         url += `?${params.toString()}`;
       }
 
-      const response = await apiClient.get(url);
+      const response = await apiClient.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response;
     } catch (error) {
-      console.error("Error fetching board with categories:", error);
+      console.error("Error fetching cards:", error);
       throw handleApiError(error);
     }
   },
+  
   async getBoardCards(categoryId = null) {
     try {
       const url = categoryId ? `/cards/board/?category_id=${categoryId}` : "/cards/board/";

@@ -8,11 +8,11 @@ const LearnDone = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCount((prev) => prev - 1);
-    }, 3000);
+    }, 1000);
 
     const redirect = setTimeout(() => {
-      navigate("/items");
-    }, 10000);
+      navigate("/how-to-use/categories");
+    }, 5000);
 
     return () => {
       clearInterval(timer);
