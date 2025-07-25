@@ -7,6 +7,9 @@ import Footer from "../Components/Footer";
 import CardService from "../api/services/CardService";
 import { getTranslation } from "../utils/translations";
 import { getUserLanguage } from "../utils/languageUtils";
+import { useAuth } from "../context/AuthContext";
+import { userService } from "../api/services/UserService";
+
 
 const Selection = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -20,8 +23,28 @@ const Selection = () => {
 
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const { user } = useAuth();
+  const [isPremium, setIsPremium] = useState(false);
 
   const [currentLanguage, setCurrentLanguage] = useState(getUserLanguage());
+  useEffect(() => {
+  const checkPremiumStatus = async () => {
+    try {
+      if (user?.is_premium) {
+        setIsPremium(true);
+        return;
+      }
+
+      const response = await userService.getProfile();
+      setIsPremium(response.data?.is_premium || false);
+    } catch (error) {
+      console.error("Error checking premium status:", error);
+      setIsPremium(false);
+    }
+  };
+
+  checkPremiumStatus();
+}, [user]);
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -206,6 +229,21 @@ const Selection = () => {
         {!dataReady ? (
           <div className="text-center py-5">
             <div className="spinner-border text-primary" role="status"></div>
+          </div>
+        ) : !isPremium ? (
+          <div className="text-center my-5">
+            <div className="alert alert-warning d-inline-block" role="alert">
+              <i className="bi bi-exclamation-triangle-fill me-2"></i>
+              {getTranslation("premiumRequired") || "You must be a premium user to manage cards."}
+            </div>
+            <div className="mt-3">
+              <button
+                className="btn btn-primary rounded-pill px-4"
+                onClick={() => (window.location.href = "/profile")}
+              >
+                {getTranslation("upgradeNow") || "Upgrade to Premium"}
+              </button>
+            </div>
           </div>
         ) : (
           <div className="row g-4 justify-content-center">
