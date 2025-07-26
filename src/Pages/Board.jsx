@@ -364,8 +364,8 @@ const Board = () => {
         />
       </Container>
 
-      <div className="cards-section">
-        <div className="cards-wrapper">
+      <div className="cards-section container-fluid d-flex flex-column align-items-center justify-content-center">
+        <div className="cards-wrapper d-flex flex-wrap justify-content-center">
           {getCardsToDisplay().map((card, idx) => (
             <div key={card.id || idx} className="card-item" onClick={() => handleCardClick(card)}>
               <div className="emoji-image-wrapper">
@@ -386,7 +386,6 @@ const Board = () => {
             </div>
           ))}
         </div>
-
         <div style={{ height: "20px" }}></div>
       </div>
 
