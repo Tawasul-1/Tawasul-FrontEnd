@@ -15,6 +15,8 @@ const Board = () => {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [pinError, setPinError] = useState("");
+
   const [boardData, setBoardData] = useState({
     cards: [],
     categories: [],
@@ -28,6 +30,7 @@ const Board = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
   const currentLanguage = getUserLanguage();
+  
   const isRTLMode = isRTL();
 
   useEffect(() => {
@@ -47,23 +50,27 @@ const Board = () => {
     fetchData();
   }, []);
 
-  const verifyPin = async () => {
-    try {
-      const response = await BoardService.verifyPin(password);
-      if (response.status) {
-        setShowSidebar(true);
-        setShowPasswordCard(false);
-        setPassword("");
-      } else {
-        alert(currentLanguage === "ar" ? "كلمة مرور خاطئة!" : "Wrong password!");
-      }
-    } catch (error) {
-      console.error("PIN verification error:", error);
-      alert(
-        currentLanguage === "ar" ? "حدث خطأ أثناء التحقق من الرمز السري" : "Error verifying PIN"
-      );
+ const verifyPin = async () => {
+  try {
+    setPinError(""); 
+    const response = await BoardService.verifyPin(password);
+    if (response.status) {
+      setShowSidebar(true);
+      setShowPasswordCard(false);
+      setPassword("");
+    } else {
+      setPinError(currentLanguage === "ar" ? "كلمة مرور خاطئة!" : "Wrong password!");
     }
-  };
+  } catch (error) {
+    console.error("PIN verification error:", error);
+    setPinError(
+      currentLanguage === "ar"
+        ? "حدث خطأ أثناء التحقق من الرمز السري"
+        : "Error verifying PIN"
+    );
+  }
+};
+
 
   const getCardsToDisplay = () => {
     if (!activeCategory || activeCategory === "all") {
@@ -483,6 +490,12 @@ const Board = () => {
                 onClick={() => setShowPass((prev) => !prev)}
               ></i>
             </div>
+            {pinError && (
+  <div className="text-danger text-center mb-2" style={{ fontSize: "0.9rem" }}>
+    {pinError}
+  </div>
+)}
+
 
             <Button
               variant="primary"

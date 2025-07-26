@@ -170,6 +170,12 @@ export const translations = {
       ar: "يرجى إدخال كلمة المرور الجديدة أدناه.",
     },
     backToLogin: { en: "Back to Login", ar: "العودة لتسجيل الدخول" },
+    premiumTrialMessage: {
+  en: "Sign up now and get 30 days of Premium for free",
+  ar: "سجل الآن واحصل على تجربة مجانية لحساب مميز  لمدة 30 يوم"
+},
+
+
   },
 
   // Form Validation
@@ -581,6 +587,13 @@ export const translations = {
       en: "Password reset email sent!",
       ar: "تم إرسال بريد إعادة تعيين كلمة المرور!",
     },
+    newpasswordSuccess: {
+      "en": "Your password has been reset successfully! Redirecting to login...",
+      "ar": "تم تغيير كلمة المرور بنجاح! سيتم تحويلك إلى صفحة الدخول..."
+    },
+  
+
+
     emailVerificationSuccess: {
       en: "Email verified successfully!",
       ar: "تم التحقق من البريد الإلكتروني بنجاح!",

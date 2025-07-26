@@ -271,6 +271,10 @@ function Signup() {
             <h2 className="text-center mb-4 px-3">
               {getTranslation("auth.signupTitle", currentLanguage)}
             </h2>
+            <p className="text-center text-success fw-bold mb-4">
+              {getTranslation("auth.premiumTrialMessage", currentLanguage)}
+            </p>
+
             {generalError && (
               <div className="alert alert-danger text-center">
                 {Array.isArray(generalError)
