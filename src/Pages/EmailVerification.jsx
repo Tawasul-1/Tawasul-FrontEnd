@@ -80,28 +80,6 @@ function EmailVerification() {
     verifyEmail();
   }, [searchParams, navigate]);
 
-  const handleResendVerification = async () => {
-    try {
-      setStatus("loading");
-      setMessage("Sending verification email...");
-
-      const email = searchParams.get("email");
-      if (!email) {
-        setStatus("error");
-        setMessage("Email address not found. Please try signing up again.");
-        return;
-      }
-
-      await authService.resendVerification(email);
-      setStatus("success");
-      setMessage("Verification email sent successfully! Please check your inbox.");
-    } catch (error) {
-      console.error("Resend verification error:", error);
-      setStatus("error");
-      setMessage("Failed to send verification email. Please try again.");
-    }
-  };
-
   const handleGoToLogin = () => {
     navigate("/login");
   };
@@ -166,20 +144,6 @@ function EmailVerification() {
 
                 {status === "error" && (
                   <>
-                    <Button
-                      className="w-75 mb-3"
-                      onClick={handleResendVerification}
-                      disabled={status === "loading"}
-                    >
-                      {status === "loading" ? (
-                        <>
-                          <Spinner animation="border" size="sm" className="me-2" />
-                          Sending...
-                        </>
-                      ) : (
-                        "Resend Verification Email"
-                      )}
-                    </Button>
 
                     <Button variant="outline-primary" className="w-75" onClick={handleGoToLogin}>
                       Go to Login

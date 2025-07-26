@@ -44,14 +44,11 @@ class AuthenticationService extends BaseService {
     }
   }
 
-  async verifyEmail(token, uid) {
-    const endpoint = `${this.endpoint}/verify-email/`;
+  async verifyEmail(token) {
+    const endpoint = `${this.endpoint}/activate/${token}/`;
 
     try {
-      const response = await this.apiClient.post(endpoint, {
-        token: token,
-        uid: uid,
-      });
+      const response = await this.apiClient.get(endpoint);
       return response;
     } catch (error) {
       console.error("Email verification error:", error);
@@ -59,17 +56,6 @@ class AuthenticationService extends BaseService {
     }
   }
 
-  async resendVerificationEmail(email) {
-    try {
-      const response = await this.apiClient.post(`${this.endpoint}/resend-verification/`, {
-        email: email,
-      });
-      return response;
-    } catch (error) {
-      console.error("Resend verification error:", error);
-      throw handleApiError(error);
-    }
-  }
 
   async requestPasswordReset(email) {
     try {
