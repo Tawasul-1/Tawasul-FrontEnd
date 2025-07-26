@@ -87,7 +87,7 @@ function NewPassword() {
 
     try {
       await authService.resetPassword(token, formData.password, formData.confirmPassword);
-      setSuccess(getTranslation("success.newpasswordSuccess", currentLanguage));
+      setSuccess(getTranslation("success.newpasswordSuccess9", currentLanguage));
       setTimeout(() => {
         navigate("/login");
       }, 3000);

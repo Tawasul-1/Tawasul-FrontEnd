@@ -27,7 +27,7 @@ const LearnDone = () => {
     }, 1000);
 
     const redirect = setTimeout(() => {
-      navigate("/how-to-use/cards");
+      navigate(-2);;
     }, 3000);
 
     return () => {
