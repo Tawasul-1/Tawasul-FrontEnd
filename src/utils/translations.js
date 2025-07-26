@@ -469,7 +469,7 @@ export const translations = {
     },
     team1: { en: "Mohsen Thabet", ar: "محسن ثابت" },
     team2: { en: "Mohamed Fawzy", ar: "محمد فوزي" },
-    team3: { en: "Mohamed ElKorany", ar: "محمد القرني" },
+    team3: { en: "Mohamed ElKorany", ar: "محمد الكوراني" },
     team4: { en: "Youssef Shaaban", ar: "يوسف شعبان" },
     team5: { en: "Youmna Khalil", ar: "يمنى خليل" },
     team6: { en: "Yousef Abdelati", ar: "يوسف عبد العاطي" },
