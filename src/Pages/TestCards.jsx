@@ -172,9 +172,6 @@ const TestCards = () => {
                           <div className="text-white">
                             {currentLanguage === 'ar' ? card.title_ar || translations[currentLanguage].cardDefault : card.title_en || translations[currentLanguage].cardDefault}
                           </div>
-                          <div className="text-white">
-                            {currentLanguage === 'ar' ? card.title_en || translations[currentLanguage].cardDefault : card.title_ar || translations[currentLanguage].cardDefault}
-                          </div>
                         </div>
                       </div>
                     </Link>

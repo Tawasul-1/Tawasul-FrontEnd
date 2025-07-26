@@ -96,9 +96,6 @@ const CategoriesTest = () => {
                           <p className="m-0 fw-medium" style={{ color: "#173067" }}>
                             {currentLanguage === 'ar' ? cat.name_ar : cat.name_en}
                           </p>
-                          <small className="text-muted">
-                            {currentLanguage === 'ar' ? cat.name_en : cat.name_ar}
-                          </small>
                         </div>
                       </Link>
                     </div>

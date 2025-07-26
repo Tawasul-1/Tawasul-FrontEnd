@@ -29,7 +29,7 @@ const LearnDone = () => {
     const redirect = setTimeout(() => {
       navigate(-2);;
     }, 3000);
-
+ 
     return () => {
       clearInterval(timer);
       clearTimeout(redirect);

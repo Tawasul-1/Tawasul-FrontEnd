@@ -160,7 +160,7 @@ const TestCard = () => {
           margin: isRTL ? "0 0 0 15px" : "0 15px 0 0" 
         }}>
           {currentLanguage === 'ar' ? item.title_ar : item.title_en}
-          <div>{currentLanguage === 'ar' ? item.title_en : item.title_ar}</div>
+          {/* <div>{currentLanguage === 'ar' ? item.title_en : item.title_ar}</div> */}
         </span>
         <BsVolumeUp size={32} color="#0073e6" />
       </div>
